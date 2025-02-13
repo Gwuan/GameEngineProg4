@@ -10,7 +10,13 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 
+#include <chrono>
+#include <thread>
+
 SDL_Window* g_window{};
+const float dae::Minigin::m_MsPerFrame{16.f}; // 16.66ms -> 60 fps
+const float dae::Minigin::m_FixedTimeStep{0.02f};
+
 
 void PrintSDLVersion()
 {
@@ -83,12 +89,32 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	// todo: this update loop could use some work.
+	// The update loop is basically a copy pasta from the slides,
+	// I have a feeling that this loop has to be refactored anyway in the future.
+	// So it is fine for now that it is copied. I don't want to spend too
+	// much time at this right now.
 	bool doContinue = true;
+	auto lastTime = std::chrono::high_resolution_clock::now();
+	float lag{};
 	while (doContinue)
 	{
+		const auto currentTime = std::chrono::high_resolution_clock::now();
+		const float deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+		lastTime = currentTime;
+		lag += deltaTime;
+
 		doContinue = input.ProcessInput();
-		sceneManager.Update();
+
+		while (lag >= m_MsPerFrame)
+		{
+			sceneManager.FixedUpdate(m_FixedTimeStep);
+			lag -= m_FixedTimeStep;
+		} 
+
+		sceneManager.Update(deltaTime);
 		renderer.Render();
+
+		const auto sleepTime = currentTime + std::chrono::milliseconds(static_cast<long long>(m_MsPerFrame)) - std::chrono::high_resolution_clock::now();
+		std::this_thread::sleep_for(sleepTime);
 	}
 }
