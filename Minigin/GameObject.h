@@ -24,17 +24,18 @@ namespace dae
 		virtual void Render() const;
 
 		template <typename T, typename ... Args>
-		std::shared_ptr<T> AddComponent(Args&&... args)
+		T* AddComponent(Args&&... args)
 		{
-			if (!std::is_base_of<Component, T>::value)
+			if (!std::is_base_of_v<Component, T>)
 			{
-				static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+				static_assert(std::is_base_of_v<Component, T>, "T must derive from Component");
 			}
 			try
 			{
 				auto component = std::make_shared<T>(this, std::forward<Args>(args)...);
-				m_Components.push_back(std::static_pointer_cast<Component>(component));
-				return component;
+				T* returnValue = component.get();
+				m_Components.push_back(std::move(std::static_pointer_cast<Component>(component)));
+				return returnValue;
 				
 			}
 			catch (const std::exception& e)
@@ -44,17 +45,26 @@ namespace dae
 		}
 
 		template <typename T>
-		std::shared_ptr<T> GetComponent()
+		T* GetComponent()
 		{
 			for (auto& com : m_Components)
 			{
 				// Check if the current component has the same class as the requested class
-				if(auto casted = std::dynamic_pointer_cast<T>(com))
+				if(auto casted = std::dynamic_pointer_cast<T>(com).get())
 					return casted;
 			}
 
 			// If nothing is found return nullptr;
 			return nullptr;
+		}
+
+		template <typename T>
+		void RemoveComponent()
+		{
+			if(auto component = GetComponent<T>())
+			{
+				dynamic_cast<Component*>(component)->Destroy();
+			}
 		}
 
 		Transform GetTransform() const { return this->m_transform; }
@@ -70,6 +80,9 @@ namespace dae
 		GameObject& operator=(GameObject&& other) = delete;
 
 	private:
+		void KillComponents();
+
+		std::vector<uint32_t> m_ComponentKillList;
 		Transform m_transform{};
 		// todo: mmm, every gameobject has a texture? Is that correct?
 		std::shared_ptr<Texture2D> m_texture{};

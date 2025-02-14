@@ -13,4 +13,9 @@ Component::Component(dae::GameObject* owner)
 
 	m_pOwner = owner;	
 }
+
+Component::~Component()
+{
+	m_pOwner = nullptr;
+}
 	

@@ -14,7 +14,7 @@
 #include <thread>
 
 SDL_Window* g_window{};
-const float dae::Minigin::m_MsPerFrame{16.67f}; // 16.66ms -> 60 fps
+const float dae::Minigin::m_MsPerFrame{16.667f}; // 16.667ms -> 60 fps
 const float dae::Minigin::m_FixedTimeStep{0.02f};
 
 

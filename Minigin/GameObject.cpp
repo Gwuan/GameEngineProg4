@@ -5,11 +5,23 @@
 
 dae::GameObject::~GameObject() = default;
 
+void dae::GameObject::KillComponents()
+{
+	if (m_ComponentKillList.empty())
+		return;
+
+	for (auto& index : m_ComponentKillList)
+	{
+		m_Components.erase(m_Components.begin() + index);
+	}
+	m_ComponentKillList.clear();
+}
+
 void dae::GameObject::BeginPlay()
 {
 	for (auto& component : m_Components)
 	{
-		component.get()->BeginPlay();
+		component->BeginPlay();
 	}
 }
 
@@ -17,26 +29,34 @@ void dae::GameObject::FixedUpdate(const float fixedTimeStep)
 {
 	for (auto& component : m_Components)
 	{
-		component.get()->FixedUpdate(fixedTimeStep);
+		component->FixedUpdate(fixedTimeStep);
 	}
 }
 
 void dae::GameObject::Update(const float deltaTime)
 {
-	for (auto& component : m_Components)
+	for(uint32_t i{}; i < m_Components.size(); ++i)
 	{
-		component.get()->Update(deltaTime);
-	}	
+		auto& component = m_Components[i];
+		if(component->NeedDestroyed())
+		{
+			m_ComponentKillList.push_back(i);
+		}
+		else
+		{
+			component->Update(deltaTime);
+		}
+	}
+
+	KillComponents();
 }
 
 void dae::GameObject::Render() const
 {
 	for (auto& component : m_Components)
 	{
-		component.get()->Render();
+		component->Render();
 	}
-	//const auto& pos = m_transform.GetPosition();
-	//Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
 }
 
 void dae::GameObject::SetTexture(const std::string& filename)
