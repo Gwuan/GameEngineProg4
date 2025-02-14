@@ -14,7 +14,7 @@
 #include <thread>
 
 SDL_Window* g_window{};
-const float dae::Minigin::m_MsPerFrame{16.f}; // 16.66ms -> 60 fps
+const float dae::Minigin::m_MsPerFrame{16.67f}; // 16.66ms -> 60 fps
 const float dae::Minigin::m_FixedTimeStep{0.02f};
 
 
@@ -89,7 +89,10 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	// The update loop is basically a copy pasta from the slides,
+	// This is added
+	sceneManager.BeginPlay();
+
+	// The game loop is basically a copy pasta from the slides,
 	// I have a feeling that this loop has to be refactored anyway in the future.
 	// So it is fine for now that it is copied. I don't want to spend too
 	// much time at this right now.

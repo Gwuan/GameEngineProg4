@@ -26,6 +26,14 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
+void Scene::BeginPlay()
+{
+	for(auto& object : m_objects)
+	{
+		object->BeginPlay();
+	}
+}
+
 void Scene::FixedUpdate(const float fixedTime)
 {
 	for (auto& object : m_objects)

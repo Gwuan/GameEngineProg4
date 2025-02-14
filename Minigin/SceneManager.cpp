@@ -24,6 +24,14 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 	return *scene;
 }
 
+void dae::SceneManager::BeginPlay()
+{
+	for(const auto& scene : m_scenes)
+	{
+		scene->BeginPlay();
+	}
+}
+
 // TODO: Why on all the scenes?
 void dae::SceneManager::FixedUpdate(const float fixedTime)
 {
