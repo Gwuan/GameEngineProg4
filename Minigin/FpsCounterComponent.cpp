@@ -1,7 +1,8 @@
 #include "FpsCounterComponent.h"
+
+#include <format>
+
 #include "TextComponent.h"
-#include "ostream"
-#include <iomanip>
 
 FpsCounterComponent::FpsCounterComponent(dae::GameObject* owner)
 	: Component(owner)
@@ -14,10 +15,18 @@ void FpsCounterComponent::BeginPlay()
 
 void FpsCounterComponent::Update(const float deltaTime)
 {
-	const float fps = 1.f / deltaTime;
+	if(m_TextComponent == nullptr)
+		return;
 
-	std::ostringstream stream;
-	stream << std::fixed << std::setprecision(1) << fps;
+	m_TotalElapsedTime += deltaTime;
+	m_FrameCount++;
 
-	m_TextComponent->SetText(stream.str() + " FPS");
+	if(m_TotalElapsedTime >= m_Timer)
+	{
+		const float fps = static_cast<float>(m_FrameCount) / m_TotalElapsedTime;
+		m_TextComponent->SetText(std::format("{:.1f} FPS", fps));
+
+		m_TotalElapsedTime = 0;
+		m_FrameCount = 0;
+	}
 }

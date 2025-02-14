@@ -12,7 +12,9 @@ public:
 	void Update(const float deltaTime) override;
 
 private:
-	std::shared_ptr<TextComponent> m_TextComponent;
-
+	TextComponent* m_TextComponent;
+	float m_Timer{0.5f};
+	float m_TotalElapsedTime{};
+	uint32_t m_FrameCount{};
 };
 
