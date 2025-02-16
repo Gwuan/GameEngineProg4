@@ -32,7 +32,7 @@ namespace dae
 			}
 			try
 			{
-				auto component = std::make_shared<T>(this, std::forward<Args>(args)...);
+				auto component = std::shared_ptr<T>(new T(this, std::forward<Args>(args)...));
 				T* returnValue = component.get();
 				m_Components.push_back(std::move(std::static_pointer_cast<Component>(component)));
 				return returnValue;

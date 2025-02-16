@@ -9,14 +9,24 @@ namespace dae
 class TextComponent final : public Component
 {
 public:
-	TextComponent(dae::GameObject* owner, std::shared_ptr<dae::Font> font);
-	TextComponent(dae::GameObject* owner, const std::string& text, std::shared_ptr<dae::Font> font);
-
 	virtual void Update(const float deltaTime) override;
 	virtual void Render() const override;
 
 	void SetText(const std::string& text);
 
+	TextComponent() = delete;
+	virtual ~TextComponent() override = default;
+
+	TextComponent(const TextComponent& other) = delete;
+	TextComponent(TextComponent&& other) noexcept = delete;
+	TextComponent& operator=(const TextComponent& other) = delete;
+	TextComponent& operator=(TextComponent&& other) noexcept = delete;
+protected:
+	template <typename T, typename ... Args>
+	friend T* dae::GameObject::AddComponent(Args&&... args);
+
+	TextComponent(dae::GameObject* owner, std::shared_ptr<dae::Font> font);
+	TextComponent(dae::GameObject* owner, const std::string& text, std::shared_ptr<dae::Font> font);
 private:
 	bool m_NeedsUpdate;
 	std::string m_Text;

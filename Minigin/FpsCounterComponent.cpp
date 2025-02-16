@@ -8,6 +8,11 @@ FpsCounterComponent::FpsCounterComponent(dae::GameObject* owner)
 	: Component(owner)
 {}
 
+FpsCounterComponent::~FpsCounterComponent()
+{
+	m_TextComponent = nullptr;
+}
+
 void FpsCounterComponent::BeginPlay()
 {
 	m_TextComponent = GetOwner()->GetComponent<TextComponent>();

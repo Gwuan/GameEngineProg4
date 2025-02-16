@@ -15,7 +15,6 @@ TextComponent::TextComponent(dae::GameObject* owner, const std::string& text, st
 	: Component(owner), m_NeedsUpdate(true), m_Text(text), m_Font(font), m_textTexture(nullptr)
 {}
 
-
 void TextComponent::Update(const float)
 {
 	if (m_NeedsUpdate)
