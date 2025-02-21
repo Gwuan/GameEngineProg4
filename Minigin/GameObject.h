@@ -1,5 +1,6 @@
 #pragma once
 #include <complex>
+#include <iostream>
 #include <memory>
 #include "Transform.h"
 
@@ -14,15 +15,16 @@ namespace dae
 {
 	class Texture2D;
 
-	// todo: this should become final.
 	class GameObject final
 	{
 	public:
 		void BeginPlay();
-		virtual void FixedUpdate(const float fixedTime);
-		virtual void Update(const float deltaTime);
-		virtual void Render() const;
+		void FixedUpdate(const float fixedTime);
+		void Update(const float deltaTime);
+		void LateUpdate(const float deltaTime);
+		void Render() const;
 
+		#pragma region Component related functions
 		template <typename T, typename ... Args>
 		T* AddComponent(Args&&... args)
 		{
@@ -32,9 +34,9 @@ namespace dae
 			}
 			try
 			{
-				auto component = std::shared_ptr<T>(new T(this, std::forward<Args>(args)...));
+				auto component = std::unique_ptr<T>(new T(*this, std::forward<Args>(args)...));
 				T* returnValue = component.get();
-				m_Components.push_back(std::move(std::static_pointer_cast<Component>(component)));
+				m_Components.push_back(std::move(component));
 				return returnValue;
 				
 			}
@@ -50,7 +52,7 @@ namespace dae
 			for (auto& com : m_Components)
 			{
 				// Check if the current component has the same class as the requested class
-				if(auto casted = std::dynamic_pointer_cast<T>(com).get())
+				if(auto casted = dynamic_cast<T*>(com.get()))
 					return casted;
 			}
 
@@ -66,14 +68,17 @@ namespace dae
 				dynamic_cast<Component*>(component)->Destroy();
 			}
 		}
+		#pragma endregion
 
 		Transform GetTransform() const { return this->m_transform; }
 
-		void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);
 
+		bool NeedsDestroyed() const { return m_IsDead; }
+		void Destroy() { m_IsDead = true; };
+
 		GameObject() = default;
-		virtual ~GameObject();
+		~GameObject() = default;
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -82,11 +87,9 @@ namespace dae
 	private:
 		void KillComponents();
 
-		std::vector<uint32_t> m_ComponentKillList;
+		bool m_IsDead = false;
 		Transform m_transform{};
-		// todo: mmm, every gameobject has a texture? Is that correct?
-		std::shared_ptr<Texture2D> m_texture{};
-
-		std::vector<std::shared_ptr<Component>> m_Components;
+		std::vector<uint32_t> m_ComponentKillList;
+		std::vector<std::unique_ptr<Component>> m_Components;
 	};
 }

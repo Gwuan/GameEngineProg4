@@ -3,9 +3,17 @@
 
 void dae::SceneManager::Update(const float deltaTime)
 {
-	for(auto& scene : m_scenes)
+	for (auto& scene : m_scenes)
 	{
 		scene->Update(deltaTime);
+	}
+}
+
+void dae::SceneManager::LateUpdate(const float deltaTime)
+{
+	for (auto& scene : m_scenes)
+	{
+		scene->LateUpdate(deltaTime);
 	}
 }
 
@@ -32,7 +40,6 @@ void dae::SceneManager::BeginPlay()
 	}
 }
 
-// TODO: Why on all the scenes?
 void dae::SceneManager::FixedUpdate(const float fixedTime)
 {
 	for (const auto& scene : m_scenes)

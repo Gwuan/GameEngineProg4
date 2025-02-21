@@ -15,6 +15,7 @@ namespace dae
 		void BeginPlay();
 		void FixedUpdate(const float fixedTime);
 		void Update(const float deltaTime);
+		void LateUpdate(const float deltaTime);
 		void Render() const;
 
 		~Scene();
@@ -23,11 +24,14 @@ namespace dae
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
-	private: 
+	private:
+		void KillGameObjects();
+
 		explicit Scene(const std::string& name);
 
 		std::string m_name;
-		std::vector < std::shared_ptr<GameObject>> m_objects{};
+		std::vector<uint32_t> m_ObjectKillList;
+		std::vector<std::shared_ptr<GameObject>> m_objects{};
 
 		static unsigned int m_idCounter; 
 	};

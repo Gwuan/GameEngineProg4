@@ -10,27 +10,27 @@ class Component
 {
 public:
 	virtual void BeginPlay();
-	virtual void Update(const float deltaTime);
-	virtual void FixedUpdate(const float fixedTimeStep);
-	virtual void Render() const;
+	virtual void Update(const float deltaTime) = 0;
+	virtual void FixedUpdate(const float fixedTimeStep) = 0;
+	virtual void LateUpdate(const float deltaTime) = 0;
+	virtual void Render() const = 0;
 
 	void Destroy() { m_IsDead = true;}
 	bool NeedDestroyed() const { return m_IsDead; }
 
 	Component() = delete;
+	virtual ~Component() = default;
 
 	Component(const Component& other) = delete;
 	Component(Component&& other) noexcept = delete;
 	Component& operator=(const Component& other) = delete;
 	Component& operator=(Component&& other) noexcept = delete;
 protected:
-	explicit Component(dae::GameObject* owner);
-	virtual ~Component();
+	explicit Component(dae::GameObject& owner);
 
-	dae::GameObject* GetOwner() const { return this->m_pOwner; }
+	dae::GameObject& GetOwner() const { return m_Owner; }
 private:
-
-	dae::GameObject* m_pOwner;
 	bool m_IsDead = false;
+	dae::GameObject& m_Owner;
 };
 

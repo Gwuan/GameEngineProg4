@@ -9,8 +9,11 @@ namespace dae
 class TextComponent final : public Component
 {
 public:
-	virtual void Update(const float deltaTime) override;
-	virtual void Render() const override;
+
+	void FixedUpdate(const float) override {}
+	void Update(const float deltaTime) override;
+	void LateUpdate(const float) override {}
+	void Render() const override;
 
 	void SetText(const std::string& text);
 
@@ -25,8 +28,8 @@ protected:
 	template <typename T, typename ... Args>
 	friend T* dae::GameObject::AddComponent(Args&&... args);
 
-	TextComponent(dae::GameObject* owner, std::shared_ptr<dae::Font> font);
-	TextComponent(dae::GameObject* owner, const std::string& text, std::shared_ptr<dae::Font> font);
+	TextComponent(dae::GameObject& owner, std::shared_ptr<dae::Font> font);
+	TextComponent(dae::GameObject& owner, const std::string& text, std::shared_ptr<dae::Font> font);
 private:
 	bool m_NeedsUpdate;
 	std::string m_Text;

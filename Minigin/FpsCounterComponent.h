@@ -7,7 +7,11 @@ class FpsCounterComponent final : public Component
 {
 public:
 	void BeginPlay() override;
+
+	void FixedUpdate(const float) override {}
 	void Update(const float deltaTime) override;
+	void LateUpdate(const float) override {}
+	void Render() const override {}
 
 	FpsCounterComponent() = delete;
 	virtual ~FpsCounterComponent() override;
@@ -18,14 +22,14 @@ public:
 	FpsCounterComponent& operator=(FpsCounterComponent&& other) noexcept = delete;
 
 private:
-	explicit FpsCounterComponent(dae::GameObject* owner);
+	explicit FpsCounterComponent(dae::GameObject& owner);
 
 	template <typename T, typename ... Args>
 	friend T* dae::GameObject::AddComponent(Args&&... args);
 
-	TextComponent* m_TextComponent;
-	float m_Timer{0.5f};
+	float m_TimeTreshHold{0.5f};
 	float m_TotalElapsedTime{};
 	uint32_t m_FrameCount{};
+	TextComponent* m_TextComponent;
 };
 

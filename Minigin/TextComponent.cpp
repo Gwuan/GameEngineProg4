@@ -6,13 +6,20 @@
 #include "Texture2D.h"
 
 
-TextComponent::TextComponent(dae::GameObject* owner, std::shared_ptr<dae::Font> font)
-	: Component(owner), m_NeedsUpdate(true), m_Text(" "), m_Font(font), m_textTexture(nullptr)
-{
-}
+TextComponent::TextComponent(dae::GameObject& owner, std::shared_ptr<dae::Font> font)
+	: Component(owner),
+      m_NeedsUpdate(true),
+      m_Text(" "),
+      m_Font(font),
+      m_textTexture(nullptr)
+{}
 
-TextComponent::TextComponent(dae::GameObject* owner, const std::string& text, std::shared_ptr<dae::Font> font)
-	: Component(owner), m_NeedsUpdate(true), m_Text(text), m_Font(font), m_textTexture(nullptr)
+TextComponent::TextComponent(dae::GameObject& owner, const std::string& text, std::shared_ptr<dae::Font> font)
+	: Component(owner),
+	  m_NeedsUpdate(true),
+	  m_Text(text),
+	  m_Font(font),
+	  m_textTexture(nullptr)
 {}
 
 void TextComponent::Update(const float)
@@ -40,7 +47,7 @@ void TextComponent::Render() const
 {
 	if (m_textTexture != nullptr)
 	{
-		const auto& pos = GetOwner()->GetTransform().GetPosition();
+		const auto& pos = GetOwner().GetTransform().GetPosition();
 		dae::Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
 	}
 }

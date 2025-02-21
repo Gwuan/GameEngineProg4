@@ -3,8 +3,6 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 
-dae::GameObject::~GameObject() = default;
-
 void dae::GameObject::KillComponents()
 {
 	if (m_ComponentKillList.empty())
@@ -35,6 +33,14 @@ void dae::GameObject::FixedUpdate(const float fixedTimeStep)
 
 void dae::GameObject::Update(const float deltaTime)
 {
+	for (auto& component : m_Components)
+	{
+		component->Update(deltaTime);
+	}
+}
+
+void dae::GameObject::LateUpdate(const float deltaTime)
+{
 	for(uint32_t i{}; i < m_Components.size(); ++i)
 	{
 		auto& component = m_Components[i];
@@ -44,7 +50,7 @@ void dae::GameObject::Update(const float deltaTime)
 		}
 		else
 		{
-			component->Update(deltaTime);
+			component->LateUpdate(deltaTime);
 		}
 	}
 
@@ -57,12 +63,6 @@ void dae::GameObject::Render() const
 	{
 		component->Render();
 	}
-}
-
-void dae::GameObject::SetTexture(const std::string& filename)
-{
-
-	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
 void dae::GameObject::SetPosition(float x, float y)

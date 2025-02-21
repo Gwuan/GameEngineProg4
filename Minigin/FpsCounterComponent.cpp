@@ -4,8 +4,9 @@
 
 #include "TextComponent.h"
 
-FpsCounterComponent::FpsCounterComponent(dae::GameObject* owner)
-	: Component(owner)
+FpsCounterComponent::FpsCounterComponent(dae::GameObject& owner)
+	: Component(owner),
+	  m_TextComponent(nullptr)
 {}
 
 FpsCounterComponent::~FpsCounterComponent()
@@ -15,7 +16,7 @@ FpsCounterComponent::~FpsCounterComponent()
 
 void FpsCounterComponent::BeginPlay()
 {
-	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
+	m_TextComponent = GetOwner().GetComponent<TextComponent>();
 }
 
 void FpsCounterComponent::Update(const float deltaTime)
@@ -26,12 +27,12 @@ void FpsCounterComponent::Update(const float deltaTime)
 	m_TotalElapsedTime += deltaTime;
 	m_FrameCount++;
 
-	if(m_TotalElapsedTime >= m_Timer)
+	if(m_TotalElapsedTime >= m_TimeTreshHold)
 	{
 		const float fps = static_cast<float>(m_FrameCount) / m_TotalElapsedTime;
 		m_TextComponent->SetText(std::format("{:.1f} FPS", fps));
 
-		m_TotalElapsedTime = 0;
+		m_TotalElapsedTime -= m_TimeTreshHold;
 		m_FrameCount = 0;
 	}
 }

@@ -2,10 +2,12 @@
 #include "GameObject.h"
 
 #include <algorithm>
+#include <chrono>
 
 using namespace dae;
 
 unsigned int Scene::m_idCounter = 0;
+
 
 Scene::Scene(const std::string& name) : m_name(name) {}
 
@@ -44,10 +46,29 @@ void Scene::FixedUpdate(const float fixedTime)
 
 void Scene::Update(const float deltaTime)
 {
-	for(auto& object : m_objects)
+	for (auto& object : m_objects)
 	{
 		object->Update(deltaTime);
 	}
+}
+
+void Scene::LateUpdate(const float deltaTime)
+{
+	for (uint32_t i{}; i < m_objects.size(); ++i)
+	{
+		auto& object = m_objects[i];
+
+		if (object->NeedsDestroyed())
+		{
+			m_ObjectKillList.push_back(i);
+		}
+		else
+		{
+			object->LateUpdate(deltaTime);
+		}
+	}
+
+	KillGameObjects();
 }
 
 void Scene::Render() const
@@ -58,3 +79,14 @@ void Scene::Render() const
 	}
 }
 
+void Scene::KillGameObjects()
+{
+	if (m_ObjectKillList.empty())
+		return;
+	for (auto& index : m_ObjectKillList)
+	{
+		m_objects.erase(m_objects.begin() + index);
+	}
+
+	m_ObjectKillList.clear();
+}
