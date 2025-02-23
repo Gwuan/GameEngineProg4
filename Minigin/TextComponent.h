@@ -36,4 +36,3 @@ private:
 	std::shared_ptr<dae::Font> m_Font;
 	std::shared_ptr<dae::Texture2D> m_textTexture;
 };
-

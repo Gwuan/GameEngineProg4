@@ -1,7 +1,52 @@
 #include <string>
 #include "GameObject.h"
+
+#include <windows.h>
+
+#include <memory>
 #include "ResourceManager.h"
 #include "Renderer.h"
+
+
+dae::GameObject::GameObject(const glm::vec2& position)
+	: m_IsDead(false),
+      m_pParent()
+{
+	SetPosition(position.x, position.y);
+}
+
+dae::GameObject::~GameObject()
+{
+	m_Children.clear();
+	m_pParent = nullptr;
+	
+}
+
+void dae::GameObject::AddChild(GameObject* object)
+{
+	m_Children.push_back(object);
+}
+
+void dae::GameObject::RemoveChild(GameObject* object)
+{
+    auto it = std::remove_if(m_Children.begin(), m_Children.end(),
+                             [object](GameObject* child) {
+                                 return child == object;
+                             });
+
+    if (it != m_Children.end())
+    {
+        m_Children.erase(it);
+    }
+}
+
+bool dae::GameObject::IsChild(GameObject* object)
+{
+	if (!object)
+		return false;
+
+    return std::find(m_Children.begin(), m_Children.end(), object) != m_Children.end();
+}
 
 void dae::GameObject::KillComponents()
 {
@@ -65,7 +110,31 @@ void dae::GameObject::Render() const
 	}
 }
 
-void dae::GameObject::SetPosition(float x, float y)
+void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 {
-	m_transform.SetPosition(x, y, 0.0f);
+	if (IsChild(parent) || parent == this || parent == m_pParent)
+		return;
+
+	if (parent == nullptr)
+	{
+		const auto worldPos = GetWorldPosition();
+		SetPosition(worldPos.x, worldPos.y);
+	}
+	else if (keepWorldPos)
+	{
+		const auto worldPos = GetWorldPosition() - parent->GetWorldPosition();
+		SetPosition(worldPos.x, worldPos.y);
+	}
+
+	if (m_pParent)
+	{
+		m_pParent->RemoveChild(this);
+	}
+
+	m_pParent = parent;
+
+	if(m_pParent)
+	{
+		m_pParent->AddChild(this);
+	}
 }

@@ -2,14 +2,15 @@
 #include <complex>
 #include <iostream>
 #include <memory>
+#include "Component.h"
 #include "Transform.h"
 
 #include <vector>
 #include <stdexcept>
-
-#include "Component.h"
+#include "glm.hpp"
 
 class Component;
+class Transform;
 
 namespace dae
 {
@@ -46,17 +47,16 @@ namespace dae
 			}
 		}
 
+		// Return nullptr if the desired component isn't found
 		template <typename T>
 		T* GetComponent()
 		{
 			for (auto& com : m_Components)
 			{
-				// Check if the current component has the same class as the requested class
 				if(auto casted = dynamic_cast<T*>(com.get()))
 					return casted;
 			}
 
-			// If nothing is found return nullptr;
 			return nullptr;
 		}
 
@@ -70,25 +70,37 @@ namespace dae
 		}
 		#pragma endregion
 
-		Transform GetTransform() const { return this->m_transform; }
-
-		void SetPosition(float x, float y);
+		void SetParent(GameObject* parent, bool keepWorldPosition = false);
+		GameObject* GetParent() const { return m_pParent; }
+		std::vector<GameObject*> GetChildren() const { return m_Children; }
 
 		bool NeedsDestroyed() const { return m_IsDead; }
-		void Destroy() { m_IsDead = true; };
+		void Destroy() { m_IsDead = true; }
 
-		GameObject() = default;
-		~GameObject() = default;
+		void SetPosition(float x, float y) { m_Transform.SetPosition(*this, x, y); }
+		Transform GetTransform() const { return m_Transform; }
+
+		glm::vec2 GetWorldPosition() { return m_Transform.GetWorldPosition(*this); }
+
+		explicit GameObject(const glm::vec2& position = glm::vec2(0.f, 0.f));
+		~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
 	private:
+		void AddChild(GameObject* object);
+		void RemoveChild(GameObject* object);
+		bool IsChild(GameObject* object);
+
 		void KillComponents();
 
-		bool m_IsDead = false;
-		Transform m_transform{};
+		bool m_IsDead;
+		GameObject* m_pParent;
+		Transform m_Transform;
+
+		std::vector<GameObject*> m_Children;
 		std::vector<uint32_t> m_ComponentKillList;
 		std::vector<std::unique_ptr<Component>> m_Components;
 	};

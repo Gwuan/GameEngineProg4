@@ -22,7 +22,7 @@ void TextureComponent::Render() const
 {
 	if(m_Texture)
 	{
-		auto& pos = GetOwner().GetTransform().GetPosition();
+		auto pos = GetOwner().GetWorldPosition();
 		dae::Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 	}
 }

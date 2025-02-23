@@ -33,4 +33,3 @@ private:
 	bool m_IsDead = false;
 	dae::GameObject& m_Owner;
 };
-
