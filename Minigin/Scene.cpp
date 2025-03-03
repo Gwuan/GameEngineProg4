@@ -79,6 +79,14 @@ void Scene::Render() const
 	}
 }
 
+void Scene::DebugRender()
+{
+	for (const auto& object : m_objects)
+	{
+		object->DebugRender();
+	}
+}
+
 void Scene::KillGameObjects()
 {
 	if (m_ObjectKillList.empty())

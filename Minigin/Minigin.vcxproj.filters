@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{924cc50c-13ee-45d2-a7e1-5f6bc2fbfd0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{be7b11cf-475e-45d9-8b7e-4dc9639f6578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\TrashTheCache_Components">
+      <UniqueIdentifier>{679edb1a-1ed0-4ccb-b2f5-abede82277a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TrachTheCache_Classes">
+      <UniqueIdentifier>{f8c39e6c-8336-4251-9e6e-5e62bfa14a2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -48,20 +60,56 @@
     <ClInclude Include="Minigin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\3rdParty\ImGui\imgui.h">
+      <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="TextComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\3rdParty\ImGui\imgui_plot.h">
+      <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="TextureComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\3rdParty\ImGui\backends\imgui_impl_sdl2.h">
+      <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="FpsCounterComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\3rdParty\ImGui\imconfig.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\ImGui\imstb_rectpack.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\ImGui\imstb_textedit.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\ImGui\imstb_truetype.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\ImGui\imgui_internal.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\ImGui\backends\imgui_impl_opengl3.h">
+      <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="CircularMovement.h">
-      <Filter>Header Files</Filter>
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsCounterComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TextComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject3DAlt.h">
+      <Filter>TrachTheCache_Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject3D.h">
+      <Filter>TrachTheCache_Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryBenchComponent.h">
+      <Filter>Components\TrashTheCache_Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,20 +146,53 @@
     <ClCompile Include="Minigin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rdParty\ImGui\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\ImGui\imgui_demo.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\ImGui\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\ImGui\imgui_tables.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\ImGui\imgui_widgets.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\ImGui\backends\imgui_impl_sdl2.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\ImGui\imgui_plot.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\ImGui\backends\imgui_impl_opengl3.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="Component.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="FpsCounterComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="CircularMovement.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TextComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject3D.cpp">
+      <Filter>TrachTheCache_Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject3DAlt.cpp">
+      <Filter>TrachTheCache_Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryBenchComponent.cpp">
+      <Filter>Components\TrashTheCache_Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

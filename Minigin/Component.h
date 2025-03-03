@@ -14,6 +14,7 @@ public:
 	virtual void FixedUpdate(const float fixedTimeStep) = 0;
 	virtual void LateUpdate(const float deltaTime) = 0;
 	virtual void Render() const = 0;
+	virtual void DebugRender() {}
 
 	void Destroy() { m_IsDead = true;}
 	bool NeedDestroyed() const { return m_IsDead; }
