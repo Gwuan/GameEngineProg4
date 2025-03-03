@@ -2,6 +2,12 @@
 #include "Component.h"
 #include <glm.hpp>
 
+enum class RotationDirection
+{
+	LEFT,
+	RIGHT
+};
+
 class CircularMovement final : public Component
 {
 	void FixedUpdate(const float fixedTimeStep) override;
@@ -10,16 +16,17 @@ class CircularMovement final : public Component
 	void Render() const override;
 
 protected:
-	explicit CircularMovement(dae::GameObject& owner);
+	explicit CircularMovement(dae::GameObject& owner, RotationDirection desiredDirection = RotationDirection::LEFT);
 
 	template <typename T, typename ... Args>
 	friend T* dae::GameObject::AddComponent(Args&&... args);
 
 private:
-	bool m_UsingStaticCenterPoint = false;
-	float m_Speed = 10;
-	float m_Radius = 10;
+	const float m_Speed;
+	const float m_Radius;
 	float m_Angle;
-	glm::vec2 m_DefaultStartPosition;
+	Transform* m_OwnerTransform;
+	const glm::vec2 m_CenterPoint;
+	const RotationDirection m_Direction;
 };
 

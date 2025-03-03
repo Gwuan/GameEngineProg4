@@ -4,6 +4,8 @@
 #include <windows.h>
 
 #include <memory>
+
+#include "imgui_plot.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
 
@@ -12,14 +14,14 @@ dae::GameObject::GameObject(const glm::vec2& position)
 	: m_IsDead(false),
       m_pParent()
 {
-	SetPosition(position.x, position.y);
+	m_Transform = new Transform(*this);
+	m_Transform->SetPosition(position.x, position.y);
 }
 
 dae::GameObject::~GameObject()
 {
 	m_Children.clear();
 	m_pParent = nullptr;
-	
 }
 
 void dae::GameObject::AddChild(GameObject* object)
@@ -110,6 +112,19 @@ void dae::GameObject::Render() const
 	}
 }
 
+void dae::GameObject::DebugRender()
+{
+	ImGui::SetNextWindowSize(ImVec2(200, 200));
+	ImGui::Begin("Debug renderer for gameObject", NULL, ImGuiWindowFlags_MenuBar);
+
+	for (auto& component : m_Components)
+	{
+		component->DebugRender();
+	}
+
+	ImGui::End();
+}
+
 void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 {
 	if (IsChild(parent) || parent == this || parent == m_pParent)
@@ -118,12 +133,16 @@ void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 	if (parent == nullptr)
 	{
 		const auto worldPos = GetWorldPosition();
-		SetPosition(worldPos.x, worldPos.y);
+		m_Transform->SetPosition(worldPos.x, worldPos.y);
 	}
-	else if (keepWorldPos)
+	else
 	{
-		const auto worldPos = GetWorldPosition() - parent->GetWorldPosition();
-		SetPosition(worldPos.x, worldPos.y);
+		if (keepWorldPos)
+		{
+			const auto worldPos = GetWorldPosition() - parent->GetWorldPosition();
+			m_Transform->SetPosition(worldPos.x, worldPos.y);
+		}
+		m_Transform->MarkDirty();
 	}
 
 	if (m_pParent)

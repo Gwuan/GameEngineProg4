@@ -1,51 +1,48 @@
 #include "Transform.h"
+
+#include <windows.h>
+
 #include "GameObject.h"
 
-Transform::Transform()
-    : m_LocalPosition(0.0f, 0.0f), m_WorldPosition(0.0f, 0.0f), m_IsDirty(true) {}
+Transform::Transform(dae::GameObject& owner)
+    : m_Owner(owner),
+	  m_LocalPosition(0.0f, 0.0f),
+	  m_WorldPosition(0.0f, 0.0f),
+	  m_IsDirty(true) {}
 
-void Transform::SetPosition(dae::GameObject& owner, float x, float y)
+void Transform::SetPosition(float x, float y)
 {
 	m_LocalPosition = {x, y};
     MarkDirty();
-
-    // Mark all children as dirty, doesn't seem to work either
-    for (auto child : owner.GetChildren())
-    {
-        if (child) 
-        {
-            child->GetTransform().MarkDirty();
-        }
-    }
-}
-
-void Transform::SetPosition(dae::GameObject& owner, const glm::vec2& position)
-{
-    SetPosition(owner, position.x, position.y);
 }
 
 void Transform::MarkDirty()
 {
+    if (m_IsDirty)  // Avoid unnecessary calls
+        return;
+
     m_IsDirty = true;
+
+    for (dae::GameObject* child : m_Owner.GetChildren())
+    {
+	    child->GetTransform()->MarkDirty();
+    }
 }
 
-glm::vec2 Transform::GetWorldPosition(dae::GameObject& owner)
+glm::vec2 Transform::GetWorldPosition()
 {
     if (m_IsDirty)
     {
-        UpdateWorldPosition(owner);
+        UpdateWorldPosition();
     }
     return m_WorldPosition;
 }
 
-void Transform::UpdateWorldPosition(dae::GameObject& owner) const
+void Transform::UpdateWorldPosition()
 {
-    if (!m_IsDirty)
-        return;
-
-    if (auto parent = owner.GetParent())
+    if (auto parent = m_Owner.GetParent())
     {
-        auto world = parent->GetTransform().GetWorldPosition(*parent);
+        auto world = parent->GetTransform()->GetWorldPosition();
         m_WorldPosition = world + m_LocalPosition;
     }
     else

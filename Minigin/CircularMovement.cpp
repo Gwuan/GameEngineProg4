@@ -4,42 +4,34 @@ void CircularMovement::FixedUpdate(const float) {}
 
 void CircularMovement::Update(const float deltaTime)
 {
-    m_Angle += m_Speed * deltaTime; 
-
-	float x;
-	float y;
-
-	if (m_UsingStaticCenterPoint)
+	switch (m_Direction)
 	{
-		x = m_DefaultStartPosition.x + m_Radius * cosf(m_Angle);
-		y = m_DefaultStartPosition.y + m_Radius * sinf(m_Angle);
-	}
-	else
-	{
-		x = GetOwner().GetParent()->GetWorldPosition().x + m_Radius * glm::cos(m_Angle);
-		y = GetOwner().GetParent()->GetWorldPosition().y + m_Radius * glm::sin(m_Angle);
+	case RotationDirection::LEFT:
+		m_Angle += m_Speed * deltaTime;
+		break;
+	case RotationDirection::RIGHT:
+		m_Angle -= m_Speed * deltaTime;
+		break;
 	}
 
 
-	std::cout << GetOwner().GetWorldPosition().x  << " " << GetOwner().GetWorldPosition().y << std::endl;
+	const float x{ m_CenterPoint.x + (cosf(m_Angle) * m_Radius) };
+	const float y{ m_CenterPoint.y + (sinf(m_Angle) * m_Radius) };
 
-	GetOwner().SetPosition(x, y);
-
+	m_OwnerTransform->SetPosition(x, y);
 }
 
 void CircularMovement::LateUpdate(const float) {}
 
 void CircularMovement::Render() const{}
 
-CircularMovement::CircularMovement(dae::GameObject& owner)
+CircularMovement::CircularMovement(dae::GameObject& owner, RotationDirection desiredDirection)
 	: Component(owner),
+	  m_Speed(5),
+	  m_Radius(25),
 	  m_Angle(0),
-	  m_DefaultStartPosition(0.f, 0.f)
+	  m_OwnerTransform(owner.GetTransform()),
+	  m_CenterPoint(m_OwnerTransform->GetLocalPosition()),
+	  m_Direction(desiredDirection)
 {
-    if (!owner.GetParent())
-    {
-		m_UsingStaticCenterPoint = true;   
-		m_DefaultStartPosition = owner.GetWorldPosition();
-    }
-
 }

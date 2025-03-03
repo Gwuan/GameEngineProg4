@@ -24,6 +24,7 @@ namespace dae
 		void Update(const float deltaTime);
 		void LateUpdate(const float deltaTime);
 		void Render() const;
+		void DebugRender();
 
 		#pragma region Component related functions
 		template <typename T, typename ... Args>
@@ -77,10 +78,9 @@ namespace dae
 		bool NeedsDestroyed() const { return m_IsDead; }
 		void Destroy() { m_IsDead = true; }
 
-		void SetPosition(float x, float y) { m_Transform.SetPosition(*this, x, y); }
-		Transform GetTransform() const { return m_Transform; }
+		Transform* GetTransform() { return m_Transform; }
 
-		glm::vec2 GetWorldPosition() { return m_Transform.GetWorldPosition(*this); }
+		glm::vec2 GetWorldPosition() { return m_Transform->GetWorldPosition(); }
 
 		explicit GameObject(const glm::vec2& position = glm::vec2(0.f, 0.f));
 		~GameObject();
@@ -98,7 +98,7 @@ namespace dae
 
 		bool m_IsDead;
 		GameObject* m_pParent;
-		Transform m_Transform;
+		Transform*  m_Transform;
 
 		std::vector<GameObject*> m_Children;
 		std::vector<uint32_t> m_ComponentKillList;
