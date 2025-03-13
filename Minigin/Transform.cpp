@@ -10,10 +10,15 @@ Transform::Transform(dae::GameObject& owner)
 	  m_WorldPosition(0.0f, 0.0f),
 	  m_IsDirty(true) {}
 
+void Transform::SetPosition(glm::vec2 newPosition)
+{
+    m_LocalPosition = newPosition;
+    MarkDirty();
+}
+
 void Transform::SetPosition(float x, float y)
 {
-	m_LocalPosition = {x, y};
-    MarkDirty();
+    SetPosition({x, y});
 }
 
 void Transform::MarkDirty()

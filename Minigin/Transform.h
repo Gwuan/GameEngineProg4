@@ -11,6 +11,7 @@ class Transform
 public:
     Transform(dae::GameObject& owner);
 
+    void SetPosition(glm::vec2 newPosition);
     void SetPosition(float x, float y);
 
     glm::vec2 GetLocalPosition() const { return m_LocalPosition; }
