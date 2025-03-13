@@ -12,9 +12,13 @@
 
 dae::GameObject::GameObject(const glm::vec2& position)
 	: m_IsDead(false),
-      m_pParent()
+      m_pParent(nullptr),
+	  m_Transform(std::make_unique<Transform>(*this)),
+	  m_Children(),
+	  m_ComponentKillList(),
+	  m_Components()
+      
 {
-	m_Transform = new Transform(*this);
 	m_Transform->SetPosition(position.x, position.y);
 }
 

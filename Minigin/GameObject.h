@@ -78,7 +78,7 @@ namespace dae
 		bool NeedsDestroyed() const { return m_IsDead; }
 		void Destroy() { m_IsDead = true; }
 
-		Transform* GetTransform() { return m_Transform; }
+		Transform* GetTransform() { return m_Transform.get(); }
 
 		glm::vec2 GetWorldPosition() { return m_Transform->GetWorldPosition(); }
 
@@ -98,7 +98,7 @@ namespace dae
 
 		bool m_IsDead;
 		GameObject* m_pParent;
-		Transform*  m_Transform;
+		std::unique_ptr<Transform> m_Transform;
 
 		std::vector<GameObject*> m_Children;
 		std::vector<uint32_t> m_ComponentKillList;
