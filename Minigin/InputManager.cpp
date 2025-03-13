@@ -10,24 +10,24 @@
 constexpr auto MAX_GAMEPADS = 4;
 
 dae::InputManager::InputManager()
-	: m_CurrentKeyboardState(static_cast<Uint8*>(malloc(sizeof(Uint8))))
+	: m_BindedCommands(),
+	  m_CurrentKeyboardState(SDL_GetKeyboardState(nullptr)),
+	  m_Gamepads(MAX_GAMEPADS),
+	  m_PreviousKeyboardState(SDL_NUM_SCANCODES),
+	  m_KeysPressedThisFrame(SDL_NUM_SCANCODES),
+	  m_KeysReleasedThisFrame(SDL_NUM_SCANCODES)
 {
 	// Creates bloat for unused controllers, I might want look into how I can handle
-	// controller connection/disconnection. 
-	m_Gamepads.reserve(MAX_GAMEPADS);
-	for (uint32_t i{}; i < MAX_GAMEPADS; i++)
+	// controller connection/disconnection.
+	for (uint32_t controllerIdx{}; controllerIdx < MAX_GAMEPADS; controllerIdx++)
 	{
-		m_Gamepads.emplace_back(std::make_unique<Gamepad>(i));
+		m_Gamepads[controllerIdx] = std::make_unique<Gamepad>(controllerIdx);
 	}
-
-	m_PreviousKeyboardState.resize(SDL_NUM_SCANCODES);
-
-	m_KeysReleasedThisFrame.resize(SDL_NUM_SCANCODES);
-	m_KeysPressedThisFrame.resize(SDL_NUM_SCANCODES);
 }
 
 dae::InputManager::~InputManager()
 {
+	m_CurrentKeyboardState = nullptr;
 }
 
 bool dae::InputManager::ProcessInput()
@@ -61,16 +61,15 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
-// TODO: Add keyboard support
 void dae::InputManager::HandleBindedInput()
 {
 	for (auto& bindedCommand : m_BindedCommands)
 	{
-		auto& controllerIdx = std::get<0>(bindedCommand.first);
-		auto& gamepadButton = std::get<1>(bindedCommand.first);
-		auto& keyScancode = std::get<2>(bindedCommand.first);
-		InputAction inputAction = std::get<3>(bindedCommand.first);
-		auto& command = bindedCommand.second;
+		const unsigned& controllerIdx = std::get<0>(bindedCommand.first);
+		const Gamepad::GamepadButton& gamepadButton = std::get<1>(bindedCommand.first);
+		const SDL_Scancode& keyScancode = std::get<2>(bindedCommand.first);
+		const InputAction& inputAction = std::get<3>(bindedCommand.first);
+		auto command = bindedCommand.second.get();
 
 		switch (inputAction)
 		{
@@ -106,6 +105,18 @@ void dae::InputManager::BindCommand(unsigned int controllerIdx, Gamepad::Gamepad
 	ControllerKey inputKey = std::make_tuple(controllerIdx, button, keyboardKey, inputAction);
 	m_BindedCommands.insert_or_assign(inputKey, std::move(command));
 }
+
+bool dae::InputManager::UnbindCommand(unsigned int controllerIdx, Gamepad::GamepadButton button, SDL_Scancode keyboardKey, InputAction inputAction)
+{
+	if (auto found = m_BindedCommands.find(ControllerKey(controllerIdx, button, keyboardKey, inputAction)); found != m_BindedCommands.end())
+	{
+		m_BindedCommands.erase(found);
+		return true;
+	}
+
+	return false;
+}
+
 
 bool dae::InputManager::IsKeyPressed(SDL_Scancode scancode) const
 {
