@@ -16,6 +16,7 @@ public:
 	void Render() const override;
 
 	void SetText(const std::string& text);
+	void SetTextOffset(const glm::vec2& offset) { m_TextOffset = offset; };
 
 	TextComponent() = delete;
 	virtual ~TextComponent() override = default;
@@ -33,6 +34,7 @@ protected:
 private:
 	bool m_NeedsUpdate;
 	std::string m_Text;
+	glm::vec2 m_TextOffset;
 	std::shared_ptr<dae::Font> m_Font;
 	std::shared_ptr<dae::Texture2D> m_textTexture;
 };

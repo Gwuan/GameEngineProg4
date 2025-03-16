@@ -49,8 +49,8 @@ namespace dae
 		std::vector<std::unique_ptr<Gamepad>> m_Gamepads;
 
 		// Keyboard Related
-		std::vector<Uint8> m_PreviousKeyboardState;
-		std::vector<Uint8> m_KeysPressedThisFrame{};
-		std::vector<Uint8> m_KeysReleasedThisFrame{};
+		std::vector<bool> m_PreviousKeyboardState;
+		std::vector<bool> m_KeysPressedThisFrame{};
+		std::vector<bool> m_KeysReleasedThisFrame{};
 	};
 }

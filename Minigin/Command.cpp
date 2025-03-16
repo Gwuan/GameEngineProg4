@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "MovementComponent.h"
+#include "SubjectComponent.h"
 
 Command::Command(dae::GameObject* object)
 	: m_pObject(object)
@@ -35,4 +36,19 @@ MoveSaltCommand::MoveSaltCommand(dae::GameObject* object, MoveDirection directio
 void MoveSaltCommand::Execute()
 {
 	m_pMovementComp->Move(m_Direction);
+}
+
+void DieCommand::Execute()
+{
+	GetGameObject()->GetSubject()->Notify(GetGameObject(), "PlayerDied");
+}
+
+void KillHotDogCommand::Execute()
+{
+	GetGameObject()->GetSubject()->Notify(GetGameObject(), "HotDogKilled");
+}
+
+void KillPickleCommand::Execute()
+{
+	GetGameObject()->GetSubject()->Notify(GetGameObject(), "PickleKilled");
 }

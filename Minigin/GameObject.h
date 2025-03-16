@@ -9,8 +9,10 @@
 #include <stdexcept>
 #include "glm.hpp"
 
+class IObserver;
 class Component;
 class Transform;
+class SubjectComponent;
 
 namespace dae
 {
@@ -78,9 +80,10 @@ namespace dae
 		bool NeedsDestroyed() const { return m_IsDead; }
 		void Destroy() { m_IsDead = true; }
 
-		Transform* GetTransform() { return m_Transform.get(); }
+		Transform* GetTransform() const { return m_Transform.get(); }
+		glm::vec2 GetWorldPosition() const { return m_Transform->GetWorldPosition(); }
+		SubjectComponent* GetSubject() const { return m_Subject; }
 
-		glm::vec2 GetWorldPosition() { return m_Transform->GetWorldPosition(); }
 
 		explicit GameObject(const glm::vec2& position = glm::vec2(0.f, 0.f));
 		~GameObject();
@@ -98,7 +101,9 @@ namespace dae
 
 		bool m_IsDead;
 		GameObject* m_pParent;
+
 		std::unique_ptr<Transform> m_Transform;
+		SubjectComponent* m_Subject;
 
 		std::vector<GameObject*> m_Children;
 		std::vector<uint32_t> m_ComponentKillList;

@@ -6,9 +6,8 @@
 #include <memory>
 
 #include "imgui_plot.h"
-#include "ResourceManager.h"
 #include "Renderer.h"
-
+#include "SubjectComponent.h"
 
 dae::GameObject::GameObject(const glm::vec2& position)
 	: m_IsDead(false),
@@ -17,9 +16,9 @@ dae::GameObject::GameObject(const glm::vec2& position)
 	  m_Children(),
 	  m_ComponentKillList(),
 	  m_Components()
-      
 {
 	m_Transform->SetPosition(position.x, position.y);
+	m_Subject = AddComponent<SubjectComponent>();
 }
 
 dae::GameObject::~GameObject()

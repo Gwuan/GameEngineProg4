@@ -10,6 +10,7 @@ TextComponent::TextComponent(dae::GameObject& owner, std::shared_ptr<dae::Font> 
 	: Component(owner),
       m_NeedsUpdate(true),
       m_Text(" "),
+	  m_TextOffset(0.f, 0.f),
       m_Font(font),
       m_textTexture(nullptr)
 {}
@@ -18,6 +19,7 @@ TextComponent::TextComponent(dae::GameObject& owner, const std::string& text, st
 	: Component(owner),
 	  m_NeedsUpdate(true),
 	  m_Text(text),
+	  m_TextOffset(0.f, 0.f),
 	  m_Font(font),
 	  m_textTexture(nullptr)
 {}
@@ -47,7 +49,7 @@ void TextComponent::Render() const
 {
 	if (m_textTexture != nullptr)
 	{
-		const auto& pos = GetOwner().GetWorldPosition();
+		const auto& pos = GetOwner().GetWorldPosition() + m_TextOffset;
 		dae::Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
 	}
 }

@@ -50,3 +50,29 @@ private:
 	MovementComponent* m_pMovementComp;
 };
 
+// ===================
+// Die
+class DieCommand final : public Command
+{
+public:
+	DieCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+// ===================
+// KillHotDog
+class KillHotDogCommand final : public Command
+{
+public:
+	KillHotDogCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+// ===================
+// KillPickle
+class KillPickleCommand final : public Command
+{
+public:
+	KillPickleCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};

@@ -52,8 +52,8 @@ bool dae::InputManager::ProcessInput()
 	for (uint32_t i{}; i < SDL_NUM_SCANCODES; i++)
 	{
 		const Uint8 keyChanged = m_CurrentKeyboardState[i] ^ m_PreviousKeyboardState[i];
-		m_KeysPressedThisFrame[i] = keyChanged & m_CurrentKeyboardState[i];
-		m_KeysReleasedThisFrame[i] = keyChanged & (~m_CurrentKeyboardState[i]);
+		m_KeysPressedThisFrame[i] = keyChanged && m_CurrentKeyboardState[i];
+		m_KeysReleasedThisFrame[i] = keyChanged && (~m_CurrentKeyboardState[i]);
 	}
 
 	HandleBindedInput();
