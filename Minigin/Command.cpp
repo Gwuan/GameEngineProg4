@@ -46,9 +46,12 @@ void DieCommand::Execute()
 void KillHotDogCommand::Execute()
 {
 	GetGameObject()->GetSubject()->Notify(GetGameObject(), "HotDogKilled");
+	GetGameObject()->GetSubject()->Notify(GetGameObject(), "EnemyKilled");
+
 }
 
 void KillPickleCommand::Execute()
 {
 	GetGameObject()->GetSubject()->Notify(GetGameObject(), "PickleKilled");
+	GetGameObject()->GetSubject()->Notify(GetGameObject(), "EnemyKilled");
 }

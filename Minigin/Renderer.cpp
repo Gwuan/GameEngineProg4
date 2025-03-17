@@ -2,7 +2,6 @@
 #include "Renderer.h"
 
 #include <iostream>
-#include <steam_api_common.h>
 
 #include "SceneManager.h"
 #include "Texture2D.h"
@@ -49,8 +48,6 @@ void dae::Renderer::Render() const
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
-
-	SteamAPI_RunCallbacks(); 
 
 	SceneManager::GetInstance().Render();
 

@@ -1,5 +1,6 @@
 #include "HudDemoComponent.h"
 
+#include "SteamAchievements.h"
 #include "ResourceManager.h"
 #include "TextComponent.h"
 
@@ -31,10 +32,19 @@ void HudDemoComponent::OnNotify(dae::GameObject*, EventID event)
 	{
 		m_Score += 100;
 		m_ScoreTextComp->SetText(m_DefaultScoreText + std::to_string(m_Score));
+
 	}
 	if (event == hasher("PickleKilled"))
 	{
 		m_Score += 200;
 		m_ScoreTextComp->SetText(m_DefaultScoreText + std::to_string(m_Score));
 	}
+	if (event == hasher("EnemyKilled"))
+	{
+		if (m_Score >= 500)
+		{
+			CSteamAchievements::GetInstance().SetAchievement("ACH_WIN_ONE_GAME");
+		}
+	}
+
 }

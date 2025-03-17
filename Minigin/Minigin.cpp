@@ -11,7 +11,10 @@
 #include "ResourceManager.h"
 
 #include <chrono>
+#include <steam_api_common.h>
 #include <thread>
+
+#include "SteamAchievements.h"
 
 SDL_Window* g_window{};
 const float dae::Minigin::m_MsPerFrame{16.667f}; // 16.667ms -> 60 fps
@@ -69,7 +72,7 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	}
 
 	Renderer::GetInstance().Init(g_window);
-
+	CSteamAchievements::GetInstance().Init(g_Achievements, 4);
 	ResourceManager::GetInstance().Init(dataPath);
 }
 
@@ -113,6 +116,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			sceneManager.FixedUpdate(m_FixedTimeStep);
 			lag -= m_FixedTimeStep;
 		} 
+		SteamAPI_RunCallbacks(); 
 
 		sceneManager.Update(deltaTime);
 		sceneManager.LateUpdate(deltaTime);
