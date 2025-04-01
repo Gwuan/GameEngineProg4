@@ -35,13 +35,11 @@ namespace dae
 		bool UnbindCommand(unsigned int controllerIdx, Gamepad::GamepadButton button,
 			SDL_Scancode keyboardKey, InputAction inputAction);
 
-
 	private:
 		bool IsKeyPressed(SDL_Scancode scancode) const;
 		bool IsKeyReleased(SDL_Scancode scancode) const;
 		bool IsKeyHoldDown(SDL_Scancode scancode) const;
 		
-
 		using ControllerKey = std::tuple<unsigned int, Gamepad::GamepadButton, SDL_Scancode, InputAction>;
 		using InputMap = std::map<ControllerKey, std::unique_ptr<Command>>;
 		InputMap m_BindedCommands;

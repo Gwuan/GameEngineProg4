@@ -81,9 +81,6 @@
     <ClInclude Include="..\3rdParty\ImGui\backends\imgui_impl_opengl3.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="CircularMovement.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -109,9 +106,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SubjectComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HudDemoComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -141,9 +135,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Minigin.cpp">
@@ -179,9 +170,6 @@
     <ClCompile Include="FpsCounterComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="CircularMovement.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="TextComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -198,9 +186,6 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="SubjectComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HudDemoComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

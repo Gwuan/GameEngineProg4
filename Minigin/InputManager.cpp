@@ -45,10 +45,11 @@ bool dae::InputManager::ProcessInput()
 		gamepad->Update();
 	}
 
-	// Not sure if this needs to be pimpled away
 	std::copy(m_CurrentKeyboardState, m_CurrentKeyboardState + SDL_NUM_SCANCODES, m_PreviousKeyboardState.begin());
 	m_CurrentKeyboardState = SDL_GetKeyboardState(nullptr);
 
+	// This doesn't work like intended, it will work sometimes when the key is rightfully timed when the frame changes?
+	// TODO: Make sure that the state can be captured correctly
 	for (uint32_t i{}; i < SDL_NUM_SCANCODES; i++)
 	{
 		const Uint8 keyChanged = m_CurrentKeyboardState[i] ^ m_PreviousKeyboardState[i];
@@ -116,7 +117,6 @@ bool dae::InputManager::UnbindCommand(unsigned int controllerIdx, Gamepad::Gamep
 
 	return false;
 }
-
 
 bool dae::InputManager::IsKeyPressed(SDL_Scancode scancode) const
 {
