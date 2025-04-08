@@ -27,7 +27,7 @@ private:
 	MovementComponent* m_pMovementComp;
 };
 
-// ===================
+// ===================	
 // Die
 class DieCommand final : public Command
 {
@@ -51,5 +51,12 @@ class KillPickleCommand final : public Command
 {
 public:
 	KillPickleCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+class SoundTestCommand : public Command
+{
+public:
+	SoundTestCommand(dae::GameObject* object) : Command(object) {}
 	void Execute() override;
 };

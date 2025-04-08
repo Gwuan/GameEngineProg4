@@ -13,6 +13,10 @@
 #include <chrono>
 #include <thread>
 
+#include "NullSoundSystem.hpp"
+#include "SDLSoundSystem.h"
+#include "ServiceAllocator.h"
+
 SDL_Window* g_window{};
 const float dae::Minigin::m_MsPerFrame{16.667f}; // 16.667ms -> 60 fps
 const float dae::Minigin::m_FixedTimeStep{0.02f};
@@ -71,6 +75,8 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+	ServiceAllocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
 }
 
 dae::Minigin::~Minigin()

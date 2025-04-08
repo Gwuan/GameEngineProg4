@@ -1,4 +1,9 @@
 #include "GameCommands.h"
+
+#include <chrono>
+
+#include "ServiceAllocator.h"
+#include "SoundSystem.hpp"
 #include "SubjectComponent.h"
 
 MovePepperCommand::MovePepperCommand(dae::GameObject* object, MoveDirection direction)
@@ -39,5 +44,16 @@ void KillHotDogCommand::Execute()
 void KillPickleCommand::Execute()
 {
 	GetGameObject()->GetSubject()->Notify(GetGameObject(), "PickleKilled");
+}
+
+void SoundTestCommand::Execute()
+{
+	const auto startTime = std::chrono::high_resolution_clock::now();	
+	ServiceAllocator::GetSoundSystem().PlaySoundEffect("../gameResources/sounds/level_start.wav", 1.f);
+	// ServiceAllocator::GetSoundSystem().PlayMusic("../gameResources/sounds/background_music.ogg", 1.f);
+	const auto endTime = std::chrono::high_resolution_clock::now();
+
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+	std::cout << "Play took: " << elapsed << std::endl;
 }
 

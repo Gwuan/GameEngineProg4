@@ -33,7 +33,7 @@ std::shared_ptr<dae::Font> dae::ResourceManager::LoadFont(const std::string& fil
 	const auto filename = fs::path(fullPath).filename().string();
 	const auto key = std::pair<std::string, uint8_t>(filename, size);
 	if(m_loadedFonts.find(key) == m_loadedFonts.end())
-		m_loadedFonts.insert(std::pair(key,std::make_shared<Font>(fullPath.string(), size)));
+		m_loadedFonts.insert(std::pair	(key,std::make_shared<Font>(fullPath.string(), size)));
 	return m_loadedFonts.at(key);
 }
 

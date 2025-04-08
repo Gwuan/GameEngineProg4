@@ -19,6 +19,9 @@
     <Filter Include="Components">
       <UniqueIdentifier>{be7b11cf-475e-45d9-8b7e-4dc9639f6578}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SoundSystem">
+      <UniqueIdentifier>{c0672358-11f4-46d5-9ee5-1a3eacb1f90f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -108,6 +111,18 @@
     <ClInclude Include="SubjectComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ServiceAllocator.h">
+      <Filter>SoundSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.hpp">
+      <Filter>SoundSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLSoundSystem.h">
+      <Filter>SoundSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="NullSoundSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -187,6 +202,12 @@
     </ClCompile>
     <ClCompile Include="SubjectComponent.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceAllocator.cpp">
+      <Filter>SoundSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLSoundSystem.cpp">
+      <Filter>SoundSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
