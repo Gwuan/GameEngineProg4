@@ -1,21 +1,27 @@
 #pragma once
+#include <string>
 
 class ISoundSystem
 {
 
 public:
-	struct QueuedAudio
-	{
-		const std::string path;
-		const int volume;
-		const bool isSoundEffect;
-	};
-
 	virtual ~ISoundSystem() = default;
 
 	virtual void PlaySoundEffect(const std::string& path, const float volume) = 0;
-	virtual void StopAllSoundEffects() = 0;
 
 	virtual void PlayMusic(const std::string& path, const float volume) = 0;
-	virtual void StopSoundLoop(const std::string& path, const float volume) = 0;
+	virtual void StopMusic() = 0;
+	virtual void PauseMusic() = 0;
+	virtual void ResumeMusic() = 0;
+
+	virtual void PauseAll() = 0;
+	virtual void ResumeAll() = 0;
+
+protected:
+	struct QueuedAudio
+	{
+		std::string path;
+		float volume;
+		bool isSoundEffect;
+	};
 };

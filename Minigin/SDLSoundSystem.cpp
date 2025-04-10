@@ -1,15 +1,45 @@
 #include "SDLSoundSystem.h"
-
 #include <iostream>
 #include <SDL.h>
-
-#include "SDL_audio.h"
 #include <SDL_mixer.h>
+#include <queue>
+#include <map>
+#include <mutex>
+#include <thread>
+#include <condition_variable>
+#include <algorithm>
 
-SDLSoundSystem::SDLSoundSystem()
-	: m_SoundEffectQueue()
+class SDLSoundSystem::Impl
 {
-	// TODO: Clean this up
+public:
+	Impl();
+	~Impl();
+
+	void PlaySoundEffect(const std::string& path, float volume);
+	void PlayMusic(const std::string& path, float volume);
+	void PauseMusic();
+	void ResumeMusic();
+	void StopMusic();
+	void PauseAll();
+	void ResumeAll();
+
+private:
+	void ProcessQueue();
+	static Uint8 ClampVolume(float volume);
+
+	bool m_IsRunning = true;
+	std::queue<QueuedAudio> m_SoundEffectQueue;
+
+	std::thread m_AudioThread;
+	std::mutex m_AudioMutex;
+	std::condition_variable m_NeedsAudio;
+
+	Mix_Music* m_Music = nullptr;
+};
+
+SDLSoundSystem::Impl::Impl()
+{
+		// TODO: Clean this up
 	unsigned int supportedFormats = MIX_INIT_OGG;
 	unsigned int innitedFormats = Mix_Init(supportedFormats);
 	if ((innitedFormats & supportedFormats) != supportedFormats)
@@ -21,7 +51,6 @@ SDLSoundSystem::SDLSoundSystem()
 		std::cout << "Mix_Init: All supported sound formats initialized!\n";
 	}
 
-	Mix_Init(MIX_INIT_MP3);
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
 		std::cout << "SDL error: " << SDL_GetError() << std::endl;
@@ -37,7 +66,7 @@ SDLSoundSystem::SDLSoundSystem()
 	// Initialize SDL_MIXER
 	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0)
 	{
-		std::cout << "SDL error:" << Mix_GetError << std::endl;
+		std::cout << "SDL error:" << Mix_GetError() << std::endl;
 	}
 	else
 	{
@@ -45,62 +74,79 @@ SDLSoundSystem::SDLSoundSystem()
 	}
 
 	
-	m_AudioThread = std::thread(&SDLSoundSystem::ProcessQueue, this);
+	m_AudioThread = std::thread(&Impl::ProcessQueue, this);
+
 }
 
-SDLSoundSystem::~SDLSoundSystem()
+SDLSoundSystem::Impl::~Impl()
 {
 	m_IsRunning = false;
 	m_NeedsAudio.notify_one();
 	m_AudioThread.join();
 
 	Mix_FreeMusic(m_Music);
+
+	Mix_CloseAudio();
+	Mix_Quit();
 }
 
-void SDLSoundSystem::PlaySoundEffect(const std::string& path, const float volume)
+void SDLSoundSystem::Impl::PlaySoundEffect(const std::string& path, float volume)
 {
-	const QueuedAudio newSoundEffect
+	const QueuedAudio newSoundEffect = 
 	{
 		path,
-		ClampVolume(volume),
+		volume,
 		true
 	};
 
+	std::unique_lock<std::mutex> lock(m_AudioMutex);
 	m_SoundEffectQueue.emplace(newSoundEffect);
 	m_NeedsAudio.notify_one();
 }
 
-void SDLSoundSystem::PlayMusic(const std::string& path, const float volume)
+void SDLSoundSystem::Impl::PlayMusic(const std::string& path, float volume)
 {
 	const QueuedAudio newMusic
 	{
 		path,
-		ClampVolume(volume),
+		volume,
 		false
 	};
 
+	std::unique_lock<std::mutex> lock(m_AudioMutex);
 	m_SoundEffectQueue.emplace(newMusic);
 	m_NeedsAudio.notify_one();
 }
 
-void SDLSoundSystem::StopSoundLoop(const std::string&, const float)
+void SDLSoundSystem::Impl::PauseMusic()
 {
-	throw std::runtime_error("Not implemented yet");
+	Mix_PauseMusic();
 }
 
-void SDLSoundSystem::StopAllSoundEffects()
+void SDLSoundSystem::Impl::ResumeMusic()
 {
-	throw std::runtime_error("Not implemented yet");
+	Mix_ResumeMusic();
 }
 
-int SDLSoundSystem::ClampVolume(float volume)
+void SDLSoundSystem::Impl::StopMusic()
 {
-	return std::clamp(static_cast<int>(MIX_MAX_VOLUME * volume), 0, MIX_MAX_VOLUME);
+	Mix_HaltMusic();
 }
 
-void SDLSoundSystem::ProcessQueue()
+void SDLSoundSystem::Impl::PauseAll()
 {
-	// TODO: add error handling, this can break if a single nullptr occurs
+	Mix_Pause(-1);
+	Mix_PauseMusic();
+}
+
+void SDLSoundSystem::Impl::ResumeAll()
+{
+	Mix_Resume(-1);
+	Mix_ResumeMusic();
+}
+
+void SDLSoundSystem::Impl::ProcessQueue()
+{
 	thread_local std::map<std::string, Mix_Chunk*> chunkCache;
 
 	std::unique_lock<std::mutex> queueLock{m_AudioMutex};
@@ -119,13 +165,25 @@ void SDLSoundSystem::ProcessQueue()
 			{
 				const auto& key = currentAudio.path;
 				auto soundEffect = chunkCache.find(key);
+
+				// If current chunk is not present inside the map...
 				if (soundEffect == chunkCache.end())
 				{
 					auto chunk = Mix_LoadWAV(currentAudio.path.c_str());
-					chunkCache.insert(std::pair<std::string, Mix_Chunk*>(key, chunk));
+
+					// If the soundEffect can't be loaded in, skip to the next while loop cycle
+					if (!chunk) 
+					{
+					    std::cerr << "Failed to load sound effect: " << currentAudio.path << "\nError: " << Mix_GetError() << "\n";
+					    queueLock.unlock();
+					    continue;
+					}
+
+					// If it is valid, insert it inside the map
+					chunkCache.emplace(key, chunk);
 				}
 
-				chunkCache.at(key)->volume = static_cast<Uint8>(currentAudio.volume);
+				chunkCache.at(key)->volume = ClampVolume(currentAudio.volume);
 				Mix_PlayChannel(-1, chunkCache.at(key), 0);
 			}
 			else
@@ -138,6 +196,17 @@ void SDLSoundSystem::ProcessQueue()
 				}
 
 				m_Music = Mix_LoadMUS(currentAudio.path.c_str());
+				if (m_Music != nullptr)
+				{
+					Mix_VolumeMusic(ClampVolume(currentAudio.volume));
+				}
+				#ifdef _DEBUG
+				else
+				{
+					throw std::runtime_error(std::string("Failed to load music: ") + Mix_GetError());
+				}
+				#endif
+
 				Mix_PlayMusic(m_Music, -1);
 			}
 
@@ -156,4 +225,56 @@ void SDLSoundSystem::ProcessQueue()
 		Mix_FreeChunk(pair.second);
 		pair.second = nullptr;
 	}
+}
+
+Uint8 SDLSoundSystem::Impl::ClampVolume(float volume)
+{
+	const int result = std::clamp(static_cast<int>(MIX_MAX_VOLUME * volume), 0, MIX_MAX_VOLUME);
+	return static_cast<Uint8>(result);
+}
+
+SDLSoundSystem::SDLSoundSystem()
+	: m_pImpl(new Impl())
+{}
+
+SDLSoundSystem::~SDLSoundSystem()
+{
+	delete m_pImpl;
+	m_pImpl = nullptr;
+}
+
+
+void SDLSoundSystem::PlaySoundEffect(const std::string& path, const float volume)
+{
+	m_pImpl->PlaySoundEffect(path, volume);
+}
+
+void SDLSoundSystem::PlayMusic(const std::string& path, const float volume)
+{
+	m_pImpl->PlayMusic(path, volume);
+}
+
+void SDLSoundSystem::PauseMusic()
+{
+	m_pImpl->PauseMusic();
+}
+
+void SDLSoundSystem::ResumeMusic()
+{
+	m_pImpl->ResumeMusic();
+}
+
+void SDLSoundSystem::StopMusic()
+{
+	m_pImpl->StopMusic();
+}
+
+void SDLSoundSystem::PauseAll()
+{
+	m_pImpl->PauseAll();
+}
+
+void SDLSoundSystem::ResumeAll()
+{
+	m_pImpl->ResumeAll();
 }

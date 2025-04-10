@@ -7,8 +7,6 @@
 #endif
 #endif
 
-#include <SDL_syswm.h>
-
 #include "FpsCounterComponent.h"
 #include "GameCommands.h"
 #include "HudDemoComponent.h"
@@ -20,7 +18,6 @@
 #include "Scene.h"
 #include "SDLSoundSystem.h"
 #include "ServiceAllocator.h"
-#include "SoundSystem.hpp"
 #include "TextComponent.h"
 #include "TextureComponent.h"
 
@@ -77,7 +74,15 @@ void load()
 	input.BindCommand(0, Gamepad::GamepadButton::DPAD_LEFT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), MoveDirection::LEFT));
 	input.BindCommand(0, Gamepad::GamepadButton::DPAD_RIGHT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), MoveDirection::RIGHT));
 
-	input.BindCommand(0, Gamepad::GamepadButton::BUTTON_A, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<SoundTestCommand>(peterPepper.get()));
+	input.BindCommand(0, Gamepad::GamepadButton::BUTTON_A, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<StartMusicCommand>(peterPepper.get()));
+	input.BindCommand(0, Gamepad::GamepadButton::BUTTON_B, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<StopMusicCommand>(peterPepper.get()));
+	input.BindCommand(0, Gamepad::GamepadButton::BUTTON_X, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<PauseMusicCommand>(peterPepper.get()));
+	input.BindCommand(0, Gamepad::GamepadButton::BUTTON_Y, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<ResumeMusicCommand>(peterPepper.get()));
+
+	input.BindCommand(0, Gamepad::GamepadButton::LEFT_THUMB, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<SoundTestCommand>(peterPepper.get()));
+
+	input.BindCommand(0, Gamepad::GamepadButton::LEFT_SHOULDER, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<PauseAllAudioCommand>(peterPepper.get()));
+	input.BindCommand(0, Gamepad::GamepadButton::RIGHT_SHOULDER, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<ResumeAllAudioCommand>(peterPepper.get()));
 
 }
 

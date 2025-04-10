@@ -54,9 +54,51 @@ public:
 	void Execute() override;
 };
 
-class SoundTestCommand : public Command
+class SoundTestCommand final : public Command
 {
 public:
 	SoundTestCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+class StartMusicCommand final : public Command
+{
+public:
+	StartMusicCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+class StopMusicCommand final : public Command
+{
+public:
+	StopMusicCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+class PauseMusicCommand final : public Command
+{
+public:
+	PauseMusicCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+class ResumeMusicCommand final : public Command
+{
+public:
+	ResumeMusicCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+class PauseAllAudioCommand final : public Command
+{
+public:
+	PauseAllAudioCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
+class ResumeAllAudioCommand final : public Command
+{
+public:
+	ResumeAllAudioCommand(dae::GameObject* object) : Command(object) {}
 	void Execute() override;
 };
