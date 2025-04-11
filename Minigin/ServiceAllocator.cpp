@@ -13,3 +13,11 @@ ISoundSystem& ServiceAllocator::GetSoundSystem()
 
 	return *m_SoundSystemInstance;
 }
+
+void ServiceAllocator::RegisterSoundSystem(std::unique_ptr<ISoundSystem>&& soundSystem)
+{
+	if (soundSystem != nullptr)
+	{
+		m_SoundSystemInstance = std::move(soundSystem);
+	}
+}

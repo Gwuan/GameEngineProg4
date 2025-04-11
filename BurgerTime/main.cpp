@@ -60,8 +60,6 @@ void load()
 
 	auto& input = dae::InputManager::GetInstance();
 
-	ServiceAllocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
-
 	// Input for peterPepper
 	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_W, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), MoveDirection::UP));
 	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_S, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), MoveDirection::DOWN));

@@ -13,6 +13,7 @@
 #include <chrono>
 #include <thread>
 
+#include "LoggingSoundSystem.h"
 #include "NullSoundSystem.hpp"
 #include "SDLSoundSystem.h"
 #include "ServiceAllocator.h"
@@ -94,6 +95,14 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
+
+	#ifdef _DEBUG
+	ServiceAllocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(
+		std::make_unique<SDLSoundSystem>())
+	);
+	#else
+	ServiceAllocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>()); 
+	#endif
 
 	// This is added
 	sceneManager.BeginPlay();

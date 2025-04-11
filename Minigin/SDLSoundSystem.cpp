@@ -37,9 +37,9 @@ private:
 	Mix_Music* m_Music = nullptr;
 };
 
+// TODO: Error log this later inside the logger service
 SDLSoundSystem::Impl::Impl()
 {
-		// TODO: Clean this up
 	unsigned int supportedFormats = MIX_INIT_OGG;
 	unsigned int innitedFormats = Mix_Init(supportedFormats);
 	if ((innitedFormats & supportedFormats) != supportedFormats)
@@ -62,7 +62,6 @@ SDLSoundSystem::Impl::Impl()
 
 	}
 
-
 	// Initialize SDL_MIXER
 	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0)
 	{
@@ -73,9 +72,7 @@ SDLSoundSystem::Impl::Impl()
 		std::cout << "Open audio success" << std::endl; 
 	}
 
-	
 	m_AudioThread = std::thread(&Impl::ProcessQueue, this);
-
 }
 
 SDLSoundSystem::Impl::~Impl()
