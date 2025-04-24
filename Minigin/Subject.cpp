@@ -1,21 +1,18 @@
-#include "SubjectComponent.h"
+#include "Subject.h"
+#include "GameObject.h"
 #include "Observer.h"
 
-SubjectComponent::SubjectComponent(dae::GameObject& owner)
-	: Component(owner)
-{}
-
-SubjectComponent::~SubjectComponent()
+Subject::~Subject()
 {
 	m_Observers.clear();
 }
 
-void SubjectComponent::AddObserver(IObserver* observer)
+void Subject::AddObserver(IObserver* observer)
 {
 	m_Observers.push_back(observer);
 }
 
-bool SubjectComponent::RemoveObserver(IObserver* observer)
+bool Subject::RemoveObserver(IObserver* observer)
 {
 	if (!observer)
 		return false;
@@ -29,7 +26,7 @@ bool SubjectComponent::RemoveObserver(IObserver* observer)
 	return false;
 }
 
-void SubjectComponent::Notify(dae::GameObject* object, const std::string& event)
+void Subject::Notify(dae::GameObject* object, const std::string& event)
 {
 	const size_t hashedEvent{ std::hash<std::string>{}(event)};
 
@@ -38,4 +35,3 @@ void SubjectComponent::Notify(dae::GameObject* object, const std::string& event)
 		observer->OnNotify(object, hashedEvent);
 	}
 }
-

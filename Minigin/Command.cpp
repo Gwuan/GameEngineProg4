@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 #include "MovementComponent.h"
-#include "SubjectComponent.h"
+#include "Subject.h"
 
 Command::Command(dae::GameObject* object)
 	: m_pObject(object)

@@ -108,7 +108,7 @@
     <ClInclude Include="Observer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SubjectComponent.h">
+    <ClInclude Include="Subject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ServiceAllocator.h">
@@ -203,7 +203,7 @@
     <ClCompile Include="MovementComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="SubjectComponent.cpp">
+    <ClCompile Include="Subject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ServiceAllocator.cpp">

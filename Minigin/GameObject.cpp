@@ -7,7 +7,6 @@
 
 #include "imgui_plot.h"
 #include "Renderer.h"
-#include "SubjectComponent.h"
 
 dae::GameObject::GameObject(const glm::vec2& position)
 	: m_IsDead(false),
@@ -18,11 +17,6 @@ dae::GameObject::GameObject(const glm::vec2& position)
 	  m_Components()
 {
 	m_Transform->SetPosition(position.x, position.y);
-
-	// NOTE: it is not advised to use a component as a subject like that
-	// components should be inherited from the subject interface when needed.
-	// TODO: Change component approach to an interface approach that can be used when needed
-	m_Subject = AddComponent<SubjectComponent>();
 }
 
 dae::GameObject::~GameObject()

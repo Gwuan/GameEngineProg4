@@ -1,5 +1,5 @@
 #pragma once
-#include "SubjectComponent.h"
+#include "Subject.h"
 
 using EventID = size_t;
 
