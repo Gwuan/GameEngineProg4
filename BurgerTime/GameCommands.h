@@ -1,4 +1,7 @@
 #pragma once
+#include <SDL_syswm.h>
+#include <vec2.hpp>
+
 #include "Command.h"
 
 // ===================
@@ -6,12 +9,11 @@
 class MovePepperCommand final : public Command
 {
 public:
-	MovePepperCommand(dae::GameObject* object, MoveDirection direction);
+	MovePepperCommand(dae::GameObject* object, const glm::vec2& direction)
+	: Command(object), m_Direction(direction) {}
 	void Execute() override;
-
 private:
-	MoveDirection m_Direction;
-	MovementComponent* m_pMovementComp;
+	const glm::vec2 m_Direction;
 };
 
 // ===================
@@ -19,12 +21,12 @@ private:
 class MoveSaltCommand final : public Command
 {
 public:
-	MoveSaltCommand(dae::GameObject* object, MoveDirection direction);
+	MoveSaltCommand(dae::GameObject* object, const glm::vec2& direction)
+	: Command(object), m_Direction(direction) {}
 	void Execute() override;
 
 private:
-	MoveDirection m_Direction;
-	MovementComponent* m_pMovementComp;
+	glm::vec2 m_Direction;
 };
 
 // ===================	

@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
+#include "Transform.h"
 
 
 TextComponent::TextComponent(dae::GameObject& owner, std::shared_ptr<dae::Font> font)
@@ -49,7 +50,7 @@ void TextComponent::Render() const
 {
 	if (m_textTexture != nullptr)
 	{
-		const auto& pos = GetOwner().GetWorldPosition() + m_TextOffset;
+		const auto& pos = GetOwner().GetTransform()->GetWorldPosition() + m_TextOffset;
 		dae::Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
 	}
 }

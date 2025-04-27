@@ -6,30 +6,17 @@
 #include "ServiceAllocator.h"
 #include "SoundSystem.hpp"
 #include "Subject.h"
+#include "Transform.h"
 
-MovePepperCommand::MovePepperCommand(dae::GameObject* object, MoveDirection direction)
-	: Command(object),
-	  m_Direction(direction)
-{
-	m_pMovementComp = object->GetComponent<MovementComponent>();
-}
 
 void MovePepperCommand::Execute()
 {
-	m_pMovementComp->Move(m_Direction);
-}
-
-MoveSaltCommand::MoveSaltCommand(dae::GameObject* object, MoveDirection direction)
-	: Command(object),
-	  m_Direction(direction)
-{
-	m_pMovementComp = object->GetComponent<MovementComponent>();
-	m_pMovementComp->SetMovementSpeed(100.0f);
+	GetGameObject()->GetTransform()->velocity += m_Direction;
 }
 
 void MoveSaltCommand::Execute()
 {
-	m_pMovementComp->Move(m_Direction);
+	GetGameObject()->GetTransform()->velocity += glm::vec2{m_Direction.x * 2, m_Direction.y *  2};
 }
 
 void SoundTestCommand::Execute()

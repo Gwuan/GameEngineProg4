@@ -7,12 +7,13 @@
 #endif
 #endif
 
+#include "ColliderComponent.h"
 #include "FpsCounterComponent.h"
 #include "GameCommands.h"
 #include "HudDemoComponent.h"
 #include "InputManager.h"
 #include "Minigin.h"
-#include "MovementComponent.h"
+#include "PeterPepperComponent.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
 #include "Scene.h"
@@ -20,6 +21,7 @@
 #include "ServiceAllocator.h"
 #include "TextComponent.h"
 #include "TextureComponent.h"
+#include "Transform.h"
 
 void load()
 {
@@ -48,29 +50,29 @@ void load()
 
 	auto peterPepper = std::make_shared<dae::GameObject>();
 	peterPepper->GetTransform()->SetPosition(300, 300);
-	peterPepper->AddComponent<TextureComponent>("../gameResources/pepper.png");
-	peterPepper->AddComponent<MovementComponent>();
+	peterPepper->AddComponent<PeterPepperComponent>();
 	scene.Add(peterPepper);
 
 	auto msSalt = std::make_shared<dae::GameObject>(); 
-	msSalt->GetTransform()->SetPosition(330, 300);
+	msSalt->GetTransform()->SetPosition(360, 300);
 	msSalt->AddComponent<TextureComponent>("../gameResources/salt.png");
-	msSalt->AddComponent<MovementComponent>();
+	msSalt->AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, true, false);
+
 	scene.Add(msSalt);
 
 	auto& input = dae::InputManager::GetInstance();
 
 	// Input for peterPepper
-	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_W, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), MoveDirection::UP));
-	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_S, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), MoveDirection::DOWN));
-	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_A, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), MoveDirection::LEFT));
-	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_D, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), MoveDirection::RIGHT));
+	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_W, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{0.f, 1.f}));
+	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_S, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{0.f, -1.f}));
+	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_A, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{-1.f, 0.f}));
+	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_D, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{1.f, 0.f}));
 
 	// Input for msSalt
-	input.BindCommand(0, Gamepad::GamepadButton::DPAD_UP, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), MoveDirection::UP));
-	input.BindCommand(0, Gamepad::GamepadButton::DPAD_DOWN, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), MoveDirection::DOWN));
-	input.BindCommand(0, Gamepad::GamepadButton::DPAD_LEFT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), MoveDirection::LEFT));
-	input.BindCommand(0, Gamepad::GamepadButton::DPAD_RIGHT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), MoveDirection::RIGHT));
+	input.BindCommand(0, Gamepad::GamepadButton::DPAD_UP, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{0.f, 1.f}));
+	input.BindCommand(0, Gamepad::GamepadButton::DPAD_DOWN, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{0.f, -1.f}));
+	input.BindCommand(0, Gamepad::GamepadButton::DPAD_LEFT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{-1.f, 0.f}));
+	input.BindCommand(0, Gamepad::GamepadButton::DPAD_RIGHT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{1.f, 0.f}));
 
 	input.BindCommand(0, Gamepad::GamepadButton::BUTTON_A, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<StartMusicCommand>(peterPepper.get()));
 	input.BindCommand(0, Gamepad::GamepadButton::BUTTON_B, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<StopMusicCommand>(peterPepper.get()));

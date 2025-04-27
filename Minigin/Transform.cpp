@@ -1,14 +1,28 @@
 #include "Transform.h"
+#include "GameObject.h" 
 
-#include <windows.h>
+Transform::Transform(dae::GameObject& owner, glm::vec2 pos)
+    : Component(owner),
+	  velocity(0.f, 0.f),
+	  m_LocalPosition(pos),
+	  m_WorldPosition(0.f, 0.f),
+	  m_MoveSpeed(50.f),
+	  m_IsDirty(true)
+{}
 
-#include "GameObject.h"
+void Transform::Update(const float deltaTime)
+{
+    if (glm::length<2>(velocity) >= 0.2f)
+    {
+        velocity = (glm::normalize(velocity) * m_MoveSpeed) * deltaTime;
+        velocity.y *= -1.f;
+    	m_LocalPosition += velocity;
+        MarkDirty();
 
-Transform::Transform(dae::GameObject& owner)
-    : m_Owner(owner),
-	  m_LocalPosition(0.0f, 0.0f),
-	  m_WorldPosition(0.0f, 0.0f),
-	  m_IsDirty(true) {}
+    	velocity.x = 0.f;
+        velocity.y = 0.f;
+    }
+}
 
 void Transform::SetPosition(glm::vec2 newPosition)
 {
@@ -28,7 +42,7 @@ void Transform::MarkDirty()
 
     m_IsDirty = true;
 
-    for (dae::GameObject* child : m_Owner.GetChildren())
+    for (dae::GameObject* child : GetOwner().GetChildren())
     {
 	    child->GetTransform()->MarkDirty();
     }
@@ -45,7 +59,7 @@ glm::vec2 Transform::GetWorldPosition()
 
 void Transform::UpdateWorldPosition()
 {
-    if (auto parent = m_Owner.GetParent())
+    if (auto parent = GetOwner().GetParent())
     {
         auto world = parent->GetTransform()->GetWorldPosition();
         m_WorldPosition = world + m_LocalPosition;

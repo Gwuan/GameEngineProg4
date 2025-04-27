@@ -1,14 +1,9 @@
 #pragma once
-#include <cstdint>
-
-#include "MovementComponent.h"
-
 namespace dae
 {
 	class GameObject;
 }
 
-class MovementComponent;
 
 class Command
 {

@@ -13,6 +13,7 @@
 #include <chrono>
 #include <thread>
 
+#include "CollisionSystem.h"
 #include "LoggingSoundSystem.h"
 #include "NullSoundSystem.hpp"
 #include "SDLSoundSystem.h"
@@ -76,8 +77,6 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
-
-	ServiceAllocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
 }
 
 dae::Minigin::~Minigin()
@@ -95,10 +94,11 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
+	auto& colSystem = CollisionSystem::GetInstance();
 
 	#ifdef _DEBUG
 	ServiceAllocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(
-		std::make_unique<SDLSoundSystem>())
+		std::make_unique<NullSoundSystem>())
 	);
 	#else
 	ServiceAllocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>()); 
@@ -130,6 +130,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		} 
 
 		sceneManager.Update(deltaTime);
+		colSystem.Update();
 		sceneManager.LateUpdate(deltaTime);
 		renderer.Render();
 

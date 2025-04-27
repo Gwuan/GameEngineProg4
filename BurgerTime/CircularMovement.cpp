@@ -1,4 +1,5 @@
 #include "CircularMovement.h"
+#include "Transform.h"
 
 void CircularMovement::FixedUpdate(const float) {}
 

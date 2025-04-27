@@ -13,7 +13,7 @@ class Subject
 {
 public:
 	Subject() = default;
-	~Subject();
+	virtual ~Subject();
 
 	Subject(const Subject&) = delete;
 	Subject(Subject&&) noexcept = delete;

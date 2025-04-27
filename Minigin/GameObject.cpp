@@ -1,22 +1,19 @@
-#include <string>
 #include "GameObject.h"
-
 #include <windows.h>
-
 #include <memory>
-
 #include "imgui_plot.h"
 #include "Renderer.h"
+#include "Transform.h"
 
 dae::GameObject::GameObject(const glm::vec2& position)
 	: m_IsDead(false),
       m_pParent(nullptr),
-	  m_Transform(std::make_unique<Transform>(*this)),
+	  m_pTransform(nullptr),
 	  m_Children(),
 	  m_ComponentKillList(),
 	  m_Components()
 {
-	m_Transform->SetPosition(position.x, position.y);
+	m_pTransform = this->AddComponent<Transform>(position);
 }
 
 dae::GameObject::~GameObject()
@@ -133,17 +130,17 @@ void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 
 	if (parent == nullptr)
 	{
-		const auto worldPos = GetWorldPosition();
-		m_Transform->SetPosition(worldPos.x, worldPos.y);
+		const auto worldPos = m_pTransform->GetWorldPosition();
+		m_pTransform->SetPosition(worldPos.x, worldPos.y);
 	}
 	else
 	{
 		if (keepWorldPos)
 		{
-			const auto worldPos = GetWorldPosition() - parent->GetWorldPosition();
-			m_Transform->SetPosition(worldPos.x, worldPos.y);
+			const auto worldPos = m_pTransform->GetWorldPosition() - parent->m_pTransform->GetWorldPosition();
+			m_pTransform->SetPosition(worldPos.x, worldPos.y);
 		}
-		m_Transform->MarkDirty();
+		m_pTransform->MarkDirty();
 	}
 
 	if (m_pParent)

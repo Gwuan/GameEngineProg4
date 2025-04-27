@@ -2,6 +2,7 @@
 
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "Transform.h"
 
 TextureComponent::TextureComponent(dae::GameObject& owner)
 	: Component(owner)
@@ -22,7 +23,7 @@ void TextureComponent::Render() const
 {
 	if(m_Texture)
 	{
-		auto pos = GetOwner().GetWorldPosition();
+		auto pos = GetOwner().GetTransform()->GetWorldPosition();
 		dae::Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 	}
 }

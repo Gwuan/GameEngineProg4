@@ -2,17 +2,15 @@
 #include <complex>
 #include <iostream>
 #include <memory>
-#include "Component.h"
-#include "Transform.h"
-
 #include <vector>
 #include <stdexcept>
 #include "glm.hpp"
+#include "Component.h"
 
 class IObserver;
-class Component;
-class Transform;
 class Subject;
+class Transform;
+class Component;
 
 namespace dae
 {
@@ -80,8 +78,7 @@ namespace dae
 		bool NeedsDestroyed() const { return m_IsDead; }
 		void Destroy() { m_IsDead = true; }
 
-		Transform* GetTransform() const { return m_Transform.get(); }
-		glm::vec2 GetWorldPosition() const { return m_Transform->GetWorldPosition(); }
+		Transform* GetTransform() const { return m_pTransform; }
 
 		explicit GameObject(const glm::vec2& position = glm::vec2(0.f, 0.f));
 		~GameObject();
@@ -100,7 +97,7 @@ namespace dae
 		bool m_IsDead;
 		GameObject* m_pParent;
 
-		std::unique_ptr<Transform> m_Transform;
+		Transform* m_pTransform; // only used for reference, this ptr does NOT HAVE OWNERSHIP
 
 		std::vector<GameObject*> m_Children;
 		std::vector<uint32_t> m_ComponentKillList;

@@ -101,4 +101,9 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
+void dae::Renderer::RenderLine(const glm::vec2& start, const glm::vec2& end) const
+{
+	SDL_RenderDrawLineF(GetSDLRenderer(), start.x, start.y, end.x, end.y);;
+}
+
 SDL_Renderer* dae::Renderer::GetSDLRenderer() const { return m_renderer; }

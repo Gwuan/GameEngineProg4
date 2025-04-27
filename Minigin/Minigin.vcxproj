@@ -228,8 +228,11 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="..\3rdParty\ImGui\imstb_rectpack.h" />
     <ClInclude Include="..\3rdParty\ImGui\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\ImGui\imstb_truetype.h" />
+    <ClInclude Include="ColliderComponent.h" />
+    <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="GameObject.h" />
@@ -237,7 +240,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LoggingSoundSystem.h" />
     <ClInclude Include="Minigin.h" />
-    <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="NullSoundSystem.hpp" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Renderer.h" />
@@ -263,8 +265,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="..\3rdParty\ImGui\imgui_plot.cpp" />
     <ClCompile Include="..\3rdParty\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="ColliderComponent.cpp" />
+    <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Command.cpp" />
-    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FpsCounterComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -272,7 +276,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LoggingSoundSystem.cpp" />
     <ClCompile Include="Minigin.cpp" />
-    <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />

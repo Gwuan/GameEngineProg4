@@ -23,4 +23,3 @@ private:
 	static const std::string m_LogPrefix;
 
 };
-
