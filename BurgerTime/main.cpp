@@ -10,15 +10,12 @@
 #include "ColliderComponent.h"
 #include "FpsCounterComponent.h"
 #include "GameCommands.h"
-#include "HudDemoComponent.h"
 #include "InputManager.h"
 #include "Minigin.h"
 #include "PeterPepperComponent.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
 #include "Scene.h"
-#include "SDLSoundSystem.h"
-#include "ServiceAllocator.h"
 #include "TextComponent.h"
 #include "TextureComponent.h"
 #include "Transform.h"
@@ -68,7 +65,6 @@ void load()
 	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_A, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{-1.f, 0.f}));
 	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_D, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{1.f, 0.f}));
 
-	// Input for msSalt
 	input.BindCommand(0, Gamepad::GamepadButton::DPAD_UP, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{0.f, 1.f}));
 	input.BindCommand(0, Gamepad::GamepadButton::DPAD_DOWN, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{0.f, -1.f}));
 	input.BindCommand(0, Gamepad::GamepadButton::DPAD_LEFT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{-1.f, 0.f}));
@@ -83,7 +79,6 @@ void load()
 
 	input.BindCommand(0, Gamepad::GamepadButton::LEFT_SHOULDER, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<PauseAllAudioCommand>(peterPepper.get()));
 	input.BindCommand(0, Gamepad::GamepadButton::RIGHT_SHOULDER, SDL_SCANCODE_UNKNOWN, dae::InputAction::PRESSED, std::make_unique<ResumeAllAudioCommand>(peterPepper.get()));
-
 }
 
 int main(int, char*[]) {

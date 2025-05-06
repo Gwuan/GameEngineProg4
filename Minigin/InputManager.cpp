@@ -13,9 +13,7 @@ dae::InputManager::InputManager()
 	: m_BindedCommands(),
 	  m_CurrentKeyboardState(SDL_GetKeyboardState(nullptr)),
 	  m_Gamepads(MAX_GAMEPADS),
-	  m_PreviousKeyboardState(SDL_NUM_SCANCODES),
-	  m_KeysPressedThisFrame(SDL_NUM_SCANCODES),
-	  m_KeysReleasedThisFrame(SDL_NUM_SCANCODES)
+	  m_PreviousKeyboardState()
 {
 	// Creates bloat for unused controllers, I might want look into how I can handle
 	// controller connection/disconnection.
@@ -32,6 +30,8 @@ dae::InputManager::~InputManager()
 
 bool dae::InputManager::ProcessInput()
 {
+	std::memcpy(m_PreviousKeyboardState, m_CurrentKeyboardState, SDL_NUM_SCANCODES);
+
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
@@ -43,18 +43,6 @@ bool dae::InputManager::ProcessInput()
 	for (auto& gamepad : m_Gamepads)
 	{
 		gamepad->Update();
-	}
-
-	std::copy(m_CurrentKeyboardState, m_CurrentKeyboardState + SDL_NUM_SCANCODES, m_PreviousKeyboardState.begin());
-	m_CurrentKeyboardState = SDL_GetKeyboardState(nullptr);
-
-	// This doesn't work like intended, it will work sometimes when the key is rightfully timed when the frame changes?
-	// TODO: Make sure that the state can be captured correctly
-	for (uint32_t i{}; i < SDL_NUM_SCANCODES; i++)
-	{
-		const Uint8 keyChanged = m_CurrentKeyboardState[i] ^ m_PreviousKeyboardState[i];
-		m_KeysPressedThisFrame[i] = keyChanged && m_CurrentKeyboardState[i];
-		m_KeysReleasedThisFrame[i] = keyChanged && (~m_CurrentKeyboardState[i]);
 	}
 
 	HandleBindedInput();
@@ -120,16 +108,15 @@ bool dae::InputManager::UnbindCommand(unsigned int controllerIdx, Gamepad::Gamep
 
 bool dae::InputManager::IsKeyPressed(SDL_Scancode scancode) const
 {
-	return (m_KeysPressedThisFrame[scancode] && scancode != SDL_SCANCODE_UNKNOWN);
+	return m_CurrentKeyboardState[scancode] && !m_PreviousKeyboardState[scancode];
 }
 
 bool dae::InputManager::IsKeyReleased(SDL_Scancode scancode) const
 {
-	return (m_KeysReleasedThisFrame[scancode] && scancode != SDL_SCANCODE_UNKNOWN);
+	return !m_CurrentKeyboardState[scancode] && m_PreviousKeyboardState[scancode];
 }
 
 bool dae::InputManager::IsKeyHoldDown(SDL_Scancode scancode) const
 {
 	return (m_CurrentKeyboardState[scancode] && scancode != SDL_SCANCODE_UNKNOWN);
 }
-
