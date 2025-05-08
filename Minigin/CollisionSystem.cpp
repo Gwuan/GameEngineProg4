@@ -1,5 +1,7 @@
 #include "CollisionSystem.h"
 #include "ColliderComponent.h"
+#include "Transform.h"
+#include "../BurgerTime/GameCommands.h"
 
 CollisionSystem::~CollisionSystem()
 {
@@ -34,26 +36,36 @@ void CollisionSystem::Update()
 			if (secondCollider == collider)
 				continue;
 
+			// Create a single pairID, we need them all cases
+			const uint32_t pairID = MakePairID(collider->GetID(), secondCollider->GetID());
+
 			#pragma region OnCollision
 			if (collider->CheckCollision(secondCollider))
 			{
 				// Handle Trigger
 				if ((collider->IsTrigger() || secondCollider->IsTrigger()))
 				{
-					const uint32_t pairID = MakePairID(collider->GetID(), secondCollider->GetID());
+					if (m_OverlappingPairs.contains(pairID))
+						continue;
 
-					if (!m_OverlappingPairs.contains(pairID))
-					{
-						m_OverlappingPairs.insert(pairID);
+					m_OverlappingPairs.insert(pairID);
 
-						if (collider->IsTrigger())
-							collider->OnBeginOverlap.Broadcast(secondCollider);
-						if (secondCollider->IsTrigger())
-							collider->OnBeginOverlap.Broadcast(secondCollider);
-					}
+					if (collider->IsTrigger())
+						collider->OnBeginOverlap.Broadcast(secondCollider);
+
+					if (secondCollider->IsTrigger())
+						collider->OnBeginOverlap.Broadcast(secondCollider);
 				}
 				else
 				{
+					ResolveCollision(collider, secondCollider);
+
+					if (m_HittingPairs.contains(pairID))
+						continue;
+
+					m_HittingPairs.insert(pairID);
+
+					std::cout << "COLLIDING" << std::endl;
 					collider->OnHit.Broadcast(secondCollider);
 					secondCollider->OnHit.Broadcast(collider);
 				}
@@ -62,20 +74,24 @@ void CollisionSystem::Update()
 			#pragma region OnNoCollision
 			else if ((collider->IsTrigger() || secondCollider->IsTrigger())) // Handle triggers only on no collision
 			{
-				const uint32_t pairID = MakePairID(collider->GetID(), secondCollider->GetID());
+				if (!m_OverlappingPairs.contains(pairID))
+					continue;
 
-				if (m_OverlappingPairs.contains(pairID))
-				{
-					m_OverlappingPairs.erase(pairID);
+				m_OverlappingPairs.erase(pairID);
 
-					if (collider->IsTrigger())
-						collider->OnEndOverlap.Broadcast(secondCollider);
-					if (secondCollider->IsTrigger())
-						collider->OnEndOverlap.Broadcast(secondCollider);
-				}
+				if (collider->IsTrigger())
+					collider->OnEndOverlap.Broadcast(secondCollider);
+				if (secondCollider->IsTrigger())
+					collider->OnEndOverlap.Broadcast(secondCollider);
+			}
+			else
+			{
+				if (!m_HittingPairs.contains(pairID))
+					continue;
+
+				m_HittingPairs.erase(pairID);
 			}
 			#pragma endregion
-
 		}
 	}
 }
@@ -87,5 +103,43 @@ uint32_t CollisionSystem::MakePairID(uint16_t id1, uint16_t id2)
 		std::swap(id1, id2);
 	}
 
-	return (static_cast<uint32_t>(id1) << 16) | id2;
+	return (static_cast<uint32_t>(id1) << sizeof(uint16_t)) | id2;
+}
+
+void CollisionSystem::ResolveCollision(ColliderComponent* colliderA, ColliderComponent* colliderB)
+{
+    if (colliderA->IsStatic() && colliderB->IsStatic()) 
+		return;
+
+	const glm::vec2 posA = colliderA->GetOwner().GetTransform()->GetWorldPosition();
+    const glm::vec2 posB = colliderB->GetOwner().GetTransform()->GetWorldPosition();
+
+    const auto boundsA = colliderA->GetBoundingBox().GetBounds(posA);
+    const auto boundsB = colliderB->GetBoundingBox().GetBounds(posB);
+
+    // Calculate overlap
+    const float overlapX = std::min(boundsA[1].x, boundsB[1].x) - std::max(boundsA[0].x, boundsB[0].x);
+    const float overlapY = std::min(boundsA[2].y, boundsB[2].y) - std::max(boundsA[0].y, boundsB[0].y);
+
+    // Resolve along the axis of least penetration
+    if (overlapX < overlapY)
+    {
+        const float correction = (posA.x < posB.x) ? -overlapX : overlapX;
+
+        if (!colliderA->IsStatic())
+            colliderA->GetOwner().GetTransform()->SetPosition(posA.x + correction * 0.5f, posA.y);
+
+    	if (!colliderB->IsStatic())
+            colliderB->GetOwner().GetTransform()->SetPosition(posB.x - correction * 0.5f, posB.y);
+    }
+    else
+    {
+        const float correction = (posA.y < posB.y) ? -overlapY : overlapY;
+
+        if (!colliderA->IsStatic())
+            colliderA->GetOwner().GetTransform()->SetPosition(posA.x, posA.y + correction * 0.5f);
+
+    	if (!colliderB->IsStatic())
+            colliderB->GetOwner().GetTransform()->SetPosition(posB.x, posB.y - correction * 0.5f);
+    }	
 }

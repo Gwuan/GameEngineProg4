@@ -1,14 +1,11 @@
 #pragma once
 #include <unordered_set>
-
-#include "Subject.h"
 #include <vector>
-
 #include "Singleton.h"
 
 class ColliderComponent;
 
-class CollisionSystem final : public dae::Singleton<CollisionSystem>,  public Subject
+class CollisionSystem final : public dae::Singleton<CollisionSystem>
 {
 public:
 	CollisionSystem() = default;
@@ -27,6 +24,10 @@ public:
 private:
 	static uint32_t MakePairID(uint16_t id1, uint16_t id2);
 
+	static void ResolveCollision(ColliderComponent* colliderA, ColliderComponent* colliderB);
+
+
 	std::vector<ColliderComponent*> m_pColliders;
 	std::unordered_set<uint32_t> m_OverlappingPairs;
+	std::unordered_set<uint32_t> m_HittingPairs;
 };

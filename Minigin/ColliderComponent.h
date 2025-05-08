@@ -46,6 +46,7 @@ public:
 	virtual void DebugRender() override {}
 
 	uint16_t GetID() const { return m_ID; }
+	Rect GetBoundingBox() const { return m_BoundingBox; }
 
 	Event<ColliderComponent*> OnBeginOverlap;
 	Event<ColliderComponent*> OnEndOverlap;
