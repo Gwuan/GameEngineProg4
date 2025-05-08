@@ -75,12 +75,14 @@ namespace dae
 		GameObject* GetParent() const { return m_pParent; }
 		std::vector<GameObject*> GetChildren() const { return m_Children; }
 
-		bool NeedsDestroyed() const { return m_IsDead; }
-		void Destroy() { m_IsDead = true; }
+		bool IsStatic() const { return m_IsStatic; }
+
+		bool NeedsDestroyed() const { return m_IsPendingDelete; }
+		void Destroy() { m_IsPendingDelete = true; }
 
 		Transform* GetTransform() const { return m_pTransform; }
 
-		explicit GameObject(const glm::vec2& position = glm::vec2(0.f, 0.f));
+		explicit GameObject(const glm::vec2& position = glm::vec2(0.f, 0.f), bool isStatic = false);
 		~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -94,7 +96,8 @@ namespace dae
 
 		void KillComponents();
 
-		bool m_IsDead;
+		bool m_IsPendingDelete;
+		bool m_IsStatic;
 		GameObject* m_pParent;
 
 		Transform* m_pTransform; // only used for reference, this ptr does NOT HAVE OWNERSHIP

@@ -9,7 +9,7 @@ PeterPepperComponent::PeterPepperComponent(dae::GameObject& owner)
 	: Component(owner)
 {
 	owner.AddComponent<TextureComponent>("../gameResources/pepper.png");
-	auto collider = owner.AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, false, false);
+	auto collider = owner.AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, false);
 
 	collider->OnBeginOverlap += std::bind(&PeterPepperComponent::PlaySoundOnOverlap, this, std::placeholders::_1);
 	

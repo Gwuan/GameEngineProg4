@@ -12,6 +12,9 @@ Transform::Transform(dae::GameObject& owner, glm::vec2 pos)
 
 void Transform::Update(const float deltaTime)
 {
+    if (GetOwner().IsStatic())
+        return;
+
     if (glm::length<2>(velocity) >= 0.2f)
     {
         velocity = (glm::normalize(velocity) * m_MoveSpeed) * deltaTime;
@@ -26,6 +29,9 @@ void Transform::Update(const float deltaTime)
 
 void Transform::SetPosition(glm::vec2 newPosition)
 {
+    if (GetOwner().IsStatic())
+        return;
+
     m_LocalPosition = newPosition;
     MarkDirty();
 }

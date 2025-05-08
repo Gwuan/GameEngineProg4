@@ -28,7 +28,7 @@ void CollisionSystem::Update()
 {
 	for (auto& collider : m_pColliders)
 	{
-		if (collider->IsStatic())
+		if (collider->GetOwner().IsStatic())
 			continue;
 
 		for (auto& secondCollider : m_pColliders)
@@ -108,7 +108,7 @@ uint32_t CollisionSystem::MakePairID(uint16_t id1, uint16_t id2)
 
 void CollisionSystem::ResolveCollision(ColliderComponent* colliderA, ColliderComponent* colliderB)
 {
-    if (colliderA->IsStatic() && colliderB->IsStatic()) 
+    if (colliderA->GetOwner().IsStatic() && colliderB->GetOwner().IsStatic()) 
 		return;
 
 	const glm::vec2 posA = colliderA->GetOwner().GetTransform()->GetWorldPosition();
@@ -126,20 +126,14 @@ void CollisionSystem::ResolveCollision(ColliderComponent* colliderA, ColliderCom
     {
         const float correction = (posA.x < posB.x) ? -overlapX : overlapX;
 
-        if (!colliderA->IsStatic())
-            colliderA->GetOwner().GetTransform()->SetPosition(posA.x + correction * 0.5f, posA.y);
-
-    	if (!colliderB->IsStatic())
-            colliderB->GetOwner().GetTransform()->SetPosition(posB.x - correction * 0.5f, posB.y);
+    	colliderA->GetOwner().GetTransform()->SetPosition(posA.x + correction * 0.5f, posA.y);
+    	colliderB->GetOwner().GetTransform()->SetPosition(posB.x - correction * 0.5f, posB.y);
     }
     else
     {
         const float correction = (posA.y < posB.y) ? -overlapY : overlapY;
 
-        if (!colliderA->IsStatic())
-            colliderA->GetOwner().GetTransform()->SetPosition(posA.x, posA.y + correction * 0.5f);
-
-    	if (!colliderB->IsStatic())
-            colliderB->GetOwner().GetTransform()->SetPosition(posB.x, posB.y - correction * 0.5f);
+    	colliderA->GetOwner().GetTransform()->SetPosition(posA.x, posA.y + correction * 0.5f);
+    	colliderB->GetOwner().GetTransform()->SetPosition(posB.x, posB.y - correction * 0.5f);
     }	
 }

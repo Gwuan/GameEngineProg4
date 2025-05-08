@@ -58,13 +58,12 @@ public:
 	bool CheckCollision(ColliderComponent* other);
 
 	bool IsTrigger() const { return m_IsTrigger; }
-	bool IsStatic() const { return m_IsStatic; }
 
 protected:
 	template <typename T, typename ... Args>
 	friend T* dae::GameObject::AddComponent(Args&&... args);
 
-	explicit ColliderComponent(dae::GameObject& owner, const Rect& box, bool isTrigger, bool isStatic);
+	explicit ColliderComponent(dae::GameObject& owner, const Rect& box, bool isTrigger);
 
 private:
 	static uint16_t m_Counter;
@@ -72,5 +71,4 @@ private:
 	const uint16_t m_ID;
 	const Rect m_BoundingBox;
 	const bool m_IsTrigger;
-	const bool m_IsStatic;  // TODO: the GameObject should be marked as static, not a colliderComponent
 };

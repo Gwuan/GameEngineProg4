@@ -50,10 +50,9 @@ void load()
 	peterPepper->AddComponent<PeterPepperComponent>();
 	scene.Add(peterPepper);
 
-	auto msSalt = std::make_shared<dae::GameObject>(); 
-	msSalt->GetTransform()->SetPosition(360, 300);
+	auto msSalt = std::make_shared<dae::GameObject>(glm::vec2{300.f, 300.f}, true); 
 	msSalt->AddComponent<TextureComponent>("../gameResources/salt.png");
-	msSalt->AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, false, false);
+	msSalt->AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, false);
 
 	scene.Add(msSalt);
 

@@ -5,8 +5,9 @@
 #include "Renderer.h"
 #include "Transform.h"
 
-dae::GameObject::GameObject(const glm::vec2& position)
-	: m_IsDead(false),
+dae::GameObject::GameObject(const glm::vec2& position, bool isStatic)
+	: m_IsPendingDelete(false),
+	  m_IsStatic(isStatic),
       m_pParent(nullptr),
 	  m_pTransform(nullptr),
 	  m_Children(),

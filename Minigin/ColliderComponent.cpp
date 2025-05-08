@@ -39,12 +39,11 @@ bool ColliderComponent::CheckCollision(ColliderComponent* other)
 	return !(leftToRight || rightToLeft || botToUp || upToBot);
 }
 
-ColliderComponent::ColliderComponent(dae::GameObject& owner, const Rect& box,bool isTrigger, bool isStatic)
+ColliderComponent::ColliderComponent(dae::GameObject& owner, const Rect& box,bool isTrigger)
 	: Component(owner),
 	  m_ID(m_Counter),
 	  m_BoundingBox(box),
-	  m_IsTrigger(isTrigger),
-	  m_IsStatic(isStatic)
+	  m_IsTrigger(isTrigger)
 {
 	if (m_Counter == UINT16_MAX)
 	{
