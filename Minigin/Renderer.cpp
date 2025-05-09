@@ -101,6 +101,26 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
+void dae::Renderer::RenderTextureRegion(const Texture2D& texture, const SDL_Rect& sourceRect, float x, float y) const
+{
+	SDL_Rect dst{};
+	dst.x = static_cast<int>(x);
+	dst.y = static_cast<int>(y);
+	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &sourceRect, &dst);
+}
+
+void dae::Renderer::RenderTextureRegion(const Texture2D& texture, const SDL_Rect& sourceRect, float x, float y,
+	float width, float height) const
+{
+	SDL_Rect dst{};
+	dst.x = static_cast<int>(x);
+	dst.y = static_cast<int>(y);
+	dst.w = static_cast<int>(width);
+	dst.h = static_cast<int>(height);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &sourceRect, &dst);
+}
+
 void dae::Renderer::RenderLine(const glm::vec2& start, const glm::vec2& end) const
 {
 	SDL_RenderDrawLineF(GetSDLRenderer(), start.x, start.y, end.x, end.y);;

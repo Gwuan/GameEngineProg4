@@ -16,6 +16,7 @@
 #include "SceneManager.h"
 #include "ResourceManager.h"
 #include "Scene.h"
+#include "SpriteAnimation.h"
 #include "TextComponent.h"
 #include "TextureComponent.h"
 #include "Transform.h"
@@ -51,7 +52,17 @@ void load()
 	scene.Add(peterPepper);
 
 	auto msSalt = std::make_shared<dae::GameObject>(glm::vec2{300.f, 300.f}, true); 
-	msSalt->AddComponent<TextureComponent>("../gameResources/salt.png");
+	//msSalt->AddComponent<TextureComponent>("../gameResources/salt.png");
+	SpriteAnimation::AnimationConfig msSaltConfig
+	{
+		glm::vec2{16, 16},
+		3,
+		0,
+		3,
+		.6f
+	};
+	auto spriteTexture = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
+	msSalt->AddComponent<SpriteAnimation>(spriteTexture, msSaltConfig);
 	msSalt->AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, false);
 
 	scene.Add(msSalt);
