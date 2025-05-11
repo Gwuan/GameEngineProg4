@@ -8,7 +8,7 @@ public:
     void BeginPlay() override {}
     void Update(const float deltaTime) override;
     void FixedUpdate(const float) override {}
-    void LateUpdate(const float) override {}
+    void LateUpdate(float deltaTime) override;
     void Render() const override {}
     void DebugRender() override {}
 

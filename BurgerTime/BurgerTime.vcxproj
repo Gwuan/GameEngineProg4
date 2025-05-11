@@ -188,12 +188,14 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="HudDemoComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PeterPepperComponent.cpp" />
+    <ClCompile Include="PeterPepperState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CircularMovement.h" />
     <ClInclude Include="GameCommands.h" />
     <ClInclude Include="HudDemoComponent.h" />
     <ClInclude Include="PeterPepperComponent.h" />
+    <ClInclude Include="PeterPepperState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,12 +1,14 @@
 #pragma once
 #include "Component.h"
+#include "PeterPepperState.h"
+
 
 class ColliderComponent;
 
 class PeterPepperComponent final : public Component
 {
 public:
-	void Update(const float) override {}
+	void Update(const float deltaTime) override;
 	void FixedUpdate(const float) override {}
 	void LateUpdate(const float) override {}
 	void Render() const override {}
@@ -25,4 +27,6 @@ protected:
 private:
 	void PlaySoundOnOverlap(const ColliderComponent* otherCollider);
 
+
+	std::unique_ptr<PeterPepperState> m_State;
 };

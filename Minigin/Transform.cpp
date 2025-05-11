@@ -21,10 +21,13 @@ void Transform::Update(const float deltaTime)
         velocity.y *= -1.f;
     	m_LocalPosition += velocity;
         MarkDirty();
-
-    	velocity.x = 0.f;
-        velocity.y = 0.f;
     }
+}
+
+void Transform::LateUpdate(float)
+{
+    velocity.x = 0;
+    velocity.y = 0;
 }
 
 void Transform::SetPosition(glm::vec2 newPosition)
