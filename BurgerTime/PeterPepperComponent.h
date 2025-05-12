@@ -18,13 +18,18 @@ public:
 	PeterPepperComponent& operator=(const PeterPepperComponent&) = delete;
 	PeterPepperComponent& operator=(PeterPepperComponent&&) noexcept = delete;
 
+	void RequestShoot();
+
 protected:
 	template <typename T, typename ... Args>
 	friend T* dae::GameObject::AddComponent(Args&&... args);
 
+	friend PeterPepperState;
+
 	explicit PeterPepperComponent(dae::GameObject& owner);
 
 private:
+	bool m_ShootRequested = false;
 	void PlaySoundOnOverlap(const ColliderComponent* otherCollider);
 
 

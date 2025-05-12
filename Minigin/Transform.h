@@ -26,7 +26,10 @@ public:
     void SetMoveSpeed(float speed) { m_MoveSpeed = speed >= 0.f ? speed : 0; }
     float GetMoveSpeed() const { return m_MoveSpeed; }
 
-    glm::vec2 velocity;
+    glm::vec2 MoveDirection;
+
+    glm::vec2 GetVelocity() const { return m_Velocity; }
+    glm::vec2 GetForwardVector() const { return m_ForwardVector; }
 
     glm::vec2 GetLocalPosition() const { return m_LocalPosition; }
     glm::vec2 GetWorldPosition();
@@ -41,4 +44,7 @@ private:
     mutable glm::vec2 m_WorldPosition;
     float m_MoveSpeed;
 	mutable bool m_IsDirty;
+
+    glm::vec2 m_Velocity = glm::vec2{0, 0};
+    glm::vec2 m_ForwardVector = glm::vec2{1.f, 0};
 };

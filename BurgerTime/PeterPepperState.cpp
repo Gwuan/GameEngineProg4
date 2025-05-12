@@ -1,22 +1,19 @@
 #include "PeterPepperState.h"
 
+#include "ColliderComponent.h"
 #include "GameObject.h"
+#include "PeterPepperComponent.h"
+#include "ResourceManager.h"
 #include "SpriteAnimation.h"
 #include "Transform.h"
 
-std::unique_ptr<PeterPepperState> PeterIdleState::Update()
-{
-	if (glm::length(m_pPeter->GetTransform()->velocity) >= .1f)
-	{
-		return std::make_unique<PeterMoveState>(*m_pPeter);
-	}
+// Can't find a way to make peter shoot without making it a mess
 
-	return nullptr;
-}
-
+// PETER IDLE
+#pragma region PeterIdle
 void PeterIdleState::OnEnter()
 {
-	if (auto spriteAnim = m_pPeter->GetComponent<SpriteAnimation>())
+	if (auto spriteAnim = m_pPeter->GetOwner().GetComponent<SpriteAnimation>())
 	{
 		constexpr SpriteAnimation::AnimationConfig idleConfig {
 			.frameSize= glm::vec2{16.f, 16.f},
@@ -30,24 +27,24 @@ void PeterIdleState::OnEnter()
 	}
 }
 
-std::unique_ptr<PeterPepperState> PeterMoveState::Update()
+std::unique_ptr<PeterPepperState> PeterIdleState::Update(float)
 {
-		std::cout << "H33ello" << std::endl;
-	if (glm::length(m_pPeter->GetTransform()->velocity) <= 0.01f)
+	if (glm::length(m_pPeter->GetOwner().GetTransform()->GetVelocity()) >= 1.f)
 	{
-		return std::make_unique<PeterIdleState>(*m_pPeter);
+		return std::make_unique<PeterMoveState>(*m_pPeter);
 	}
 
 	return nullptr;
 }
+#pragma endregion
 
+// PETER MOVE
+#pragma region PeterMove
 void PeterMoveState::OnEnter()
 {
-	std::cout << "HEEYYYYY" << std::endl;
-
-	if (auto spriteAnim = m_pPeter->GetComponent<SpriteAnimation>())
+	if (auto spriteAnim = m_pPeter->GetOwner().GetComponent<SpriteAnimation>())
 	{
-		constexpr SpriteAnimation::AnimationConfig idleConfig {
+		constexpr SpriteAnimation::AnimationConfig moveConfig {
 			.frameSize= glm::vec2{16.f, 16.f},
 			.nrOfFrames= 3,
 			.startRow= 0,
@@ -55,6 +52,98 @@ void PeterMoveState::OnEnter()
 			.totalDuration= .3f
 		};
 
-		spriteAnim->ChangeConfig(idleConfig);
+		spriteAnim->ChangeConfig(moveConfig);
 	}
 }
+
+std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
+{
+	if (glm::length(m_pPeter->GetOwner().GetTransform()->GetVelocity()) <= 1.f)
+	{
+		return std::make_unique<PeterIdleState>(*m_pPeter);
+	}
+
+	// Doesn't compile
+	// if (m_pPeter->m_ShootRequested)
+	// {
+	// 	return std::make_unique<PeterThrowPepperState>(*m_pPeter);
+	// }
+
+	return nullptr;
+}
+#pragma endregion
+
+// PETER THROW PEPPER
+#pragma region
+const float PeterThrowPepperState::m_MaxTime = 1.f;
+
+void PeterThrowPepperState::OnEnter()
+{
+	if (auto spriteAnimation = m_pPeter->GetOwner().GetComponent<SpriteAnimation>())
+	{
+		constexpr SpriteAnimation::AnimationConfig throwPepperConfig {
+			.frameSize = glm::vec2{16.f, 16.f},
+			.nrOfFrames = 1,
+			.startRow = 1,
+			.startColumn = 1,
+			.totalDuration = 1.f
+		};
+
+		spriteAnimation->ChangeConfig(throwPepperConfig);
+	}
+
+	// Creating components for the pepper that is thrown
+	// TODO: This should be a GameObject, will update in the future
+	if (auto peterTransform = m_pPeter->GetOwner().GetTransform())
+	{
+		constexpr float distance = 16.f; 
+		const glm::vec2 pepperTriggerLocation = peterTransform->GetWorldPosition() + (peterTransform->GetForwardVector() * distance);
+
+		m_PepperTrigger = m_pPeter->GetOwner().AddComponent<ColliderComponent>(ColliderComponent::Rect{pepperTriggerLocation, 16.f, 16.f}, true);
+
+		constexpr  SpriteAnimation::AnimationConfig pepperAnimConfig {
+			.frameSize = {16.f, 16.f},
+			.nrOfFrames = 4,
+			.startRow = 1,
+			.startColumn = 12,
+			.totalDuration = m_MaxTime
+		};
+
+		auto spriteSheet = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
+		m_PepperAnimation = m_pPeter->GetOwner().AddComponent<SpriteAnimation>(spriteSheet, pepperAnimConfig);
+		m_PepperAnimation->SetPositionOffset((peterTransform->GetForwardVector() * distance));
+	}
+}
+
+std::unique_ptr<PeterPepperState> PeterThrowPepperState::Update(float deltaTime)
+{
+	if (m_TotalElapsedTime >= m_MaxTime)
+	{
+		return std::make_unique<PeterIdleState>(*m_pPeter);	
+	}
+
+	// Doesn't compile
+	// if (m_pPeter->m_ShootRequested)
+	// {
+	// 	return std::make_unique<PeterThrowPepperState>(*m_pPeter);
+	// }
+
+	m_TotalElapsedTime += deltaTime;
+	
+
+	return nullptr;
+}
+
+void PeterThrowPepperState::OnExit()
+{
+	if (m_PepperTrigger)
+	{
+		m_PepperTrigger->Destroy();
+	}
+
+	if (m_PepperAnimation)
+	{
+		m_PepperAnimation->Destroy();
+	}
+}
+#pragma endregion

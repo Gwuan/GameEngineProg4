@@ -3,7 +3,7 @@
 
 Transform::Transform(dae::GameObject& owner, glm::vec2 pos)
     : Component(owner),
-	  velocity(0.f, 0.f),
+	  MoveDirection(0.f, 0.f),
 	  m_LocalPosition(pos),
 	  m_WorldPosition(0.f, 0.f),
 	  m_MoveSpeed(50.f),
@@ -15,19 +15,19 @@ void Transform::Update(const float deltaTime)
     if (GetOwner().IsStatic())
         return;
 
-    if (glm::length<2>(velocity) >= 0.2f)
+    if (glm::length<2>(MoveDirection) >= 0.2f)
     {
-        velocity = (glm::normalize(velocity) * m_MoveSpeed) * deltaTime;
-        velocity.y *= -1.f;
-    	m_LocalPosition += velocity;
+        m_Velocity = glm::normalize(MoveDirection) * m_MoveSpeed;
+        m_Velocity.y *= -1.f;
+    	m_LocalPosition += m_Velocity * deltaTime;
         MarkDirty();
     }
 }
 
 void Transform::LateUpdate(float)
 {
-    velocity.x = 0;
-    velocity.y = 0;
+    m_Velocity = glm::vec2{};
+    MoveDirection = glm::vec2{};
 }
 
 void Transform::SetPosition(glm::vec2 newPosition)

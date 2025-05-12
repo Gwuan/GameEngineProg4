@@ -30,7 +30,7 @@ void SpriteAnimation::Render() const
     region.w = frameWidth;
     region.h = frameHeight;
 
-    const glm::vec2 pos = GetOwner().GetTransform()->GetWorldPosition();
+    const glm::vec2 pos = GetOwner().GetTransform()->GetWorldPosition() + m_PositionOffset;
     dae::Renderer::GetInstance().RenderTextureRegion(
         *m_SpriteTexture,
         region,

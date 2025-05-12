@@ -9,16 +9,20 @@
 #include "TextureComponent.h"
 #include "Transform.h"
 
-void PeterPepperComponent::Update(const float)
+void PeterPepperComponent::Update(float deltaTime)
 {
-	//std::cout << glm::length(GetOwner().GetTransform()->velocity) << std::endl;
-
-	if (auto newState = m_State->Update())
+	if (auto newState = m_State->Update(deltaTime))
 	{
 		m_State->OnExit();
 		m_State = std::move(newState);
 		m_State->OnEnter();
 	}
+}
+
+void PeterPepperComponent::RequestShoot()
+{
+	if (!m_ShootRequested)
+		m_ShootRequested = true;
 }
 
 PeterPepperComponent::PeterPepperComponent(dae::GameObject& owner)
@@ -31,8 +35,8 @@ PeterPepperComponent::PeterPepperComponent(dae::GameObject& owner)
 
 	collider->OnBeginOverlap += std::bind(&PeterPepperComponent::PlaySoundOnOverlap, this, std::placeholders::_1);
 
-	m_State = std::make_unique<PeterIdleState>(owner);
-
+	m_State = std::make_unique<PeterIdleState>(*this);
+	m_State->OnEnter();
 }
 
 void PeterPepperComponent::PlaySoundOnOverlap(const ColliderComponent*)

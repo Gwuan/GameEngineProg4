@@ -11,12 +11,12 @@
 
 void MovePepperCommand::Execute()
 {
-	GetGameObject()->GetTransform()->velocity += m_Direction;
+	GetGameObject()->GetTransform()->MoveDirection += m_Direction;
 }
 
 void MoveSaltCommand::Execute()
 {
-	GetGameObject()->GetTransform()->velocity += glm::vec2{m_Direction.x * 2, m_Direction.y *  2};
+	GetGameObject()->GetTransform()->MoveDirection += glm::vec2{m_Direction.x * 2, m_Direction.y *  2};
 }
 
 void SoundTestCommand::Execute()

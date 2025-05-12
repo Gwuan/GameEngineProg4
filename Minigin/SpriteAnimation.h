@@ -21,6 +21,7 @@ public:
     void LateUpdate(float) override {}
     void Render() const override;
 
+    void SetPositionOffset(const glm::vec2& offset) { m_PositionOffset = offset; }
     void ChangeConfig(const AnimationConfig& newConfig);
 
 protected:
@@ -30,6 +31,8 @@ protected:
     explicit SpriteAnimation(dae::GameObject& owner, std::shared_ptr<dae::Texture2D> spriteTexture, const AnimationConfig& animationConfig);
 
 private:
+    glm::vec2 m_PositionOffset = glm::vec2{};
+
     std::shared_ptr<dae::Texture2D> m_SpriteTexture;
 
 	AnimationConfig m_Config{};
