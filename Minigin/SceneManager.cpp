@@ -34,8 +34,10 @@ void dae::SceneManager::DebugRender()
 }
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
+dae::Scene& dae::SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize = 32)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
+	const auto& scene = std::shared_ptr<Scene>(new Scene(name, gridSize, cellSize));
 	m_scenes.push_back(scene);
 	return *scene;
 }

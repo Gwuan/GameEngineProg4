@@ -9,7 +9,12 @@ using namespace dae;
 unsigned int Scene::m_idCounter = 0;
 
 
-Scene::Scene(const std::string& name) : m_name(name) {}
+Scene::Scene(const std::string& name, const struct glm::vec2& gridSize, uint32_t cellSize)
+: m_name(name),
+  m_GridCellSize(cellSize)
+{
+	InitializeGrid(gridSize);
+}
 
 Scene::~Scene() = default;
 
@@ -87,6 +92,19 @@ void Scene::DebugRender()
 	}
 }
 
+glm::vec2 Scene::GridToWorld(uint32_t column, uint32_t row) const
+{
+	try
+	{
+		return m_Grid.at(row).at(column);	
+	}
+	catch (const std::out_of_range& ex)
+	{
+		std::cout << "Invalid grid position: " << ex.what() << std::endl;;
+		return glm::vec2{};
+	}
+}
+
 void Scene::KillGameObjects()
 {
 	if (m_ObjectKillList.empty())
@@ -97,4 +115,22 @@ void Scene::KillGameObjects()
 	}
 
 	m_ObjectKillList.clear();
+}
+
+void Scene::InitializeGrid(const glm::vec2& gridSize)
+{
+	const uint32_t totalCellsWidth = static_cast<uint32_t>(gridSize.x) / m_GridCellSize;
+	const uint32_t totalCellsHeight = static_cast<uint32_t>(gridSize.y) / m_GridCellSize;
+
+	m_Grid.resize(totalCellsHeight);
+
+	for (uint32_t y{}; y < totalCellsHeight; ++y)
+	{
+		m_Grid[y].reserve(totalCellsWidth);
+
+		for (uint32_t x{}; x < totalCellsWidth; ++x)
+		{
+			m_Grid[y].emplace_back(glm::vec2{m_GridCellSize * x, m_GridCellSize * y});
+		}
+	}
 }

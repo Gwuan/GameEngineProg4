@@ -11,6 +11,7 @@ namespace dae
 	{
 	public:
 		Scene& CreateScene(const std::string& name);
+		Scene& CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
 
 		void BeginPlay();
 
