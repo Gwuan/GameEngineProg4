@@ -32,7 +32,7 @@ namespace dae
 		void KillGameObjects();
 
 		void InitializeGrid(const glm::vec2& gridSize);
-
+		
 		explicit Scene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
 
 		std::vector<std::vector<glm::vec2>> m_Grid;

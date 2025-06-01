@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <vec2.hpp>
+
 #include "Singleton.h"
 
 namespace dae
@@ -10,8 +12,9 @@ namespace dae
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		Scene& CreateScene(const std::string& name);
 		Scene& CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
+
+		void LoadSceneFromJson(const std::string& path);
 
 		void BeginPlay();
 

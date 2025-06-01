@@ -14,10 +14,12 @@
 #include <thread>
 
 #include "CollisionSystem.h"
+#include "JsonResolver.h"
 #include "LoggingSoundSystem.h"
 #include "NullSoundSystem.hpp"
 #include "SDLSoundSystem.h"
 #include "ServiceAllocator.h"
+#include "TextureComponent.h"
 
 SDL_Window* g_window{};
 const float dae::Minigin::m_MsPerFrame{16.667f}; // 16.667ms -> 60 fps

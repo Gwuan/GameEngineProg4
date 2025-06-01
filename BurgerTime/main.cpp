@@ -8,7 +8,6 @@
 #endif
 
 #include "ColliderComponent.h"
-#include "FpsCounterComponent.h"
 #include "GameCommands.h"
 #include "InputManager.h"
 #include "Minigin.h"
@@ -23,7 +22,6 @@
 
 void load()
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 	// auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	//auto go = std::make_shared<dae::GameObject>();
@@ -70,11 +68,7 @@ void load()
 
 	//auto& input = dae::InputManager::GetInstance();
 
-	// Input for peterPepper
-	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_W, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{0.f, 1.f}));
-	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_S, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{0.f, -1.f}));
-	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_A, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{-1.f, 0.f}));
-	input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_D, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{1.f, 0.f}));
+	dae::SceneManager::GetInstance().LoadSceneFromJson("../Data/Levels/TestLevel.json");
 
 	//// Input for peterPepper
 	//input.BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_W, dae::InputAction::HOLD, std::make_unique<MovePepperCommand>(peterPepper.get(), glm::vec2{0.f, 1.f}));

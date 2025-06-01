@@ -1,0 +1,64 @@
+{
+  "name": "BurgerTime Level 1 - Platforms and Ladders (Textured)",
+  "gridSize": [12, 13],
+  "cellSize": 16,
+
+  "gameObjects": [
+    { "gridPos": [0, 13], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [1, 13], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [2, 13], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [3, 13], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [4, 13], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [5, 13], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [6, 13], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+
+    { "gridPos": [0, 11], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [1, 11], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [5, 11], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [6, 11], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+
+    { "gridPos": [2, 9], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [3, 9], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [4, 9], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+
+    { "gridPos": [0, 7], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [1, 7], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [5, 7], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [6, 7], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+
+    { "gridPos": [0, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [1, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [2, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [3, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [4, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [5, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+    { "gridPos": [6, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
+
+    { "gridPos": [0, 13], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [0, 12], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [0, 11], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [0, 10], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [0, 9], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [0, 8], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [0, 7], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [0, 6], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+
+    { "gridPos": [3, 13], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [3, 12], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [3, 11], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [3, 10], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+
+    { "gridPos": [3, 9], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [3, 8], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [3, 7], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+
+    { "gridPos": [6, 13], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [6, 12], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [6, 11], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [6, 10], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [6, 9], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [6, 8], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [6, 7], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] },
+    { "gridPos": [6, 6], "components": [{ "type": "TextureComponent", "texture": "ladder.png" }] }
+  ]
+}

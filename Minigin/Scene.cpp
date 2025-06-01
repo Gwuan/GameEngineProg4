@@ -4,12 +4,14 @@
 #include <algorithm>
 #include <chrono>
 
+#include "Renderer.h"
+
 using namespace dae;
 
 unsigned int Scene::m_idCounter = 0;
 
 
-Scene::Scene(const std::string& name, const struct glm::vec2& gridSize, uint32_t cellSize)
+Scene::Scene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize)
 : m_name(name),
   m_GridCellSize(cellSize)
 {
@@ -78,18 +80,20 @@ void Scene::LateUpdate(const float deltaTime)
 
 void Scene::Render() const
 {
-	for (const auto& object : m_objects)
-	{
-		object->Render();
-	}
+	std::ranges::for_each(m_objects, [](const auto& object) 
+		{
+			object->Render();
+		}
+    );
 }
 
 void Scene::DebugRender()
 {
-	for (const auto& object : m_objects)
-	{
-		object->DebugRender();
-	}
+    std::ranges::for_each(m_objects, [](const auto& object) 
+		{
+    		object->DebugRender();
+		}
+    );
 }
 
 glm::vec2 Scene::GridToWorld(uint32_t column, uint32_t row) const
@@ -119,8 +123,8 @@ void Scene::KillGameObjects()
 
 void Scene::InitializeGrid(const glm::vec2& gridSize)
 {
-	const uint32_t totalCellsWidth = static_cast<uint32_t>(gridSize.x) / m_GridCellSize;
-	const uint32_t totalCellsHeight = static_cast<uint32_t>(gridSize.y) / m_GridCellSize;
+	const uint32_t totalCellsWidth = static_cast<uint32_t>(gridSize.x);
+	const uint32_t totalCellsHeight = static_cast<uint32_t>(gridSize.y);
 
 	m_Grid.resize(totalCellsHeight);
 
@@ -130,7 +134,7 @@ void Scene::InitializeGrid(const glm::vec2& gridSize)
 
 		for (uint32_t x{}; x < totalCellsWidth; ++x)
 		{
-			m_Grid[y].emplace_back(glm::vec2{m_GridCellSize * x, m_GridCellSize * y});
+			m_Grid[y].emplace_back(m_GridCellSize * x, m_GridCellSize * y);
 		}
 	}
 }
