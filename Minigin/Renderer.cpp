@@ -51,22 +51,25 @@ void dae::Renderer::Render() const
 
 	SceneManager::GetInstance().Render();
 
+#ifdef NDEBUG
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	SDL_RenderPresent(m_renderer);
+#endif
+}
+
+void dae::Renderer::DebugRender()
+{
+	SceneManager::GetInstance().DebugRender();
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_RenderPresent(m_renderer);
 }
 
-void dae::Renderer::DebugRender()
+void dae::Renderer::RenderUI()
 {
-	//ImGui_ImplOpenGL3_NewFrame();
-	//ImGui_ImplSDL2_NewFrame();
-	//ImGui::NewFrame();
-
-	//SceneManager::GetInstance().DebugRender();
-
-	//ImGui::Render();
-	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	//SDL_RenderPresent(m_renderer);
+	
 }
 
 void dae::Renderer::Destroy()

@@ -42,8 +42,8 @@ public:
 	void Update(const float) override {}
 	void FixedUpdate(const float) override {}
 	void LateUpdate(const float) override {}
-	void Render() const override;
-	virtual void DebugRender() override {}
+	void Render() const override {};
+	void DebugRender() override;
 
 	uint16_t GetID() const { return m_ID; }
 	Rect GetBoundingBox() const { return m_BoundingBox; }

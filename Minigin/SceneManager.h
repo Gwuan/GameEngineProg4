@@ -14,7 +14,7 @@ namespace dae
 	public:
 		Scene& CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
 
-		void LoadSceneFromJson(const std::string& path);
+		Scene* LoadSceneFromJson(const std::string& path);
 
 		void BeginPlay();
 

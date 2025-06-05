@@ -19,6 +19,7 @@ namespace dae
 		void Init(SDL_Window* window);
 		void Render() const;
 		void DebugRender();
+		void RenderUI();
 		void Destroy();
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;

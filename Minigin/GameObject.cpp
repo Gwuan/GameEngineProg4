@@ -113,15 +113,10 @@ void dae::GameObject::Render() const
 
 void dae::GameObject::DebugRender()
 {
-	ImGui::SetNextWindowSize(ImVec2(200, 200));
-	ImGui::Begin("Debug renderer for gameObject", NULL, ImGuiWindowFlags_MenuBar);
-
 	for (auto& component : m_Components)
 	{
 		component->DebugRender();
 	}
-
-	ImGui::End();
 }
 
 void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)

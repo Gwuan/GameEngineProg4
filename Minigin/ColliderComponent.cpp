@@ -9,10 +9,8 @@
 
 uint16_t ColliderComponent::m_Counter = 0;
 
-void ColliderComponent::Render() const
+void ColliderComponent::DebugRender()
 {
-	// DebugRender feature doesn't work yet, must be transferred to the right function later on
-	// TODO: Place this in DebugRender
 	const auto& bounds = m_BoundingBox.GetBounds(GetOwner().GetTransform()->GetWorldPosition());
 
 	dae::Renderer::GetInstance().RenderLine(bounds[0], bounds[1]);

@@ -49,13 +49,13 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name, const glm::v
 	return *scene;
 }
 
-void dae::SceneManager::LoadSceneFromJson(const std::string& path)
+dae::Scene* dae::SceneManager::LoadSceneFromJson(const std::string& path)
 {
 	std::ifstream file(path);
 	if (!file)
 	{
 		std::cout << "Failed to load the scene, will not perform loading transition\n";
-		return;
+		return nullptr;
 	}
 
 	nlohmann::json json;
@@ -67,19 +67,19 @@ void dae::SceneManager::LoadSceneFromJson(const std::string& path)
         if (!JsonResolver::IsLevelDataValid(json)) 
 		{
 			std::cout << "Failed to load the scene, will not perform loading transition\n";
-			return;
+			return nullptr;
         }
 
         const auto& gridSizeJson = json["gridSize"];
         if (!gridSizeJson.is_array() || gridSizeJson.size() != 2) 
 		{
 			std::cout << "Json level loading failed, gridSize not found or invalid\n";
-			return;
+			return nullptr;
         }
 
         glm::vec2 gridSize{};
 		if (!JsonResolver::ExtractVector2("gridSize", json, gridSize))
-			return;
+			return nullptr;
 
         int cellSize = json["cellSize"].get<int>();
         const std::string& sceneName = json["name"].get_ref<const std::string&>();
@@ -94,10 +94,13 @@ void dae::SceneManager::LoadSceneFromJson(const std::string& path)
 		{
 			scene.Add(go);
 		});
+
+		return &scene;
 	}
 	catch (const nlohmann::detail::type_error& typeError)
 	{
 		std::cout << typeError.what() << std::endl;
+		return nullptr;
 	}
 }
 
