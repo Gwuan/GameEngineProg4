@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SDL_render.h>
+
 #include "Component.h"
 
 class SpriteAnimation final : public Component
@@ -23,6 +25,9 @@ public:
 
     void SetPositionOffset(const glm::vec2& offset) { m_PositionOffset = offset; }
     void ChangeConfig(const AnimationConfig& newConfig);
+    AnimationConfig GetConfig() const { return this->m_Config; }
+
+    SDL_RendererFlip m_Flip = SDL_FLIP_NONE;
 
 protected:
     template <typename T, typename... Args>

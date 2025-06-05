@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 
+#include "Transform.h"
+
 class PeterPepperComponent;
 class SpriteAnimation;
 class ColliderComponent;
@@ -57,6 +59,10 @@ public:
 	std::unique_ptr<PeterPepperState> Update(float deltaTime) override;
 
 	void OnEnter() override;
+
+private:
+	Transform* m_pPeterTransform = nullptr;
+	SpriteAnimation* m_pPeterAnimation = nullptr;
 };
 
 class PeterThrowPepperState final : public PeterPepperState

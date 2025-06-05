@@ -66,12 +66,13 @@ void load()
 
 	//scene.Add(msSalt);
 
+	auto scene = dae::SceneManager::GetInstance().LoadSceneFromJson("../Data/Levels/TestLevel.json");
+	if (!scene)
+		return;
 
-	auto currentScene = dae::SceneManager::GetInstance().LoadSceneFromJson("../Data/Levels/TestLevel.json");
-
-	auto peterPepper = std::make_shared<dae::GameObject>(glm::vec2{200.f, 200.f});
+	auto peterPepper = std::make_shared<dae::GameObject>(glm::vec2{220, 220});
 	peterPepper->AddComponent<PeterPepperComponent>();
-	currentScene->Add(peterPepper);
+	scene->Add(peterPepper);
 
 	auto& input = dae::InputManager::GetInstance();
 	// Input for peterPepper

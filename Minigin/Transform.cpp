@@ -26,6 +26,10 @@ void Transform::Update(const float deltaTime)
 
 void Transform::LateUpdate(float)
 {
+    if (m_Velocity != glm::vec2{})
+    {
+		m_ForwardVector = glm::normalize(m_Velocity);
+    }
     m_Velocity = glm::vec2{};
     MoveDirection = glm::vec2{};
 }

@@ -24,6 +24,7 @@ void PeterIdleState::OnEnter()
 		};
 
 		spriteAnim->ChangeConfig(idleConfig);
+		spriteAnim->m_Flip = SDL_FLIP_NONE;
 	}
 }
 
@@ -53,7 +54,10 @@ void PeterMoveState::OnEnter()
 		};
 
 		spriteAnim->ChangeConfig(moveConfig);
+		m_pPeterAnimation = spriteAnim;
 	}
+
+	m_pPeterTransform = m_pPeter->GetOwner().GetTransform();
 }
 
 std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
@@ -63,6 +67,18 @@ std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
 		return std::make_unique<PeterIdleState>(*m_pPeter);
 	}
 
+	if (m_pPeterTransform->GetForwardVector().x > 0.f && 
+		m_pPeterAnimation->m_Flip == SDL_FLIP_NONE)
+	{
+		m_pPeterAnimation->m_Flip = SDL_FLIP_HORIZONTAL;
+	}
+	else if (m_pPeterTransform->GetForwardVector().x < 0.f && 
+			 m_pPeterAnimation->m_Flip != SDL_FLIP_NONE)
+	{
+		m_pPeterAnimation->m_Flip = SDL_FLIP_NONE;
+	}
+		
+	// TODO: This need to work ASAP
 	// Doesn't compile
 	// if (m_pPeter->m_ShootRequested)
 	// {
@@ -101,7 +117,7 @@ void PeterThrowPepperState::OnEnter()
 
 		m_PepperTrigger = m_pPeter->GetOwner().AddComponent<ColliderComponent>(ColliderComponent::Rect{pepperTriggerLocation, 16.f, 16.f}, true);
 
-		constexpr  SpriteAnimation::AnimationConfig pepperAnimConfig {
+		const SpriteAnimation::AnimationConfig pepperAnimConfig {
 			.frameSize = {16.f, 16.f},
 			.nrOfFrames = 4,
 			.startRow = 1,

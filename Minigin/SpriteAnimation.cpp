@@ -36,7 +36,8 @@ void SpriteAnimation::Render() const
         region,
         pos.x, pos.y,
         static_cast<float>(frameWidth),
-        static_cast<float>(frameHeight)
+        static_cast<float>(frameHeight),
+        m_Flip
     );
 }
 

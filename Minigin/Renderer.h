@@ -26,7 +26,7 @@ namespace dae
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 
 		void RenderTextureRegion(const Texture2D& texture, const SDL_Rect& sourceRect, float x, float y) const;
-		void RenderTextureRegion(const Texture2D& texture, const SDL_Rect& sourceRect, float x, float y, float width, float height) const;
+		void RenderTextureRegion(const Texture2D& texture, const SDL_Rect& sourceRect, float x, float y, float width, float height, const SDL_RendererFlip& flip) const;
 
 		void RenderLine(const glm::vec2& start, const glm::vec2& end) const;
 

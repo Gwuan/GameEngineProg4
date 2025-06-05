@@ -86,7 +86,7 @@ void dae::Renderer::Destroy()
 }
 
 void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
-{
+{ 
 	SDL_Rect dst{};
 	dst.x = static_cast<int>(x);
 	dst.y = static_cast<int>(y);
@@ -114,14 +114,14 @@ void dae::Renderer::RenderTextureRegion(const Texture2D& texture, const SDL_Rect
 }
 
 void dae::Renderer::RenderTextureRegion(const Texture2D& texture, const SDL_Rect& sourceRect, float x, float y,
-	float width, float height) const
+	float width, float height, const SDL_RendererFlip& flip = SDL_FLIP_NONE) const
 {
 	SDL_Rect dst{};
 	dst.x = static_cast<int>(x);
 	dst.y = static_cast<int>(y);
 	dst.w = static_cast<int>(width);
 	dst.h = static_cast<int>(height);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &sourceRect, &dst);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &sourceRect, &dst, 0, nullptr, flip);
 }
 
 void dae::Renderer::RenderLine(const glm::vec2& start, const glm::vec2& end) const
