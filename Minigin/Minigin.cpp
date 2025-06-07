@@ -106,9 +106,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	ServiceAllocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>()); 
 	#endif
 
-	// This is added
-	sceneManager.BeginPlay();
-
 	// The game loop is basically a copy pasta from the slides,
 	// I have a feeling that this loop has to be refactored anyway in the future.
 	// So it is fine for now that it is copied. I don't want to spend too

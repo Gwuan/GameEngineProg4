@@ -4,19 +4,18 @@
 #include <memory>
 #include <vec2.hpp>
 
+#include "Observer.h"
 #include "Singleton.h"
 
 namespace dae
 {
 	class Scene;
-	class SceneManager final : public Singleton<SceneManager>
+	class SceneManager final : public Singleton<SceneManager>, IObserver
 	{
 	public:
 		Scene& CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
 
 		Scene* LoadSceneFromJson(const std::string& path);
-
-		void BeginPlay();
 
 		void FixedUpdate(const float fixedTime);
 		void Update(const float deltaTime);
@@ -24,14 +23,18 @@ namespace dae
 		void Render();
 		void DebugRender();
 
-		Scene* GetActiveScene() const { return m_ActiveScene.get(); }
+		Scene* GetActiveScene() const { return m_ActiveScene; }
+
+		void OnNotify(dae::GameObject* object, EventID event) override;
 
 	private:
+		void SetNewActiveScene(Scene* scene);
 
-		std::shared_ptr<Scene> m_ActiveScene = nullptr;
+		Subject m_NewSceneSub{};
+		Scene* m_ActiveScene = nullptr;
 
 		friend class Singleton<SceneManager>;
-		SceneManager() = default;
+		SceneManager();
 		std::vector<std::shared_ptr<Scene>> m_scenes;
 	};
 }

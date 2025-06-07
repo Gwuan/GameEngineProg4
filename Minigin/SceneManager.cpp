@@ -10,10 +10,6 @@
 
 #include "JsonResolver.h"
 
-// TODO: This whole scenemanager needs to rewritten.
-// Requirements:
-//	- 
-
 void dae::SceneManager::Update(const float deltaTime)
 {
 	m_ActiveScene->Update(deltaTime);
@@ -34,11 +30,32 @@ void dae::SceneManager::DebugRender()
 	m_ActiveScene->DebugRender();
 }
 
+void dae::SceneManager::OnNotify(dae::GameObject*, EventID event)
+{
+	auto hasher = std::hash<std::string>();
+
+    if (event == std::hash<std::string>{}("NewActiveScene"))
+    {
+        m_ActiveScene->BeginPlay();
+    }
+}
+
+void dae::SceneManager::SetNewActiveScene(Scene* scene)
+{
+	m_ActiveScene = scene;
+	m_NewSceneSub.Notify(nullptr, "NewActiveScene");
+}
+
+dae::SceneManager::SceneManager()
+{
+	m_NewSceneSub.AddObserver(this);
+}
+
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize = 32)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name, gridSize, cellSize));
 	m_scenes.push_back(scene);
-	m_ActiveScene = scene;
+	SetNewActiveScene(scene.get());
 	return *scene;
 }
 
@@ -95,12 +112,6 @@ dae::Scene* dae::SceneManager::LoadSceneFromJson(const std::string& path)
 		std::cout << typeError.what() << std::endl;
 		return nullptr;
 	}
-}
-
-void dae::SceneManager::BeginPlay()
-{
-	// TODO: Change to event based behavior
-	m_ActiveScene->BeginPlay();
 }
 
 void dae::SceneManager::FixedUpdate(const float fixedTime)
