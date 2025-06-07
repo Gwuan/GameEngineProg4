@@ -20,7 +20,7 @@ dae::GameObject::GameObject(const glm::vec2& position, bool isStatic)
 dae::GameObject::~GameObject()
 {
 	m_Children.clear();
-	m_pParent = nullptr;
+	SetParent(nullptr);
 }
 
 void dae::GameObject::AddChild(GameObject* object)

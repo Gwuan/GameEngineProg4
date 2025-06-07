@@ -12,7 +12,7 @@ Transform::Transform(dae::GameObject& owner, glm::vec2 pos)
 
 void Transform::Update(const float deltaTime)
 {
-    if (GetOwner().IsStatic())
+    if (GetOwner().IsStatic() || !m_MovementEnabled)
         return;
 
     if (glm::length<2>(MoveDirection) >= 0.2f)

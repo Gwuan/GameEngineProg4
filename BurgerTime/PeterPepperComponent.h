@@ -10,7 +10,7 @@ class PeterPepperComponent final : public Component
 public:
 	void Update(const float deltaTime) override;
 	void FixedUpdate(const float) override {}
-	void LateUpdate(const float) override {}
+	void LateUpdate(const float) override;
 	void Render() const override {}
 
 	PeterPepperComponent(const PeterPepperComponent&) = delete;
@@ -19,6 +19,7 @@ public:
 	PeterPepperComponent& operator=(PeterPepperComponent&&) noexcept = delete;
 
 	void RequestShoot();
+	bool IsShootRequested() const { return this->m_ShootRequested; }
 
 protected:
 	template <typename T, typename ... Args>

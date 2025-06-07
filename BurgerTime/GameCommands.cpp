@@ -3,6 +3,7 @@
 #include <chrono>
 #include <SDL_syswm.h>
 
+#include "PeterPepperComponent.h"
 #include "ServiceAllocator.h"
 #include "SoundSystem.hpp"
 #include "Subject.h"
@@ -52,4 +53,10 @@ void PauseAllAudioCommand::Execute()
 void ResumeAllAudioCommand::Execute()
 {
 	ServiceAllocator::GetSoundSystem().ResumeAll();
+}
+
+void ShootPepper::Execute()
+{
+	if (auto peterComp = GetGameObject()->GetComponent<PeterPepperComponent>())
+		peterComp->RequestShoot();
 }

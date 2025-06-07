@@ -34,11 +34,15 @@ public:
     glm::vec2 GetLocalPosition() const { return m_LocalPosition; }
     glm::vec2 GetWorldPosition();
 
+    void EnableMovement(bool value) { m_MovementEnabled = value; }
+
     void MarkDirty();
     bool IsDirty() const { return m_IsDirty; } 
 
 private:
 	void UpdateWorldPosition();
+
+    bool m_MovementEnabled = true;
 
 	glm::vec2 m_LocalPosition;
     mutable glm::vec2 m_WorldPosition;

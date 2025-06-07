@@ -85,6 +85,5 @@ private:
 	static const float m_MaxTime;
 	float m_TotalElapsedTime = 0.f;
 
-	ColliderComponent* m_PepperTrigger = nullptr;
-	SpriteAnimation* m_PepperAnimation = nullptr;
+	std::shared_ptr<dae::GameObject> m_pPepper{};
 };

@@ -10,42 +10,35 @@
 
 #include "JsonResolver.h"
 
+// TODO: This whole scenemanager needs to rewritten.
+// Requirements:
+//	- 
+
 void dae::SceneManager::Update(const float deltaTime)
 {
-	for (auto& scene : m_scenes)
-	{
-		scene->Update(deltaTime);
-	}
+	m_ActiveScene->Update(deltaTime);
 }
 
 void dae::SceneManager::LateUpdate(const float deltaTime)
 {
-	for (auto& scene : m_scenes)
-	{
-		scene->LateUpdate(deltaTime);
-	}
+	m_ActiveScene->LateUpdate(deltaTime);
 }
 
 void dae::SceneManager::Render()
 {
-	for (const auto& scene : m_scenes)
-	{
-		scene->Render();
-	}
+	m_ActiveScene->Render();
 }
 
 void dae::SceneManager::DebugRender()
 {
-	for (const auto& scene : m_scenes)
-	{
-		scene->DebugRender();
-	}
+	m_ActiveScene->DebugRender();
 }
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize = 32)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name, gridSize, cellSize));
 	m_scenes.push_back(scene);
+	m_ActiveScene = scene;
 	return *scene;
 }
 
@@ -106,16 +99,11 @@ dae::Scene* dae::SceneManager::LoadSceneFromJson(const std::string& path)
 
 void dae::SceneManager::BeginPlay()
 {
-	for(const auto& scene : m_scenes)
-	{
-		scene->BeginPlay();
-	}
+	// TODO: Change to event based behavior
+	m_ActiveScene->BeginPlay();
 }
 
 void dae::SceneManager::FixedUpdate(const float fixedTime)
 {
-	for (const auto& scene : m_scenes)
-	{
-		scene->FixedUpdate(fixedTime);
-	}
+	m_ActiveScene->FixedUpdate(fixedTime);
 }

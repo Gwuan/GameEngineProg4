@@ -104,3 +104,10 @@ public:
 	ResumeAllAudioCommand(dae::GameObject* object) : Command(object) {}
 	void Execute() override;
 };
+
+class ShootPepper final : public Command
+{
+public:
+	ShootPepper(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};

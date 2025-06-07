@@ -19,6 +19,12 @@ void PeterPepperComponent::Update(float deltaTime)
 	}
 }
 
+void PeterPepperComponent::LateUpdate(const float)
+{
+	if (m_ShootRequested)
+		m_ShootRequested = false;
+}
+
 void PeterPepperComponent::RequestShoot()
 {
 	if (!m_ShootRequested)
@@ -28,12 +34,11 @@ void PeterPepperComponent::RequestShoot()
 PeterPepperComponent::PeterPepperComponent(dae::GameObject& owner)
 	: Component(owner)
 {
-	auto collider = owner.AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, false);
+	owner.AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, false);
 
 	auto spriteSheet = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
 	owner.AddComponent<SpriteAnimation>(spriteSheet, SpriteAnimation::AnimationConfig{});
 
-	collider->OnBeginOverlap += std::bind(&PeterPepperComponent::PlaySoundOnOverlap, this, std::placeholders::_1);
 
 	m_State = std::make_unique<PeterIdleState>(*this);
 	m_State->OnEnter();

@@ -4,6 +4,10 @@
 #include "GameObject.h"
 #include "PeterPepperComponent.h"
 #include "ResourceManager.h"
+#include "Scene.h"
+#include "SceneManager.h"
+#include "ServiceAllocator.h"
+#include "SoundSystem.hpp"
 #include "SpriteAnimation.h"
 #include "Transform.h"
 
@@ -78,12 +82,10 @@ std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
 		m_pPeterAnimation->m_Flip = SDL_FLIP_NONE;
 	}
 		
-	// TODO: This need to work ASAP
-	// Doesn't compile
-	// if (m_pPeter->m_ShootRequested)
-	// {
-	// 	return std::make_unique<PeterThrowPepperState>(*m_pPeter);
-	// }
+	if (m_pPeter->IsShootRequested())
+	{
+		return std::make_unique<PeterThrowPepperState>(*m_pPeter);
+	}
 
 	return nullptr;
 }
@@ -95,6 +97,8 @@ const float PeterThrowPepperState::m_MaxTime = 1.f;
 
 void PeterThrowPepperState::OnEnter()
 {
+	ServiceAllocator::GetSoundSystem().PlaySoundEffect("../Data/Sounds/Pepper_Shake.wav", .6f);
+
 	if (auto spriteAnimation = m_pPeter->GetOwner().GetComponent<SpriteAnimation>())
 	{
 		constexpr SpriteAnimation::AnimationConfig throwPepperConfig {
@@ -108,27 +112,33 @@ void PeterThrowPepperState::OnEnter()
 		spriteAnimation->ChangeConfig(throwPepperConfig);
 	}
 
-	// Creating components for the pepper that is thrown
-	// TODO: This should be a GameObject, will update in the future
-	if (auto peterTransform = m_pPeter->GetOwner().GetTransform())
-	{
-		constexpr float distance = 16.f; 
-		const glm::vec2 pepperTriggerLocation = peterTransform->GetWorldPosition() + (peterTransform->GetForwardVector() * distance);
+	auto peterTransform = m_pPeter->GetOwner().GetTransform();
 
-		m_PepperTrigger = m_pPeter->GetOwner().AddComponent<ColliderComponent>(ColliderComponent::Rect{pepperTriggerLocation, 16.f, 16.f}, true);
+	if (!peterTransform)
+		return;
 
-		const SpriteAnimation::AnimationConfig pepperAnimConfig {
-			.frameSize = {16.f, 16.f},
-			.nrOfFrames = 4,
-			.startRow = 1,
-			.startColumn = 12,
-			.totalDuration = m_MaxTime
-		};
+	peterTransform->EnableMovement(false);
+	constexpr float distance = 16.f; 
+	const glm::vec2 pepperLocation = peterTransform->GetWorldPosition() + (peterTransform->GetForwardVector() * distance);
 
-		auto spriteSheet = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
-		m_PepperAnimation = m_pPeter->GetOwner().AddComponent<SpriteAnimation>(spriteSheet, pepperAnimConfig);
-		m_PepperAnimation->SetPositionOffset((peterTransform->GetForwardVector() * distance));
-	}
+	m_pPepper = std::make_shared<dae::GameObject>(pepperLocation, false);
+	m_pPepper->SetParent(&m_pPeter->GetOwner(), true);
+
+	m_pPepper->AddComponent<ColliderComponent>(ColliderComponent::Rect({}, 16.f, 16.f), true);
+
+	const SpriteAnimation::AnimationConfig pepperAnimConfig {
+		.frameSize = {16.f, 16.f},
+		.nrOfFrames = 4,
+		.startRow = 1,
+		.startColumn = 12,
+		.totalDuration = m_MaxTime
+	};
+
+	auto spriteSheet = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
+	m_pPepper->AddComponent<SpriteAnimation>(spriteSheet, pepperAnimConfig);
+
+	if (auto currentScene = dae::SceneManager::GetInstance().GetActiveScene())
+		currentScene->Add(m_pPepper);
 }
 
 std::unique_ptr<PeterPepperState> PeterThrowPepperState::Update(float deltaTime)
@@ -138,28 +148,16 @@ std::unique_ptr<PeterPepperState> PeterThrowPepperState::Update(float deltaTime)
 		return std::make_unique<PeterIdleState>(*m_pPeter);	
 	}
 
-	// Doesn't compile
-	// if (m_pPeter->m_ShootRequested)
-	// {
-	// 	return std::make_unique<PeterThrowPepperState>(*m_pPeter);
-	// }
-
 	m_TotalElapsedTime += deltaTime;
-	
 
 	return nullptr;
 }
 
 void PeterThrowPepperState::OnExit()
 {
-	if (m_PepperTrigger)
-	{
-		m_PepperTrigger->Destroy();
-	}
+	m_pPeter->GetOwner().GetTransform()->EnableMovement(true);
 
-	if (m_PepperAnimation)
-	{
-		m_PepperAnimation->Destroy();
-	}
+	if (m_pPepper)
+		m_pPepper->Destroy();
 }
 #pragma endregion
