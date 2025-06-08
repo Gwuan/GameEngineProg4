@@ -21,37 +21,31 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircularMovement.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="GameCommands.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HudDemoComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PeterPepperComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PeterPepperState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HudDemoComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PeterPepperComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CircularMovement.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="GameCommands.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HudDemoComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PeterPepperComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PeterPepperState.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HudDemoComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PeterPepperComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

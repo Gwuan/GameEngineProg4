@@ -183,7 +183,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CircularMovement.cpp" />
     <ClCompile Include="GameCommands.cpp" />
     <ClCompile Include="HudDemoComponent.cpp" />
     <ClCompile Include="main.cpp" />
@@ -191,7 +190,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="PeterPepperState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CircularMovement.h" />
     <ClInclude Include="GameCommands.h" />
     <ClInclude Include="HudDemoComponent.h" />
     <ClInclude Include="PeterPepperComponent.h" />
