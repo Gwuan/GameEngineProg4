@@ -12,22 +12,22 @@
 
 void dae::SceneManager::Update(const float deltaTime)
 {
-	m_ActiveScene->Update(deltaTime);
+	if (m_ActiveScene) m_ActiveScene->Update(deltaTime);
 }
 
 void dae::SceneManager::LateUpdate(const float deltaTime)
 {
-	m_ActiveScene->LateUpdate(deltaTime);
+	if (m_ActiveScene) m_ActiveScene->LateUpdate(deltaTime);
 }
 
 void dae::SceneManager::Render()
 {
-	m_ActiveScene->Render();
+	if (m_ActiveScene) m_ActiveScene->Render();
 }
 
 void dae::SceneManager::DebugRender()
 {
-	m_ActiveScene->DebugRender();
+	if (m_ActiveScene) m_ActiveScene->DebugRender();
 }
 
 void dae::SceneManager::OnNotify(dae::GameObject*, EventID event)
@@ -36,27 +36,56 @@ void dae::SceneManager::OnNotify(dae::GameObject*, EventID event)
 
     if (event == std::hash<std::string>{}("NewActiveScene"))
     {
-        m_ActiveScene->BeginPlay();
+        if (m_ActiveScene) m_ActiveScene->BeginPlay();
     }
 }
 
 void dae::SceneManager::SetNewActiveScene(Scene* scene)
 {
 	m_ActiveScene = scene;
-	m_NewSceneSub.Notify(nullptr, "NewActiveScene");
+	m_NewSceneSubj.Notify(nullptr, "NewActiveScene");
 }
 
 dae::SceneManager::SceneManager()
 {
-	m_NewSceneSub.AddObserver(this);
+	m_NewSceneSubj.AddObserver(this);
 }
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize = 32)
 {
+	const size_t newSceneNameHash = std::hash<std::string>{}(name);
+
+	auto sceneIt = std::ranges::find_if(m_scenes, [newSceneNameHash](std::shared_ptr<Scene>& scene)
+	{
+		return newSceneNameHash == scene->GetHashedName();
+	});
+
+	if (sceneIt != m_scenes.end())
+	{
+		SetNewActiveScene(sceneIt->get());
+		return *m_ActiveScene;
+	}
+
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name, gridSize, cellSize));
 	m_scenes.push_back(scene);
+
 	SetNewActiveScene(scene.get());
 	return *scene;
+}
+
+bool dae::SceneManager::DeleteScene(const std::string& name)
+{
+	const size_t deletedSceneHash = std::hash<std::string>{}(name);
+
+	if (m_ActiveScene->GetHashedName() == deletedSceneHash)
+		m_ActiveScene = nullptr;
+
+	auto result = std::erase_if(m_scenes, [deletedSceneHash](const std::shared_ptr<Scene>& scene)
+	{
+		return scene->GetHashedName() == deletedSceneHash;
+	});
+
+	return result == 0;
 }
 
 dae::Scene* dae::SceneManager::LoadSceneFromJson(const std::string& path)
@@ -116,5 +145,5 @@ dae::Scene* dae::SceneManager::LoadSceneFromJson(const std::string& path)
 
 void dae::SceneManager::FixedUpdate(const float fixedTime)
 {
-	m_ActiveScene->FixedUpdate(fixedTime);
+	if (m_ActiveScene) m_ActiveScene->FixedUpdate(fixedTime);
 }

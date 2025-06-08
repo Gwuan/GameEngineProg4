@@ -28,17 +28,25 @@ namespace dae
 
 		glm::vec2 GridToWorld(uint32_t column, uint32_t row) const;
 
+		size_t GetHashedName() const { return this->m_NameHash; }
+
+		bool operator==(const Scene& other) const
+		{
+			return this->m_NameHash == other.m_NameHash;
+		}
+
 	private:
 		void KillGameObjects();
 
 		void InitializeGrid(const glm::vec2& gridSize);
-		
+
 		explicit Scene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
 
 		std::vector<std::vector<glm::vec2>> m_Grid;
 		const uint32_t m_GridCellSize;
 
 		std::string m_name;
+		size_t m_NameHash;
 		std::vector<uint32_t> m_ObjectKillList;
 		std::vector<std::shared_ptr<GameObject>> m_objects{};
 

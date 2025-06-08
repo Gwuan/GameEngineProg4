@@ -13,8 +13,10 @@ unsigned int Scene::m_idCounter = 0;
 
 Scene::Scene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize)
 : m_name(name),
+  m_NameHash(),
   m_GridCellSize(cellSize)
 {
+	m_NameHash = std::hash<std::string>{}(name);
 	InitializeGrid(gridSize);
 }
 

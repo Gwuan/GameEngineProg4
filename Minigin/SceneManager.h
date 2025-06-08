@@ -15,6 +15,8 @@ namespace dae
 	public:
 		Scene& CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
 
+		bool DeleteScene(const std::string& name);
+
 		Scene* LoadSceneFromJson(const std::string& path);
 
 		void FixedUpdate(const float fixedTime);
@@ -30,7 +32,7 @@ namespace dae
 	private:
 		void SetNewActiveScene(Scene* scene);
 
-		Subject m_NewSceneSub{};
+		Subject m_NewSceneSubj{};
 		Scene* m_ActiveScene = nullptr;
 
 		friend class Singleton<SceneManager>;
