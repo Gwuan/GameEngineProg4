@@ -10,6 +10,8 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_sdl2.h"
 
+#include "DataTypes.hpp"
+
 int GetOpenGLDriverIndex()
 {
 	auto openglIndex = -1;
@@ -124,9 +126,16 @@ void dae::Renderer::RenderTextureRegion(const Texture2D& texture, const SDL_Rect
 	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &sourceRect, &dst, 0, nullptr, flip);
 }
 
-void dae::Renderer::RenderLine(const glm::vec2& start, const glm::vec2& end) const
+void dae::Renderer::RenderLine(const glm::vec2& start, const glm::vec2& end, const ColorRGBA& color) const
 {
+	SDL_Color tempColor;
+	SDL_GetRenderDrawColor(m_renderer, &tempColor.r, &tempColor.g, &tempColor.b, &tempColor.a);
+
+	SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
+
 	SDL_RenderDrawLineF(GetSDLRenderer(), start.x, start.y, end.x, end.y);;
+
+	SDL_SetRenderDrawColor(m_renderer, tempColor.r, tempColor.g, tempColor.g, tempColor.a);
 }
 
 SDL_Renderer* dae::Renderer::GetSDLRenderer() const { return m_renderer; }

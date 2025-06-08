@@ -34,7 +34,7 @@ void PeterPepperComponent::RequestShoot()
 PeterPepperComponent::PeterPepperComponent(dae::GameObject& owner)
 	: Component(owner)
 {
-	owner.AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 32, 32}, false);
+	owner.AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 16, 16}, false);
 
 	auto spriteSheet = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
 	owner.AddComponent<SpriteAnimation>(spriteSheet, SpriteAnimation::AnimationConfig{});

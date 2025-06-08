@@ -34,7 +34,7 @@ void SpriteAnimation::Render() const
     dae::Renderer::GetInstance().RenderTextureRegion(
         *m_SpriteTexture,
         region,
-        pos.x, pos.y,
+        pos.x - (frameWidth /2), pos.y - (frameHeight /2),
         static_cast<float>(frameWidth),
         static_cast<float>(frameHeight),
         m_Flip

@@ -1,8 +1,8 @@
 #pragma once
 #include <SDL.h>
-#include <vec2.hpp>
-
+#include "Datatypes.hpp"
 #include "Singleton.h"
+#include <vec2.hpp>
 
 namespace dae
 {
@@ -28,7 +28,7 @@ namespace dae
 		void RenderTextureRegion(const Texture2D& texture, const SDL_Rect& sourceRect, float x, float y) const;
 		void RenderTextureRegion(const Texture2D& texture, const SDL_Rect& sourceRect, float x, float y, float width, float height, const SDL_RendererFlip& flip) const;
 
-		void RenderLine(const glm::vec2& start, const glm::vec2& end) const;
+		void RenderLine(const glm::vec2& start, const glm::vec2& end, const ColorRGBA& color = Colors::Red) const;
 
 		SDL_Renderer* GetSDLRenderer() const;
 
