@@ -42,9 +42,3 @@ void ServiceAllocator::RegisterSoundSystem(std::unique_ptr<IRendererService>&& r
 		m_RendererInstance = std::move(renderer);
 	}
 }
-
-void ServiceAllocator::CleanUp()
-{
-	m_SoundSystemInstance.reset();
-	m_RendererInstance.reset();
-}

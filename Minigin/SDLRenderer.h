@@ -1,8 +1,6 @@
 #pragma once
 #include <SDL.h>
 #include "Datatypes.hpp"
-#include "Singleton.h"
-#include <vec2.hpp>
 
 #include "IRendererService.h"
 #include "ITexture2D.h"
@@ -10,10 +8,8 @@
 namespace dae
 {
 	class SDLTexture2D;
-	/**
-	 * Simple RAII wrapper for the SDL renderer
-	 */
-	class SDLRenderer final : public IRendererService // public Singleton<Renderer>
+
+	class SDLRenderer final : public IRendererService
 	{
 
 	public:
@@ -21,7 +17,6 @@ namespace dae
 		void Render() const override;
 		void DebugRender() const override;
 		void Destroy() override;
-
 
 		virtual ~SDLRenderer() override;
 
@@ -32,15 +27,15 @@ namespace dae
 		void RenderTexture(const ITexture2D& texture, const Rectf& dst) const override;
 
 		void RenderTextureRegion(const ITexture2D& texture, const Rectf& src, float dstX, float dstY) const override;
-		void RenderTextureRegion(const ITexture2D& texture, const Rectf& src, const Rectf& dst, const TextureFlip& flip) const;
+		void RenderTextureRegion(const ITexture2D& texture, const Rectf& src, const Rectf& dst, const TextureFlip& flip) const override;
 
-		void RenderLine(const glm::vec2& start, const glm::vec2& end, const ColorRGBA& color = Colors::Red) const;
+		void RenderLine(const glm::vec2& start, const glm::vec2& end, const ColorRGBA& color = Colors::Red) const override;
 
 	private:
 		static int GetOpenGLDriverIndex();
 
-		bool m_IsImguiDestroyed = false;
 		SDL_Renderer* m_RendererBackend = nullptr;
+		bool m_IsImguiDestroyed = false;
 	};
 
 }

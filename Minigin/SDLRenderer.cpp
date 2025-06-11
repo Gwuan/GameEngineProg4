@@ -1,4 +1,3 @@
-#include <stdexcept>
 #include "SDLRenderer.h"
 
 #include <SDL_image.h>
@@ -18,8 +17,9 @@
 void dae::SDLRenderer::Init(SDL_Window* window)
 {
 	m_pWindow = window;
+
 	m_RendererBackend = SDL_CreateRenderer(m_pWindow, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED);
-	if (m_RendererBackend == nullptr) 
+	if (!m_RendererBackend) 
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
@@ -69,7 +69,7 @@ void dae::SDLRenderer::Destroy()
 		m_IsImguiDestroyed = true;
 	}
 
-	if (m_RendererBackend != nullptr)
+	if (m_RendererBackend)
 	{
 		SDL_DestroyRenderer(m_RendererBackend);
 		m_RendererBackend = nullptr;
@@ -103,32 +103,33 @@ std::shared_ptr<ITexture2D> dae::SDLRenderer::CreateFontTexture(const char* text
 	}
 
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(m_RendererBackend, surf);
+	SDL_FreeSurface(surf);
+
 	if (!texture)
 	{
-		SDL_FreeSurface(surf);
 		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 	}
-	SDL_FreeSurface(surf);
 
 	return std::make_shared<SDLTexture2D>(texture);
 }
 
 void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const float x, const float y) const
 {
-	auto sdlTexture = dynamic_cast<const SDLTexture2D*>(&texture);
+	const auto* sdlTexture = dynamic_cast<const SDLTexture2D*>(&texture);
 	if (!sdlTexture) return
 
 	;
 	const auto textureSize = texture.GetSize();
 
-	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
+	SDL_FRect dst
+	{
+		x,
+		y,
+		static_cast<float>(textureSize.x),
+		static_cast<float>(textureSize.y)
+	};
 
-	dst.w = textureSize.x;
-	dst.h = textureSize.y;
-
-	SDL_RenderCopy(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dst);
+	SDL_RenderCopyF(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dst);
 }
 
 void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const Rectf& dst) const
@@ -136,8 +137,8 @@ void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const Rectf& dst
     auto sdlTexture = dynamic_cast<const SDLTexture2D*>(&texture);
 	if (!sdlTexture) return;
 
-	const auto dstSDL = SDLConverters::RectfToSDL(dst);
-	SDL_RenderCopy(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dstSDL);
+	const auto dstSDL = SDLConverters::RectfToSDLF(dst);
+	SDL_RenderCopyF(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dstSDL);
 }
 
 void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rectf& src, float dstX, float dstY) const
@@ -146,15 +147,17 @@ void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rect
 	if (!sdlTexture) return;
 
 	const auto srcSDL = SDLConverters::RectfToSDL(src);
+	const auto texSize = texture.GetSize();
 
-	SDL_Rect dst
+	SDL_FRect dst
 	{
-		static_cast<int>(dstX),
-		static_cast<int>(dstY)
+		dstX,
+		dstY,
+		static_cast<float>(texSize.x),
+		static_cast<float>(texSize.y)
 	};
 
-	SDL_QueryTexture(sdlTexture->GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	SDL_RenderCopy(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDL, &dst);
+	SDL_RenderCopyF(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDL, &dst);
 }
 
 void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rectf& src, const Rectf& dst, const TextureFlip& flip) const
@@ -162,10 +165,10 @@ void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rect
     auto sdlTexture = dynamic_cast<const SDLTexture2D*>(&texture);
 	if (!sdlTexture) return;
 
-	const SDL_Rect srcSDl = SDLConverters::RectfToSDL(src);  
-	const SDL_Rect dstSDL = SDLConverters::RectfToSDL(dst);  
+	const auto& srcSDl = SDLConverters::RectfToSDL(src);  
+	const auto& dstSDL = SDLConverters::RectfToSDLF(dst);  
 
-	SDL_RenderCopyEx(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDl, &dstSDL, 0, nullptr, SDLConverters::FlipToSDL(flip));
+	SDL_RenderCopyExF(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDl, &dstSDL, 0, nullptr, SDLConverters::FlipToSDL(flip));
 }
 
 void dae::SDLRenderer::RenderLine(const glm::vec2& start, const glm::vec2& end, const ColorRGBA& color) const
@@ -174,24 +177,23 @@ void dae::SDLRenderer::RenderLine(const glm::vec2& start, const glm::vec2& end, 
 	SDL_GetRenderDrawColor(m_RendererBackend, &tempColor.r, &tempColor.g, &tempColor.b, &tempColor.a);
 
 	SDL_SetRenderDrawColor(m_RendererBackend, color.r, color.g, color.b, color.a);
-
-	SDL_RenderDrawLineF(m_RendererBackend, start.x, start.y, end.x, end.y);;
-
+		SDL_RenderDrawLineF(m_RendererBackend, start.x, start.y, end.x, end.y);;
 	SDL_SetRenderDrawColor(m_RendererBackend, tempColor.r, tempColor.g, tempColor.g, tempColor.a);
 }
 
 int dae::SDLRenderer::GetOpenGLDriverIndex()
 {
-	auto openglIndex = -1;
 	const auto driverCount = SDL_GetNumRenderDrivers();
 
 	for (auto i = 0; i < driverCount; i++)
 	{
 		SDL_RendererInfo info;
 		if (!SDL_GetRenderDriverInfo(i, &info))
+		{
 			if (!strcmp(info.name, "opengl"))
-				openglIndex = i;
+				return i;
+		}
 	}
 
-	return openglIndex;
+	return -1;
 }

@@ -31,12 +31,12 @@
     <Filter Include="Core">
       <UniqueIdentifier>{c0672358-11f4-46d5-9ee5-1a3eacb1f90f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDLRenderer">
+      <UniqueIdentifier>{96d0f444-664c-41c3-a64a-00f4a71b162c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SDLTexture2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
@@ -141,9 +141,6 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="SDLRenderer.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -156,14 +153,14 @@
     <ClInclude Include="ITexture2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NullRenderer.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SDLTexture2D.h">
+      <Filter>SDLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLRenderer.h">
+      <Filter>SDLRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SDLTexture2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -242,9 +239,6 @@
     <ClCompile Include="Minigin.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="SDLRenderer.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -255,13 +249,16 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="IRendererService.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ITexture2D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="SDLUtils.hpp">
-      <Filter>Source Files</Filter>
+      <Filter>SDLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLTexture2D.cpp">
+      <Filter>SDLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLRenderer.cpp">
+      <Filter>SDLRenderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

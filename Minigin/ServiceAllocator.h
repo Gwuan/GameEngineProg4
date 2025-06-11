@@ -13,8 +13,6 @@ public:
 	static IRendererService& GetRenderer();
 	static void RegisterSoundSystem(std::unique_ptr<IRendererService>&& renderer);
 
-	static void CleanUp();
-
 private:
 	static std::unique_ptr<ISoundSystem> m_SoundSystemInstance;
 	static std::unique_ptr<IRendererService> m_RendererInstance;

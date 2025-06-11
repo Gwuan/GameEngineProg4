@@ -25,4 +25,3 @@ dae::SDLTexture2D::SDLTexture2D(SDL_Texture* texture)	: m_pTexture{ texture }
 {
 	assert(m_pTexture != nullptr);
 }
-
