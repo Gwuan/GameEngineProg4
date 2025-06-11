@@ -1,8 +1,8 @@
 #pragma once
-
-#include <SDL_render.h>
-
 #include "Component.h"
+
+class ITexture2D;
+enum class TextureFlip : uint8_t;
 
 class SpriteAnimation final : public Component
 {
@@ -27,18 +27,18 @@ public:
     void ChangeConfig(const AnimationConfig& newConfig);
     AnimationConfig GetConfig() const { return this->m_Config; }
 
-    SDL_RendererFlip m_Flip = SDL_FLIP_NONE;
+    TextureFlip m_Flip;
 
 protected:
     template <typename T, typename... Args>
     friend T* dae::GameObject::AddComponent(Args&&... args);
 
-    explicit SpriteAnimation(dae::GameObject& owner, std::shared_ptr<dae::Texture2D> spriteTexture, const AnimationConfig& animationConfig);
+    explicit SpriteAnimation(dae::GameObject& owner, std::shared_ptr<ITexture2D> spriteTexture, const AnimationConfig& animationConfig);
 
 private:
     glm::vec2 m_PositionOffset = glm::vec2{};
 
-    std::shared_ptr<dae::Texture2D> m_SpriteTexture;
+    std::shared_ptr<ITexture2D> m_SpriteTexture;
 
 	AnimationConfig m_Config{};
 

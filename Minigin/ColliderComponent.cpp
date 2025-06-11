@@ -4,7 +4,8 @@
 #include <SDL_render.h>
 
 #include "CollisionSystem.h"
-#include "Renderer.h"
+#include "IRendererService.h"
+#include "ServiceAllocator.h"
 #include "Transform.h"
 
 uint16_t ColliderComponent::m_Counter = 0;
@@ -13,10 +14,10 @@ void ColliderComponent::DebugRender()
 {
 	const auto& bounds = m_BoundingBox.GetBounds(GetOwner().GetTransform()->GetWorldPosition());
 
-	dae::Renderer::GetInstance().RenderLine(bounds[0], bounds[1]);
-	dae::Renderer::GetInstance().RenderLine(bounds[1], bounds[2]);
-	dae::Renderer::GetInstance().RenderLine(bounds[2], bounds[3]);
-	dae::Renderer::GetInstance().RenderLine(bounds[3], bounds[0]);
+	ServiceAllocator::GetRenderer().RenderLine(bounds[0], bounds[1]);
+	ServiceAllocator::GetRenderer().RenderLine(bounds[1], bounds[2]);
+	ServiceAllocator::GetRenderer().RenderLine(bounds[2], bounds[3]);
+	ServiceAllocator::GetRenderer().RenderLine(bounds[3], bounds[0]);
 }
 
 ColliderComponent::~ColliderComponent()
@@ -43,11 +44,7 @@ ColliderComponent::ColliderComponent(dae::GameObject& owner, const Rect& box,boo
 	  m_BoundingBox(box),
 	  m_IsTrigger(isTrigger)
 {
-	if (m_Counter == UINT16_MAX)
-	{
-		// TODO: add error logging
-		return;
-	}
+	if (m_Counter == UINT16_MAX) return;
 
 	m_Counter++;
 	CollisionSystem::GetInstance().RegisterCollider(*this);

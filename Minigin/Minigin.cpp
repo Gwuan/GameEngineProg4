@@ -7,7 +7,7 @@
 #include "Minigin.h"
 #include "InputManager.h"
 #include "SceneManager.h"
-#include "Renderer.h"
+#include "SDLRenderer.h"
 #include "ResourceManager.h"
 
 #include <chrono>
@@ -76,14 +76,13 @@ dae::Minigin::Minigin(const std::string &dataPath)
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
-	Renderer::GetInstance().Init(g_window);
-
+	ServiceAllocator::GetRenderer().Init(g_window);
 	ResourceManager::GetInstance().Init(dataPath);
 }
 
 dae::Minigin::~Minigin()
 {
-	Renderer::GetInstance().Destroy();
+	ServiceAllocator::GetRenderer().Destroy();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;
 	SDL_Quit();
@@ -93,7 +92,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 
-	auto& renderer = Renderer::GetInstance();
+	auto& renderer = ServiceAllocator::GetRenderer();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 	auto& colSystem = CollisionSystem::GetInstance();

@@ -239,12 +239,14 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gamepad.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="IRendererService.h" />
+    <ClInclude Include="ITexture2D.h" />
     <ClInclude Include="JsonResolver.h" />
     <ClInclude Include="LoggingSoundSystem.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="NullSoundSystem.hpp" />
     <ClInclude Include="Observer.h" />
-    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SDLRenderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -255,7 +257,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TextComponent.h" />
-    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="SDLTexture2D.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
@@ -276,19 +278,21 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="IRendererService.cpp" />
     <ClCompile Include="JsonResolver.cpp" />
     <ClCompile Include="LoggingSoundSystem.cpp" />
     <ClCompile Include="Minigin.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SDLRenderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SDLSoundSystem.cpp" />
+    <ClCompile Include="SDLUtils.hpp" />
     <ClCompile Include="ServiceAllocator.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TextComponent.cpp" />
-    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="SDLTexture2D.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>

@@ -1,6 +1,8 @@
 #pragma once
 #include "Component.h"
 
+class ITexture2D;
+
 class TextureComponent final : public Component
 {
 public:
@@ -27,6 +29,5 @@ protected:
 	TextureComponent(dae::GameObject& owner);
 	TextureComponent(dae::GameObject& owner, const std::string& filename);
 private:
-	std::shared_ptr<dae::Texture2D> m_Texture = nullptr;
+	std::shared_ptr<ITexture2D> m_Texture = nullptr;
 };
-

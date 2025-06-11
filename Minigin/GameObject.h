@@ -14,7 +14,7 @@ class Component;
 
 namespace dae
 {
-	class Texture2D;
+	class SDLTexture2D;
 
 	class GameObject final
 	{
