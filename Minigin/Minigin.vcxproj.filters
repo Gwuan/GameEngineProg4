@@ -36,7 +36,7 @@
     <ClInclude Include="Singleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
+    <ClInclude Include="SDLTexture2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
@@ -141,7 +141,7 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
+    <ClInclude Include="SDLRenderer.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
@@ -150,9 +150,18 @@
     <ClInclude Include="DataTypes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IRendererService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITexture2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NullRenderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Texture2D.cpp">
+    <ClCompile Include="SDLTexture2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
@@ -233,7 +242,7 @@
     <ClCompile Include="Minigin.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
+    <ClCompile Include="SDLRenderer.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
@@ -244,6 +253,15 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="IRendererService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ITexture2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLUtils.hpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

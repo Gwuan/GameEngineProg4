@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <chrono>
 
-#include "Renderer.h"
+#include "SDLRenderer.h"
 
 using namespace dae;
 

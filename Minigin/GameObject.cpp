@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <memory>
 #include "imgui_plot.h"
-#include "Renderer.h"
+#include "SDLRenderer.h"
 #include "Transform.h"
 
 dae::GameObject::GameObject(const glm::vec2& position, bool isStatic)

@@ -2,6 +2,7 @@
 
 #include "ColliderComponent.h"
 #include "GameObject.h"
+#include "IRendererService.h"
 #include "PeterPepperComponent.h"
 #include "ResourceManager.h"
 #include "Scene.h"
@@ -28,7 +29,7 @@ void PeterIdleState::OnEnter()
 		};
 
 		spriteAnim->ChangeConfig(idleConfig);
-		spriteAnim->m_Flip = SDL_FLIP_NONE;
+		spriteAnim->m_Flip = TextureFlip::None;
 	}
 }
 
@@ -72,14 +73,14 @@ std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
 	}
 
 	if (m_pPeterTransform->GetForwardVector().x > 0.f && 
-		m_pPeterAnimation->m_Flip == SDL_FLIP_NONE)
+		m_pPeterAnimation->m_Flip == TextureFlip::None)
 	{
-		m_pPeterAnimation->m_Flip = SDL_FLIP_HORIZONTAL;
+		m_pPeterAnimation->m_Flip = TextureFlip::Horizontal;
 	}
 	else if (m_pPeterTransform->GetForwardVector().x < 0.f && 
-			 m_pPeterAnimation->m_Flip != SDL_FLIP_NONE)
+			 m_pPeterAnimation->m_Flip != TextureFlip::Horizontal)
 	{
-		m_pPeterAnimation->m_Flip = SDL_FLIP_NONE;
+		m_pPeterAnimation->m_Flip = TextureFlip::None;
 	}
 		
 	if (m_pPeter->IsShootRequested())
