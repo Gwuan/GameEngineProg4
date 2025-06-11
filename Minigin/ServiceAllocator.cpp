@@ -1,7 +1,6 @@
 #include "ServiceAllocator.h"
 
 #include "NullSoundSystem.hpp"
-#include "NullRenderer.hpp"
 #include "SDLRenderer.h"
 
 std::unique_ptr<ISoundSystem> ServiceAllocator::m_SoundSystemInstance = nullptr;
