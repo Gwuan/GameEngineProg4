@@ -1,25 +1,25 @@
 #include <stdexcept>
 #include "SDLRenderer.h"
 
-#include <iostream>
 #include <SDL_image.h>
+#include <stdexcept>
+#include <iostream>
 
 #include "SceneManager.h"
 #include "SDLTexture2D.h"
+#include "DataTypes.hpp"
+#include "Font.h"
+#include "SDLUtils.hpp"
 
 #include "imgui.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_sdl2.h"
 
-#include "DataTypes.hpp"
-#include "Font.h"
-#include "SDLUtils.hpp"
-
 void dae::SDLRenderer::Init(SDL_Window* window)
 {
 	m_pWindow = window;
-	m_renderer = SDL_CreateRenderer(m_pWindow, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED);
-	if (m_renderer == nullptr) 
+	m_RendererBackend = SDL_CreateRenderer(m_pWindow, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED);
+	if (m_RendererBackend == nullptr) 
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
@@ -33,12 +33,14 @@ void dae::SDLRenderer::Init(SDL_Window* window)
 void dae::SDLRenderer::Render() const
 {
 	const auto& color = GetBackgroundColor();
-	SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderClear(m_renderer);
+	SDL_SetRenderDrawColor(m_RendererBackend, color.r, color.g, color.b, color.a);
+	SDL_RenderClear(m_RendererBackend);
 
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
+
+	SceneManager::GetInstance().Render();
 
 #ifdef NDEBUG
 	ImGui::Render();
@@ -53,7 +55,7 @@ void dae::SDLRenderer::DebugRender() const
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	SDL_RenderPresent(m_renderer);
+	SDL_RenderPresent(m_RendererBackend);
 }
 
 void dae::SDLRenderer::Destroy()
@@ -67,10 +69,10 @@ void dae::SDLRenderer::Destroy()
 		m_IsImguiDestroyed = true;
 	}
 
-	if (m_renderer != nullptr)
+	if (m_RendererBackend != nullptr)
 	{
-		SDL_DestroyRenderer(m_renderer);
-		m_renderer = nullptr;
+		SDL_DestroyRenderer(m_RendererBackend);
+		m_RendererBackend = nullptr;
 	}
 }
 
@@ -81,7 +83,7 @@ dae::SDLRenderer::~SDLRenderer()
 
 std::shared_ptr<ITexture2D> dae::SDLRenderer::LoadTexture(const char* filepath)
 {
-	SDL_Texture* texture = IMG_LoadTexture(m_renderer, filepath);
+	SDL_Texture* texture = IMG_LoadTexture(m_RendererBackend, filepath);
 	if (!texture)
 	{
 		throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
@@ -100,7 +102,7 @@ std::shared_ptr<ITexture2D> dae::SDLRenderer::CreateFontTexture(const char* text
 		throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 	}
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surf);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(m_RendererBackend, surf);
 	if (!texture)
 	{
 		SDL_FreeSurface(surf);
@@ -126,7 +128,7 @@ void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const float x, c
 	dst.w = textureSize.x;
 	dst.h = textureSize.y;
 
-	SDL_RenderCopy(GetSDLRenderer(), sdlTexture->GetSDLTexture(), nullptr, &dst);
+	SDL_RenderCopy(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dst);
 }
 
 void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const Rectf& dst) const
@@ -135,7 +137,7 @@ void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const Rectf& dst
 	if (!sdlTexture) return;
 
 	const auto dstSDL = SDLConverters::RectfToSDL(dst);
-	SDL_RenderCopy(GetSDLRenderer(), sdlTexture->GetSDLTexture(), nullptr, &dstSDL);
+	SDL_RenderCopy(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dstSDL);
 }
 
 void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rectf& src, float dstX, float dstY) const
@@ -152,7 +154,7 @@ void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rect
 	};
 
 	SDL_QueryTexture(sdlTexture->GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	SDL_RenderCopy(GetSDLRenderer(), sdlTexture->GetSDLTexture(), &srcSDL, &dst);
+	SDL_RenderCopy(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDL, &dst);
 }
 
 void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rectf& src, const Rectf& dst, const TextureFlip& flip) const
@@ -163,22 +165,20 @@ void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rect
 	const SDL_Rect srcSDl = SDLConverters::RectfToSDL(src);  
 	const SDL_Rect dstSDL = SDLConverters::RectfToSDL(dst);  
 
-	SDL_RenderCopyEx(GetSDLRenderer(), sdlTexture->GetSDLTexture(), &srcSDl, &dstSDL, 0, nullptr, SDLConverters::FlipToSDL(flip));
+	SDL_RenderCopyEx(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDl, &dstSDL, 0, nullptr, SDLConverters::FlipToSDL(flip));
 }
 
 void dae::SDLRenderer::RenderLine(const glm::vec2& start, const glm::vec2& end, const ColorRGBA& color) const
 {
 	SDL_Color tempColor;
-	SDL_GetRenderDrawColor(m_renderer, &tempColor.r, &tempColor.g, &tempColor.b, &tempColor.a);
+	SDL_GetRenderDrawColor(m_RendererBackend, &tempColor.r, &tempColor.g, &tempColor.b, &tempColor.a);
 
-	SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
+	SDL_SetRenderDrawColor(m_RendererBackend, color.r, color.g, color.b, color.a);
 
-	SDL_RenderDrawLineF(GetSDLRenderer(), start.x, start.y, end.x, end.y);;
+	SDL_RenderDrawLineF(m_RendererBackend, start.x, start.y, end.x, end.y);;
 
-	SDL_SetRenderDrawColor(m_renderer, tempColor.r, tempColor.g, tempColor.g, tempColor.a);
+	SDL_SetRenderDrawColor(m_RendererBackend, tempColor.r, tempColor.g, tempColor.g, tempColor.a);
 }
-
-SDL_Renderer* dae::SDLRenderer::GetSDLRenderer() const { return m_renderer; }
 
 int dae::SDLRenderer::GetOpenGLDriverIndex()
 {

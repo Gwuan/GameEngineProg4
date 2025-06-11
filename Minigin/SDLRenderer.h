@@ -36,12 +36,11 @@ namespace dae
 
 		void RenderLine(const glm::vec2& start, const glm::vec2& end, const ColorRGBA& color = Colors::Red) const;
 
-		SDL_Renderer* GetSDLRenderer() const;
 	private:
 		static int GetOpenGLDriverIndex();
 
 		bool m_IsImguiDestroyed = false;
-		SDL_Renderer* m_renderer = nullptr;
+		SDL_Renderer* m_RendererBackend = nullptr;
 	};
 
 }
