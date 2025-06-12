@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "Observer.h"
 #include "Transform.h"
 
 class PeterPepperComponent;
@@ -45,7 +46,7 @@ public:
 	void OnEnter() override;
 };
 
-class PeterMoveState final : public PeterPepperState
+class PeterMoveState final : public PeterPepperState, public IObserver
 {
 public:
 	PeterMoveState(PeterPepperComponent& peterPepper)
@@ -59,6 +60,8 @@ public:
 	std::unique_ptr<PeterPepperState> Update(float deltaTime) override;
 
 	void OnEnter() override;
+	void OnNotify(dae::GameObject* object, EventID event) override;
+	void OnExit() override;
 
 private:
 	Transform* m_pPeterTransform = nullptr;

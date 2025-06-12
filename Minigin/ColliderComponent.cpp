@@ -12,12 +12,26 @@ uint16_t ColliderComponent::m_Counter = 0;
 
 void ColliderComponent::DebugRender()
 {
-	const auto& bounds = m_BoundingBox.GetBounds(GetOwner().GetTransform()->GetWorldPosition());
+	const auto& bounds = GetBox().GetVertices();
 
 	ServiceAllocator::GetRenderer().RenderLine(bounds[0], bounds[1]);
 	ServiceAllocator::GetRenderer().RenderLine(bounds[1], bounds[2]);
 	ServiceAllocator::GetRenderer().RenderLine(bounds[2], bounds[3]);
 	ServiceAllocator::GetRenderer().RenderLine(bounds[3], bounds[0]);
+}
+
+Rectf ColliderComponent::GetBox() const
+{
+	const auto& centerPos = GetOwner().GetTransform()->GetWorldPosition();
+
+	return Rectf{
+		{
+			centerPos.x - (m_BoxSize.x / 2),
+			centerPos.y - (m_BoxSize.y / 2)
+		},
+		m_BoxSize.x,
+		m_BoxSize.y
+	};
 }
 
 ColliderComponent::~ColliderComponent()
@@ -27,8 +41,8 @@ ColliderComponent::~ColliderComponent()
 
 bool ColliderComponent::CheckCollision(ColliderComponent* other)
 {
-	auto bounds = this->m_BoundingBox.GetBounds(GetOwner().GetTransform()->GetWorldPosition());
-	auto otherBounds = other->m_BoundingBox.GetBounds(other->GetOwner().GetTransform()->GetWorldPosition());
+	auto bounds = this->GetBox().GetVertices();
+	auto otherBounds = other->GetBox().GetVertices();
 
 	bool leftToRight = bounds[0].x > otherBounds[1].x;
 	bool rightToLeft = bounds[1].x < otherBounds[0].x;
@@ -38,10 +52,10 @@ bool ColliderComponent::CheckCollision(ColliderComponent* other)
 	return !(leftToRight || rightToLeft || botToUp || upToBot);
 }
 
-ColliderComponent::ColliderComponent(dae::GameObject& owner, const Rect& box,bool isTrigger)
+ColliderComponent::ColliderComponent(dae::GameObject& owner, const glm::vec2& boxSize, bool isTrigger)
 	: Component(owner),
 	  m_ID(m_Counter),
-	  m_BoundingBox(box),
+	  m_BoxSize(boxSize),
 	  m_IsTrigger(isTrigger)
 {
 	if (m_Counter == UINT16_MAX) return;

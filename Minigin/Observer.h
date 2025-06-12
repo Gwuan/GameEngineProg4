@@ -3,6 +3,11 @@
 
 using EventID = size_t;
 
+namespace dae
+{
+	class GameObject;
+}
+
 // Interface
 class IObserver
 {

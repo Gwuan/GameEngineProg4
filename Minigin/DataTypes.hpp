@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <glm.hpp>
 
 struct Rectf final
@@ -6,6 +7,27 @@ struct Rectf final
 	glm::vec2 LeftBottom = {};
 	float width = 0.f;
 	float height = 0.f;
+
+	std::array<glm::vec2, 4> GetVertices() const
+	{
+		std::array<glm::vec2, 4> result;
+
+		result[0] = this->LeftBottom;
+		result[1] = {
+			this->LeftBottom.x + this->width,
+			this->LeftBottom.y
+		};
+		result[2] = {
+			this->LeftBottom.x + this->width,
+			this->LeftBottom.y + this->height
+		};
+		result[3] = {
+			this->LeftBottom.x,
+			this->LeftBottom.y + this->height
+		};
+
+		return result;
+	}
 };
 
 struct ColorRGBA final

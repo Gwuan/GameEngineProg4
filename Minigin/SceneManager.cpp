@@ -9,6 +9,7 @@
 #include <nlohmann/json.hpp>
 
 #include "JsonResolver.h"
+#include "Utils.hpp"
 
 void dae::SceneManager::Update(const float deltaTime)
 {
@@ -34,7 +35,7 @@ void dae::SceneManager::OnNotify(dae::GameObject*, EventID event)
 {
 	auto hasher = std::hash<std::string>();
 
-    if (event == std::hash<std::string>{}("NewActiveScene"))
+    if (event == HashUtils::make_sdbm_hash("NewActiveScene"))
     {
         if (m_ActiveScene) m_ActiveScene->BeginPlay();
     }
@@ -43,7 +44,7 @@ void dae::SceneManager::OnNotify(dae::GameObject*, EventID event)
 void dae::SceneManager::SetNewActiveScene(Scene* scene)
 {
 	m_ActiveScene = scene;
-	m_NewSceneSubj.Notify(nullptr, "NewActiveScene");
+	m_NewSceneSubj.Notify(nullptr, HashUtils::make_sdbm_hash("NewActiveScene"));
 }
 
 dae::SceneManager::SceneManager()

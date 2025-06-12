@@ -5,39 +5,13 @@
 #include <array>
 #include <vec2.hpp>
 
+#include "Datatypes.hpp"
+
 
 class ColliderComponent final : public Component
 {
 public:
 	// TODO: Transfer the following struct to datatypes utils file 
-	struct Rect final
-	{
-		glm::vec2 center;
-		float width;
-		float height;
-
-		std::array<glm::vec2, 4> GetBounds(const glm::vec2& goPos) const
-		{
-			std::array<glm::vec2, 4> result;
-
-			const glm::vec2 worldCenter = goPos + center;
-
-			result[0].x = worldCenter.x - (width / 2);
-			result[0].y = worldCenter.y - (height / 2);
-
-			result[1].x = worldCenter.x + (width / 2);
-			result[1].y = worldCenter.y - (height / 2);
-
-			result[2].x = worldCenter.x + (width / 2);
-			result[2].y = worldCenter.y + (height / 2);
-
-			result[3].x = worldCenter.x - (width / 2);
-			result[3].y = worldCenter.y + (height / 2);
-
-			return result;
-		}
-	};
-
 	void BeginPlay() override {}
 	void Update(const float) override {}
 	void FixedUpdate(const float) override {}
@@ -46,7 +20,7 @@ public:
 	void DebugRender() override;
 
 	uint16_t GetID() const { return m_ID; }
-	Rect GetBoundingBox() const { return m_BoundingBox; }
+	Rectf GetBox() const;
 
 	Event<ColliderComponent*> OnBeginOverlap;
 	Event<ColliderComponent*> OnEndOverlap;
@@ -63,12 +37,11 @@ protected:
 	template <typename T, typename ... Args>
 	friend T* dae::GameObject::AddComponent(Args&&... args);
 
-	explicit ColliderComponent(dae::GameObject& owner, const Rect& box, bool isTrigger);
+	explicit ColliderComponent(dae::GameObject& owner, const glm::vec2& boxSize, bool isTrigger);
 
 private:
 	static uint16_t m_Counter;
-
+	glm::vec2 m_BoxSize;
 	const uint16_t m_ID;
-	const Rect m_BoundingBox;
 	const bool m_IsTrigger;
 };

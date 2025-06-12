@@ -1,6 +1,7 @@
 #include "Subject.h"
 #include "GameObject.h"
 #include "Observer.h"
+#include "Utils.hpp"
 
 Subject::~Subject()
 {
@@ -26,12 +27,10 @@ bool Subject::RemoveObserver(IObserver* observer)
 	return false;
 }
 
-void Subject::Notify(dae::GameObject* object, const std::string& event)
+void Subject::Notify(dae::GameObject* object, EventID id)
 {
-	const size_t hashedEvent{ std::hash<std::string>{}(event)};
-
 	for (auto& observer : m_Observers)
 	{
-		observer->OnNotify(object, hashedEvent);
+		observer->OnNotify(object, id);
 	}
 }

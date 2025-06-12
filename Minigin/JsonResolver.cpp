@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include <algorithm>
 
+#include "ColliderComponent.h"
 #include "TextureComponent.h"
 #include "ResourceManager.h"
 #include "Scene.h"
@@ -95,7 +96,12 @@ std::shared_ptr<dae::GameObject> JsonResolver::RetrieveGameObject(
         // Use direct world position if grid position not available
         go->GetTransform()->SetPosition(position);
     }
-    
+
+	if (goData.contains("tag"))
+	{
+		go->SetTag(goData["tag"]);
+	}
+
     JsonResolver::AddComponents(*go, goData);
     return go;
 }
@@ -156,5 +162,21 @@ void ComponentFactory::RegisterEngineComponents()
 		std::shared_ptr<dae::Font> font = dae::ResourceManager::GetInstance().LoadFont(jsonData["font"], jsonData["size"]);
 
 		return go.AddComponent<TextComponent>(jsonData["text"], font);
+	});
+
+	this->Register("ColliderComponent",
+	[](dae::GameObject& go, const nlohmann::json& jsonData) -> Component*
+	{
+		if (glm::vec2 boxSize; JsonResolver::ExtractVector2("boxSize", jsonData, boxSize))
+		{
+			if (!jsonData.contains("trigger"))
+			{
+				return go.AddComponent<ColliderComponent>(boxSize, false);
+			}
+			const auto isTrigger = jsonData["trigger"].get<bool>();
+			return go.AddComponent<ColliderComponent>(boxSize, isTrigger);
+		}
+
+		throw std::exception("Sizes not provided");
 	});
 }

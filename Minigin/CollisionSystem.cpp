@@ -114,8 +114,8 @@ void CollisionSystem::ResolveCollision(ColliderComponent* colliderA, ColliderCom
 	const glm::vec2 posA = colliderA->GetOwner().GetTransform()->GetWorldPosition();
     const glm::vec2 posB = colliderB->GetOwner().GetTransform()->GetWorldPosition();
 
-    const auto boundsA = colliderA->GetBoundingBox().GetBounds(posA);
-    const auto boundsB = colliderB->GetBoundingBox().GetBounds(posB);
+    const auto boundsA = colliderA->GetBox().GetVertices();
+    const auto boundsB = colliderB->GetBox().GetVertices();
 
     // Calculate overlap
     const float overlapX = std::min(boundsA[1].x, boundsB[1].x) - std::max(boundsA[0].x, boundsB[0].x);

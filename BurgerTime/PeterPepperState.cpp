@@ -11,6 +11,7 @@
 #include "SoundSystem.hpp"
 #include "SpriteAnimation.h"
 #include "Transform.h"
+#include "Utils.hpp"
 
 
 // PETER IDLE
@@ -62,6 +63,41 @@ void PeterMoveState::OnEnter()
 	}
 
 	m_pPeterTransform = m_pPeter->GetOwner().GetTransform();
+
+	m_pPeter->AddObserver(this);
+}
+
+void PeterMoveState::OnNotify(dae::GameObject* object, EventID event)
+{
+	switch (event)
+	{
+	case HashUtils::make_sdbm_hash("OnLadderCountChange"):
+		if (object == &m_pPeter->GetOwner())
+		{
+			const auto& ladderCount = m_pPeter->GetLadderCount();
+			if (ladderCount == 1)
+			{
+				m_pPeterTransform->DisableHorizontalMovement(false);
+				m_pPeterTransform->DisableVerticalMovement(false);
+			}
+			else if (ladderCount > 1)
+			{
+				m_pPeterTransform->DisableHorizontalMovement(true);
+			}
+			else
+			{
+				m_pPeterTransform->DisableVerticalMovement(false);
+			}
+		}
+		break;
+	}
+}
+
+void PeterMoveState::OnExit()
+{
+	PeterPepperState::OnExit();
+
+	m_pPeter->RemoveObserver(this);
 }
 
 std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
@@ -81,10 +117,6 @@ std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
 	{
 		m_pPeterAnimation->m_Flip = TextureFlip::None;
 	}
-
-
-	// if (m_pPeterTransform->)
-
 
 	if (m_pPeter->IsShootRequested())
 	{
@@ -128,7 +160,7 @@ void PeterThrowPepperState::OnEnter()
 	m_pPepper = std::make_shared<dae::GameObject>(pepperLocation, false);
 	m_pPepper->SetParent(&m_pPeter->GetOwner(), true);
 
-	m_pPepper->AddComponent<ColliderComponent>(ColliderComponent::Rect({}, 16.f, 16.f), true);
+	m_pPepper->AddComponent<ColliderComponent>(glm::vec2{16, 16}, true);
 
 	const SpriteAnimation::AnimationConfig pepperAnimConfig {
 		.frameSize = {16.f, 16.f},

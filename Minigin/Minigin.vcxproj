@@ -260,6 +260,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="SDLTexture2D.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdParty\ImGui\backends\imgui_impl_opengl3.cpp" />

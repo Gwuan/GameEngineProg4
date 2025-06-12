@@ -5,7 +5,7 @@
 
 class ColliderComponent;
 
-class PeterPepperComponent final : public Component
+class PeterPepperComponent final : public Component, public Subject
 {
 public:
 	void BeginPlay() override;
@@ -18,6 +18,8 @@ public:
 	PeterPepperComponent(PeterPepperComponent&&) noexcept = delete;
 	PeterPepperComponent& operator=(const PeterPepperComponent&) = delete;
 	PeterPepperComponent& operator=(PeterPepperComponent&&) noexcept = delete;
+
+	int GetLadderCount() const { return m_LadderCounter; }
 
 	void RequestShoot();
 	bool IsShootRequested() const { return this->m_ShootRequested; }
@@ -34,6 +36,10 @@ private:
 	bool m_ShootRequested = false;
 	void PlaySoundOnOverlap(const ColliderComponent* otherCollider);
 
+	void OnBeginOverlap(const ColliderComponent* otherCollider);
+	void OnEndOverlap(const ColliderComponent* otherCollider);
 
 	std::unique_ptr<PeterPepperState> m_State;
+
+	int m_LadderCounter{};
 };

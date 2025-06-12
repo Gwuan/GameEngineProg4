@@ -2,12 +2,15 @@
 #include <string>
 #include <vector>
 
+#include "Observer.h"
+
 namespace dae
 {
 	class GameObject;
 }
 
 class IObserver;
+using EventID = size_t;
 
 class Subject
 {
@@ -24,7 +27,7 @@ public:
 	bool RemoveObserver(IObserver* observer);
 
 	// use hashing
-	void Notify(dae::GameObject* object, const std::string& event);
+	void Notify(dae::GameObject* object, EventID id);
 
 private:
 	std::vector<IObserver*> m_Observers;

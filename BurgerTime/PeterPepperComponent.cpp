@@ -8,10 +8,11 @@
 #include "SpriteAnimation.h"
 #include "TextureComponent.h"
 #include "Transform.h"
+#include "Utils.hpp"
 
 void PeterPepperComponent::BeginPlay()
 {
-	GetOwner().GetTransform()->DisableVerticalMovement(true);
+	// GetOwner().GetTransform()->DisableVerticalMovement(true);
 }
 
 void PeterPepperComponent::Update(float deltaTime)
@@ -39,11 +40,14 @@ void PeterPepperComponent::RequestShoot()
 PeterPepperComponent::PeterPepperComponent(dae::GameObject& owner)
 	: Component(owner)
 {
-	owner.AddComponent<ColliderComponent>(ColliderComponent::Rect{{0, 0}, 16, 16}, false);
+	auto collider = owner.AddComponent<ColliderComponent>(glm::vec2{16, 16}, false);
 
 	auto spriteSheet = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
 	owner.AddComponent<SpriteAnimation>(spriteSheet, SpriteAnimation::AnimationConfig{});
 
+
+    collider->OnBeginOverlap += [this](ColliderComponent* other) { OnBeginOverlap(other); };
+    collider->OnEndOverlap += [this](ColliderComponent* other) { OnEndOverlap(other); };
 
 	m_State = std::make_unique<PeterIdleState>(*this);
 	m_State->OnEnter();
@@ -51,6 +55,25 @@ PeterPepperComponent::PeterPepperComponent(dae::GameObject& owner)
 
 void PeterPepperComponent::PlaySoundOnOverlap(const ColliderComponent*)
 {
-
 	ServiceAllocator::GetSoundSystem().PlaySoundEffect("../gameResources/sounds/level_start.wav", 1.f);
+}
+
+void PeterPepperComponent::OnBeginOverlap(const ColliderComponent* otherCollider)
+{
+	if (otherCollider->GetOwner().GetTag() == "Ladder")
+	{
+		m_LadderCounter++;
+		Notify(&GetOwner(), HashUtils::make_sdbm_hash("OnLadderCountChange"));
+	}
+}
+
+void PeterPepperComponent::OnEndOverlap(const ColliderComponent* otherCollider)
+{
+	if (otherCollider->GetOwner().GetTag() == "Ladder")
+	{
+		m_LadderCounter--;
+		m_LadderCounter = std::max(m_LadderCounter, 0);
+
+		Notify(&GetOwner(), HashUtils::make_sdbm_hash("OnLadderCountChange"));
+	}
 }

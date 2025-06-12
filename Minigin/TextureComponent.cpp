@@ -25,6 +25,9 @@ void TextureComponent::Render() const
 	if(m_Texture)
 	{
 		auto pos = GetOwner().GetTransform()->GetWorldPosition();
-		ServiceAllocator::GetRenderer().RenderTexture(*m_Texture, pos.x, pos.y);
+		const auto size = m_Texture->GetSize();
+		ServiceAllocator::GetRenderer().RenderTexture(*m_Texture, 
+			pos.x - (size.x / 2), 
+			pos.y - (size.y / 2));
 	}
 }
