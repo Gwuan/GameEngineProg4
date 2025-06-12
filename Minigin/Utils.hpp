@@ -1,5 +1,18 @@
 #pragma once
+#include "DataTypes.hpp"
 
+inline bool AlmostZero(float value)
+{
+	return (value < 0.01f && value > -0.01f);
+}
+
+inline bool IsPointInRectf(const glm::vec2& point, const Rectf& rect)
+{
+    return point.x >= rect.LeftBottom.x					&&
+           point.x <= rect.LeftBottom.x + rect.width	&&
+           point.y >= rect.LeftBottom.y					&&
+           point.y <= rect.LeftBottom.y + rect.height;
+}
 
 namespace HashUtils
 {

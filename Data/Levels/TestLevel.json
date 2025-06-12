@@ -1,6 +1,6 @@
 {
   "name": "BurgerTime Level 1 - Platforms and Ladders (Textured)",
-  "gridSize": [12, 13],
+  "gridSize": [13, 14],
   "cellSize": 16,
 
   "gameObjects": [
@@ -34,31 +34,31 @@
     { "gridPos": [5, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
     { "gridPos": [6, 5], "components": [{ "type": "TextureComponent", "texture": "platform.png" }] },
 
-    { "gridPos": [0, 13], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [0, 12], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [0, 11], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [0, 10], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [0, 9],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [0, 8],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [0, 7],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [0, 6],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
+    { "gridPos": [0, 13], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [0, 12], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [0, 11], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [0, 10], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [0, 9],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [0, 8],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [0, 7],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [0, 6],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
 
-    { "gridPos": [3, 13], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [3, 12], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [3, 11], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [3, 10], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
+    { "gridPos": [3, 13], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [3, 12], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [3, 11], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [3, 10], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
 
-    { "gridPos": [3, 9],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [3, 8],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [3, 7],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
+    { "gridPos": [3, 9],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [3, 8],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [3, 7],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
 
-    { "gridPos": [6, 13], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [6, 12], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [6, 11], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [6, 10], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [6, 9],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [6, 8],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [6, 7],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] },
-    { "gridPos": [6, 6],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [16, 16], "trigger": true}] }
+    { "gridPos": [6, 13], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [6, 12], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [6, 11], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [6, 10], "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [6, 9],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [6, 8],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [6, 7],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
+    { "gridPos": [6, 6],  "tag": "Ladder", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] }
   ]
 }

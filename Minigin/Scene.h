@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include <glm.hpp>
 
+struct Rectf;
+
 namespace dae
 {
 	class GameObject;
@@ -26,7 +28,8 @@ namespace dae
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
-		glm::vec2 GridToWorld(uint32_t column, uint32_t row) const;
+		std::pair<bool, glm::vec2> GridToWorld(uint32_t column, uint32_t row) const;
+		std::pair<bool, glm::ivec2> WorldToGrid(const glm::vec2& worldPos) const;
 
 		size_t GetHashedName() const { return this->m_NameHash; }
 
@@ -42,7 +45,7 @@ namespace dae
 
 		explicit Scene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
 
-		std::vector<std::vector<glm::vec2>> m_Grid;
+		std::vector<std::vector<Rectf>> m_Grid;
 		const uint32_t m_GridCellSize;
 
 		std::string m_name;

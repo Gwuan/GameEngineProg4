@@ -1,6 +1,7 @@
 #include "PeterPepperState.h"
 
 #include "ColliderComponent.h"
+#include "GameCommands.h"
 #include "GameObject.h"
 #include "IRendererService.h"
 #include "PeterPepperComponent.h"
@@ -111,12 +112,44 @@ std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
 		m_pPeterAnimation->m_Flip == TextureFlip::None)
 	{
 		m_pPeterAnimation->m_Flip = TextureFlip::Horizontal;
+		m_OnLadder = false;
 	}
 	else if (m_pPeterTransform->GetForwardVector().x < 0.f && 
 			 m_pPeterAnimation->m_Flip != TextureFlip::Horizontal)
 	{
 		m_pPeterAnimation->m_Flip = TextureFlip::None;
+		m_OnLadder = false;
 	}
+
+	if (!m_OnLadder && !AlmostZero(m_pPeterTransform->MoveDirection.y))
+	{
+		auto config = m_pPeterAnimation->GetConfig();
+
+		config.startRow = 0;
+		config.startColumn = 6;
+		config.nrOfFrames = 3;
+
+		m_pPeterAnimation->ChangeConfig(config);
+
+		const auto activeScene = dae::SceneManager::GetInstance().GetActiveScene();
+
+		if (activeScene && m_pPeterTransform)
+		{
+			const auto worldPos = m_pPeterTransform->GetWorldPosition();
+			if (const auto gridResult = activeScene->WorldToGrid(worldPos); gridResult.first)
+			{
+				const auto worldResult = activeScene->GridToWorld(gridResult.second.x, gridResult.second.y);
+				if (worldResult.first)
+				{
+					const auto& currentWorld = m_pPeterTransform->GetWorldPosition();
+					m_pPeterTransform->SetPosition(worldResult.second.x, currentWorld.y);
+				}
+			}
+		}
+
+		m_OnLadder = true;
+	}
+
 
 	if (m_pPeter->IsShootRequested())
 	{

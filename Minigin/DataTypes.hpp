@@ -28,6 +28,14 @@ struct Rectf final
 
 		return result;
 	}
+
+	glm::vec2 GetCenterPoint() const
+	{
+		return glm::vec2{
+			this->LeftBottom.x + (this->width / 2),
+			this->LeftBottom.y + (this->height / 2)
+		};
+	}
 };
 
 struct ColorRGBA final

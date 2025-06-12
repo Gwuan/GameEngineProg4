@@ -87,9 +87,15 @@ std::shared_ptr<dae::GameObject> JsonResolver::RetrieveGameObject(
     // check grid position first, then world position
     if (glm::vec2 gridPos; JsonResolver::ExtractVector2("gridPos", goData, gridPos)) 
 	{
-        go->GetTransform()->SetPosition(scene.GridToWorld(
-            static_cast<uint32_t>(gridPos.x), 
-            static_cast<uint32_t>(gridPos.y)));
+		auto gridResult = scene.GridToWorld(static_cast<uint32_t>(gridPos.x), static_cast<uint32_t>(gridPos.y));
+		if (gridResult.first)
+		{
+			go->GetTransform()->SetPosition(gridResult.second);
+		}
+		else
+		{
+			throw std::runtime_error("Grid position not available in scene");
+		}
     }
 	else if (glm::vec2 position; JsonResolver::ExtractVector2("position", goData, position)) 
 	{

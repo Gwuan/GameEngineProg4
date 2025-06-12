@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "SDLRenderer.h"
+#include "Utils.hpp"
 
 using namespace dae;
 
@@ -98,17 +99,37 @@ void Scene::DebugRender()
     );
 }
 
-glm::vec2 Scene::GridToWorld(uint32_t column, uint32_t row) const
+std::pair<bool, glm::vec2> Scene::GridToWorld(uint32_t column, uint32_t row) const
 {
 	try
 	{
-		return m_Grid.at(row).at(column);	
+        return std::make_pair(true, m_Grid.at(row).at(column).GetCenterPoint());
 	}
 	catch (const std::out_of_range& ex)
 	{
 		std::cout << "Invalid grid position: " << ex.what() << std::endl;;
-		return glm::vec2{};
+		return std::make_pair(false, glm::vec2{});
 	}
+}
+
+std::pair<bool, glm::ivec2> Scene::WorldToGrid(const glm::vec2& worldPos) const
+{
+	uint32_t rowIdx = 0;
+	uint32_t colIdx = 0;
+	for (const auto& row : m_Grid)
+	{
+		for (const auto& column : row)
+		{
+			if (IsPointInRectf(worldPos, column))
+				return std::make_pair(true, glm::ivec2{colIdx, rowIdx});
+
+			colIdx++;
+		}
+		rowIdx++;
+		colIdx = 0;
+	}
+
+	return std::make_pair(false, glm::ivec2{});
 }
 
 void Scene::KillGameObjects()
@@ -127,6 +148,7 @@ void Scene::InitializeGrid(const glm::vec2& gridSize)
 {
 	const uint32_t totalCellsWidth = static_cast<uint32_t>(gridSize.x);
 	const uint32_t totalCellsHeight = static_cast<uint32_t>(gridSize.y);
+	const float cellSizeF = static_cast<float>(m_GridCellSize);
 
 	m_Grid.resize(totalCellsHeight);
 
@@ -136,7 +158,8 @@ void Scene::InitializeGrid(const glm::vec2& gridSize)
 
 		for (uint32_t x{}; x < totalCellsWidth; ++x)
 		{
-			m_Grid[y].emplace_back(m_GridCellSize * x, m_GridCellSize * y);
+			const glm::vec2 cellLeftBottom = {cellSizeF * x, cellSizeF * y};
+			m_Grid[y].emplace_back(cellLeftBottom, cellSizeF, cellSizeF);
 		}
 	}
 }

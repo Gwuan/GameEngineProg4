@@ -66,6 +66,7 @@ public:
 private:
 	Transform* m_pPeterTransform = nullptr;
 	SpriteAnimation* m_pPeterAnimation = nullptr;
+	bool m_OnLadder = false;
 };
 
 class PeterThrowPepperState final : public PeterPepperState

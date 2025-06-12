@@ -50,11 +50,8 @@ void CollisionSystem::Update()
 
 					m_OverlappingPairs.insert(pairID);
 
-					if (collider->IsTrigger())
-						collider->OnBeginOverlap.Broadcast(secondCollider);
-
-					if (secondCollider->IsTrigger())
-						collider->OnBeginOverlap.Broadcast(secondCollider);
+					collider->OnBeginOverlap.Broadcast(secondCollider);
+					secondCollider->OnBeginOverlap.Broadcast(collider);
 				}
 				else
 				{
@@ -79,10 +76,8 @@ void CollisionSystem::Update()
 
 				m_OverlappingPairs.erase(pairID);
 
-				if (collider->IsTrigger())
-					collider->OnEndOverlap.Broadcast(secondCollider);
-				if (secondCollider->IsTrigger())
-					collider->OnEndOverlap.Broadcast(secondCollider);
+				collider->OnEndOverlap.Broadcast(secondCollider);
+				secondCollider->OnEndOverlap.Broadcast(collider);
 			}
 			else
 			{
@@ -103,7 +98,7 @@ uint32_t CollisionSystem::MakePairID(uint16_t id1, uint16_t id2)
 		std::swap(id1, id2);
 	}
 
-	return (static_cast<uint32_t>(id1) << sizeof(uint16_t)) | id2;
+	return (static_cast<uint32_t>(id1) << 16) | id2;
 }
 
 void CollisionSystem::ResolveCollision(ColliderComponent* colliderA, ColliderComponent* colliderB)
