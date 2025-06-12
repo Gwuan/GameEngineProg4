@@ -7,7 +7,7 @@ namespace dae
 	class GameObject;
 	class Scene final
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
+		friend Scene& SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize, bool instantActivate);
 	public:
 		void Add(std::shared_ptr<GameObject> object);
 		void Remove(std::shared_ptr<GameObject> object);

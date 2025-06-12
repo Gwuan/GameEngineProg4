@@ -10,6 +10,7 @@ dae::GameObject::GameObject(const glm::vec2& position, bool isStatic)
 	  m_IsStatic(isStatic),
       m_pParent(nullptr),
 	  m_pTransform(nullptr),
+	  m_Tag(""),
 	  m_Children(),
 	  m_ComponentKillList(),
 	  m_Components()
@@ -67,6 +68,8 @@ void dae::GameObject::BeginPlay()
 	{
 		component->BeginPlay();
 	}
+
+	m_AlreadyActive = true;
 }
 
 void dae::GameObject::FixedUpdate(const float fixedTimeStep)

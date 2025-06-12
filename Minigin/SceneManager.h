@@ -13,7 +13,7 @@ namespace dae
 	class SceneManager final : public Singleton<SceneManager>, IObserver
 	{
 	public:
-		Scene& CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize);
+		Scene& CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize, bool instantActivate);
 
 		bool DeleteScene(const std::string& name);
 

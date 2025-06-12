@@ -15,10 +15,20 @@ void Transform::Update(const float deltaTime)
     if (GetOwner().IsStatic() || !m_MovementEnabled)
         return;
 
+	if (m_HorizontalMovementDisabled)
+    {
+	    MoveDirection.x = 0.f;
+    }
+    if (m_VerticalMovementDisabled)
+    {
+	    MoveDirection.y = 0.f;
+    }
+
     if (glm::length<2>(MoveDirection) >= 0.2f)
     {
         m_Velocity = glm::normalize(MoveDirection) * m_MoveSpeed;
         m_Velocity.y *= -1.f;
+
     	m_LocalPosition += m_Velocity * deltaTime;
         MarkDirty();
     }

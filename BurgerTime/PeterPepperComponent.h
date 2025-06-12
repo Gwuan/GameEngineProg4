@@ -8,6 +8,7 @@ class ColliderComponent;
 class PeterPepperComponent final : public Component
 {
 public:
+	void BeginPlay() override;
 	void Update(const float deltaTime) override;
 	void FixedUpdate(const float) override {}
 	void LateUpdate(const float) override;

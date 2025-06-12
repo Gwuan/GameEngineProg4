@@ -5,7 +5,6 @@
 class Transform final : public Component
 {
 public:
-    void BeginPlay() override {}
     void Update(const float deltaTime) override;
     void FixedUpdate(const float) override {}
     void LateUpdate(float deltaTime) override;
@@ -36,6 +35,9 @@ public:
 
     void EnableMovement(bool value) { m_MovementEnabled = value; }
 
+    void DisableHorizontalMovement(bool value) { m_HorizontalMovementDisabled = value; }
+    void DisableVerticalMovement(bool value) { m_VerticalMovementDisabled = value; }
+
     void MarkDirty();
     bool IsDirty() const { return m_IsDirty; } 
 
@@ -43,6 +45,8 @@ private:
 	void UpdateWorldPosition();
 
     bool m_MovementEnabled = true;
+    bool m_HorizontalMovementDisabled = false;
+    bool m_VerticalMovementDisabled = false;
 
 	glm::vec2 m_LocalPosition;
     mutable glm::vec2 m_WorldPosition;

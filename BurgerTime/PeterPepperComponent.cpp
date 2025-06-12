@@ -9,6 +9,11 @@
 #include "TextureComponent.h"
 #include "Transform.h"
 
+void PeterPepperComponent::BeginPlay()
+{
+	GetOwner().GetTransform()->DisableVerticalMovement(true);
+}
+
 void PeterPepperComponent::Update(float deltaTime)
 {
 	if (auto newState = m_State->Update(deltaTime))

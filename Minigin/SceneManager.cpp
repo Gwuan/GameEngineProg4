@@ -51,11 +51,11 @@ dae::SceneManager::SceneManager()
 	m_NewSceneSubj.AddObserver(this);
 }
 
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize = 32)
+dae::Scene& dae::SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize, bool instantActivate = true)
 {
 	const size_t newSceneNameHash = std::hash<std::string>{}(name);
 
-	auto sceneIt = std::ranges::find_if(m_scenes, [newSceneNameHash](std::shared_ptr<Scene>& scene)
+	auto sceneIt = std::ranges::find_if(m_scenes, [newSceneNameHash](const std::shared_ptr<Scene>& scene)
 	{
 		return newSceneNameHash == scene->GetHashedName();
 	});
@@ -66,10 +66,10 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name, const glm::v
 		return *m_ActiveScene;
 	}
 
-	const auto& scene = std::shared_ptr<Scene>(new Scene(name, gridSize, cellSize));
+    std::shared_ptr<Scene> scene(new Scene(name, gridSize, cellSize));
 	m_scenes.push_back(scene);
 
-	SetNewActiveScene(scene.get());
+	if (instantActivate) SetNewActiveScene(scene.get());
 	return *scene;
 }
 
@@ -123,7 +123,7 @@ dae::Scene* dae::SceneManager::LoadSceneFromJson(const std::string& path)
         int cellSize = json["cellSize"].get<int>();
         const std::string& sceneName = json["name"].get_ref<const std::string&>();
 
-        Scene& scene = CreateScene(sceneName, gridSize, cellSize);
+        Scene& scene = CreateScene(sceneName, gridSize, cellSize, false);
 
         std::cout << "Loading scene with the name: " << sceneName << "..." << std::endl;
 
@@ -134,6 +134,7 @@ dae::Scene* dae::SceneManager::LoadSceneFromJson(const std::string& path)
 			scene.Add(go);
 		});
 
+		SetNewActiveScene(&scene);
 		return &scene;
 	}
 	catch (const nlohmann::detail::type_error& typeError)

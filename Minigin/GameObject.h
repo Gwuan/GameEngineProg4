@@ -39,8 +39,13 @@ namespace dae
 				auto component = std::unique_ptr<T>(new T(*this, std::forward<Args>(args)...));
 				T* returnValue = component.get();
 				m_Components.push_back(std::move(component));
+
+				if constexpr (requires(T t) { t.BeginPlay(); })
+				{
+					returnValue->BeginPlay();
+				}
+
 				return returnValue;
-				
 			}
 			catch (const std::exception& e)
 			{
@@ -75,6 +80,9 @@ namespace dae
 		GameObject* GetParent() const { return m_pParent; }
 		std::vector<GameObject*> GetChildren() const { return m_Children; }
 
+		void SetTag(const std::string& tag) { m_Tag = tag; }
+		std::string GetTag() const { return this->m_Tag; }
+
 		bool IsStatic() const { return m_IsStatic; }
 
 		bool NeedsDestroyed() const { return m_IsPendingDelete; }
@@ -102,8 +110,12 @@ namespace dae
 
 		Transform* m_pTransform; // only used for reference, this ptr does NOT HAVE OWNERSHIP
 
+		std::string m_Tag;
+
 		std::vector<GameObject*> m_Children;
 		std::vector<uint32_t> m_ComponentKillList;
 		std::vector<std::unique_ptr<Component>> m_Components;
+
+		bool m_AlreadyActive = false;
 	};
 }

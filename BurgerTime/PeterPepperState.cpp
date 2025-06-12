@@ -12,7 +12,6 @@
 #include "SpriteAnimation.h"
 #include "Transform.h"
 
-// Can't find a way to make peter shoot without making it a mess
 
 // PETER IDLE
 #pragma region PeterIdle
@@ -82,7 +81,11 @@ std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
 	{
 		m_pPeterAnimation->m_Flip = TextureFlip::None;
 	}
-		
+
+
+	// if (m_pPeterTransform->)
+
+
 	if (m_pPeter->IsShootRequested())
 	{
 		return std::make_unique<PeterThrowPepperState>(*m_pPeter);
@@ -93,7 +96,7 @@ std::unique_ptr<PeterPepperState> PeterMoveState::Update(float)
 #pragma endregion
 
 // PETER THROW PEPPER
-#pragma region
+#pragma region ThrowPepper
 const float PeterThrowPepperState::m_MaxTime = 1.f;
 
 void PeterThrowPepperState::OnEnter()

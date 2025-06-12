@@ -33,6 +33,9 @@
     <ClCompile Include="PeterPepperComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="LadderBehavior.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCommands.h">
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="PeterPepperComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LadderBehavior.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
