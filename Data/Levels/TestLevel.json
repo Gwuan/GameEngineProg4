@@ -101,6 +101,7 @@
     { "gridPos": [6, 7],  "tag": "LadderEntry", "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
     { "gridPos": [6, 6],  "tag": "Ladder"     , "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
     
-    { "gridPos": [7, 5], "components": [{ "type": "BurgerSliceComponent",  "sliceType": "BottomBread"} ] }
+    { "gridPos": [7, 5], "components": [{ "type": "BurgerSliceComponent",  "sliceType": "BottomBread"} ] },
+    { "gridPos": [7, 11], "components": [{ "type": "BurgerSliceComponent",  "sliceType": "Meat"} ] }
   ]
 }

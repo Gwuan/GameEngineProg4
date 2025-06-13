@@ -13,6 +13,8 @@ void BurgerSliceComponent::BeginPlay()
 {
 	Component::BeginPlay();
 
+	GetOwner().SetTag("BurgerSlice");
+
 	InitializeSliceType();
 
 	m_pTextureComponent = GetOwner().AddComponent<TextureComponent>("SpriteSheet.png");
@@ -117,16 +119,21 @@ void BurgerSliceComponent::OnBeginOverlap(const ColliderComponent* thisCollider,
 
 void BurgerSliceComponent::FallDownBeginOverlap(ColliderComponent* otherCollider)
 {
+	if (&otherCollider->GetOwner() == &GetOwner())
+		return;
+
 	for (auto& colPair : m_PlayerColliders)
 	{
 		colPair.first = false;
 	}
 
-	if (otherCollider->GetOwner().GetTag() == "Enemy")
+	const auto& colliderTag = otherCollider->GetOwner().GetTag();
+
+	if (colliderTag == "Enemy")
 	{
 		m_IgnoreNextPlatform = true;
 	}
-	else if (otherCollider->GetOwner().GetTag() == "Platform")
+	else if (colliderTag == "Platform")
 	{
 		if (!m_IgnoreNextPlatform)
 		{
@@ -135,6 +142,11 @@ void BurgerSliceComponent::FallDownBeginOverlap(ColliderComponent* otherCollider
 		}
 		else
 			m_IgnoreNextPlatform = false;
+	}
+	else if (colliderTag == "BurgerSlice")
+	{
+		if (auto otherSlice = otherCollider->GetOwner().GetComponent<BurgerSliceComponent>())
+			otherSlice->DropDown();
 	}
 }
 
