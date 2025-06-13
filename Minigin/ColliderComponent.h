@@ -11,7 +11,6 @@
 class ColliderComponent final : public Component
 {
 public:
-	// TODO: Transfer the following struct to datatypes utils file 
 	void BeginPlay() override {}
 	void Update(const float) override {}
 	void FixedUpdate(const float) override {}
@@ -32,6 +31,8 @@ public:
 	bool CheckCollision(ColliderComponent* other);
 
 	bool IsTrigger() const { return m_IsTrigger; }
+
+	glm::vec2 m_Offset;
 
 protected:
 	template <typename T, typename ... Args>

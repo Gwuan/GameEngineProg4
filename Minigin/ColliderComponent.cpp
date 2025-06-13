@@ -26,8 +26,8 @@ Rectf ColliderComponent::GetBox() const
 
 	return Rectf{
 		{
-			centerPos.x - (m_BoxSize.x / 2),
-			centerPos.y - (m_BoxSize.y / 2)
+			centerPos.x + m_Offset.x - (m_BoxSize.x / 2),
+			centerPos.y - m_Offset.y - (m_BoxSize.y / 2)
 		},
 		m_BoxSize.x,
 		m_BoxSize.y
@@ -56,6 +56,7 @@ ColliderComponent::ColliderComponent(dae::GameObject& owner, const glm::vec2& bo
 	: Component(owner),
 	  m_ID(m_Counter),
 	  m_BoxSize(boxSize),
+	  m_Offset(glm::vec2{}),
 	  m_IsTrigger(isTrigger)
 {
 	if (m_Counter == UINT16_MAX) return;

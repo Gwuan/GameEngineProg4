@@ -82,15 +82,20 @@ std::vector<std::shared_ptr<dae::GameObject>> JsonResolver::RetrieveAllGameObjec
 std::shared_ptr<dae::GameObject> JsonResolver::RetrieveGameObject(
     const nlohmann::json& goData, const dae::Scene& scene)
 {
-    auto go = std::make_shared<dae::GameObject>();
-    
+	bool isStatic = false;
+	if (goData.contains("static"))
+	{
+		isStatic = goData["static"].get<bool>();
+	}
+
+    glm::vec2 pos{};
     // check grid position first, then world position
     if (glm::vec2 gridPos; JsonResolver::ExtractVector2("gridPos", goData, gridPos)) 
 	{
 		auto gridResult = scene.GridToWorld(static_cast<uint32_t>(gridPos.x), static_cast<uint32_t>(gridPos.y));
 		if (gridResult.first)
 		{
-			go->GetTransform()->SetPosition(gridResult.second);
+			pos = gridResult.second;
 		}
 		else
 		{
@@ -100,8 +105,10 @@ std::shared_ptr<dae::GameObject> JsonResolver::RetrieveGameObject(
 	else if (glm::vec2 position; JsonResolver::ExtractVector2("position", goData, position)) 
 	{
         // Use direct world position if grid position not available
-        go->GetTransform()->SetPosition(position);
+        pos = position;
     }
+
+    auto go = std::make_shared<dae::GameObject>(pos, isStatic);
 
 	if (goData.contains("tag"))
 	{
@@ -180,7 +187,16 @@ void ComponentFactory::RegisterEngineComponents()
 				return go.AddComponent<ColliderComponent>(boxSize, false);
 			}
 			const auto isTrigger = jsonData["trigger"].get<bool>();
-			return go.AddComponent<ColliderComponent>(boxSize, isTrigger);
+
+			
+			auto collider = go.AddComponent<ColliderComponent>(boxSize, isTrigger);
+
+			if (glm::vec2 offset; JsonResolver::ExtractVector2("offset", jsonData, offset))
+			{
+				collider->m_Offset = offset;
+			}
+
+			return collider;
 		}
 
 		throw std::exception("Sizes not provided");

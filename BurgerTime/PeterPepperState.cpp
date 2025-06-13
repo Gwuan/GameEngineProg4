@@ -78,7 +78,9 @@ void PeterMoveState::OnNotify(dae::GameObject* object, EventID event)
 			const auto& ladderCount = m_pPeter->GetLadderCount();
 			if (ladderCount == 1)
 			{
-				m_pPeterTransform->DisableHorizontalMovement(false);
+				if (m_pPeter->OnLadderEntry())
+					m_pPeterTransform->DisableHorizontalMovement(false);
+
 				m_pPeterTransform->DisableVerticalMovement(false);
 			}
 			else if (ladderCount > 1)
@@ -87,7 +89,7 @@ void PeterMoveState::OnNotify(dae::GameObject* object, EventID event)
 			}
 			else
 			{
-				m_pPeterTransform->DisableVerticalMovement(false);
+				m_pPeterTransform->DisableVerticalMovement(true);
 			}
 		}
 		break;

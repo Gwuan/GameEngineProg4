@@ -40,14 +40,16 @@ void PeterPepperComponent::RequestShoot()
 PeterPepperComponent::PeterPepperComponent(dae::GameObject& owner)
 	: Component(owner)
 {
-	auto collider = owner.AddComponent<ColliderComponent>(glm::vec2{16, 16}, false);
+	owner.AddComponent<ColliderComponent>(glm::vec2{16, 16}, false);
+	auto ladderCollider = owner.AddComponent<ColliderComponent>(glm::vec2{4, 10}, true);
+	ladderCollider->m_Offset.y = -4;
 
 	auto spriteSheet = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
 	owner.AddComponent<SpriteAnimation>(spriteSheet, SpriteAnimation::AnimationConfig{});
 
 
-    collider->OnBeginOverlap += [this](ColliderComponent* other) { OnBeginOverlap(other); };
-    collider->OnEndOverlap += [this](ColliderComponent* other) { OnEndOverlap(other); };
+	ladderCollider->OnBeginOverlap += [this](ColliderComponent* other) { OnBeginOverlap(other); };
+	ladderCollider->OnEndOverlap += [this](ColliderComponent* other) { OnEndOverlap(other); };
 
 	m_State = std::make_unique<PeterIdleState>(*this);
 	m_State->OnEnter();
@@ -60,19 +62,29 @@ void PeterPepperComponent::PlaySoundOnOverlap(const ColliderComponent*)
 
 void PeterPepperComponent::OnBeginOverlap(const ColliderComponent* otherCollider)
 {
-	if (otherCollider->GetOwner().GetTag() == "Ladder")
+	if (otherCollider->GetOwner().GetTag().find("Ladder") != std::string::npos)
 	{
 		m_LadderCounter++;
+		if (otherCollider->GetOwner().GetTag() == "LadderEntry")
+		{
+			m_OnLadderEntry = true;
+		}
+
 		Notify(&GetOwner(), HashUtils::make_sdbm_hash("OnLadderCountChange"));
 	}
 }
 
 void PeterPepperComponent::OnEndOverlap(const ColliderComponent* otherCollider)
 {
-	if (otherCollider->GetOwner().GetTag() == "Ladder")
+	if (otherCollider->GetOwner().GetTag().find("Ladder") != std::string::npos)
 	{
 		m_LadderCounter--;
 		m_LadderCounter = std::max(m_LadderCounter, 0);
+
+		if (otherCollider->GetOwner().GetTag() == "LadderEntry")
+		{
+			m_OnLadderEntry = false;
+		}
 
 		Notify(&GetOwner(), HashUtils::make_sdbm_hash("OnLadderCountChange"));
 	}

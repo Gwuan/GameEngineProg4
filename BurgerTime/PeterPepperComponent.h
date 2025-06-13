@@ -20,6 +20,7 @@ public:
 	PeterPepperComponent& operator=(PeterPepperComponent&&) noexcept = delete;
 
 	int GetLadderCount() const { return m_LadderCounter; }
+	bool OnLadderEntry() const { return m_OnLadderEntry; }
 
 	void RequestShoot();
 	bool IsShootRequested() const { return this->m_ShootRequested; }
@@ -33,6 +34,7 @@ protected:
 	explicit PeterPepperComponent(dae::GameObject& owner);
 
 private:
+	bool m_OnLadderEntry = false;
 	bool m_ShootRequested = false;
 	void PlaySoundOnOverlap(const ColliderComponent* otherCollider);
 
