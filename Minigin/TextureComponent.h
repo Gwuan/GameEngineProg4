@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Datatypes.hpp"
 
 class ITexture2D;
 
@@ -18,6 +19,8 @@ public:
 	TextureComponent() = delete;
 	virtual ~TextureComponent() override = default;
 
+	void SetTextureSourceRect(const Rectf& srcRect);
+
 	TextureComponent(const TextureComponent& other) = delete;
 	TextureComponent(TextureComponent&& other) noexcept = delete;
 	TextureComponent& operator=(const TextureComponent& other) = delete;
@@ -30,4 +33,6 @@ protected:
 	TextureComponent(dae::GameObject& owner, const std::string& filename);
 private:
 	std::shared_ptr<ITexture2D> m_Texture = nullptr;
+	Rectf m_srcRect = {};
+	bool m_UsingSrc = false;
 };

@@ -30,6 +30,8 @@ namespace dae
 
 		std::pair<bool, glm::vec2> GridToWorld(uint32_t column, uint32_t row) const;
 		std::pair<bool, glm::ivec2> WorldToGrid(const glm::vec2& worldPos) const;
+		float GetCellSize() const {	return static_cast<float>(this->m_GridCellSize); }
+
 
 		size_t GetHashedName() const { return this->m_NameHash; }
 

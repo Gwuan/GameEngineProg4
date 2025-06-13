@@ -62,7 +62,6 @@ void CollisionSystem::Update()
 
 					m_HittingPairs.insert(pairID);
 
-					std::cout << "COLLIDING" << std::endl;
 					collider->OnHit.Broadcast(secondCollider);
 					secondCollider->OnHit.Broadcast(collider);
 				}

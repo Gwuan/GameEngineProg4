@@ -7,9 +7,11 @@
 #endif
 #endif
 
+#include "BurgerComponent.h"
 #include "ColliderComponent.h"
 #include "GameCommands.h"
 #include "InputManager.h"
+#include "JsonResolver.h"
 #include "Minigin.h"
 #include "PeterPepperComponent.h"
 #include "SceneManager.h"
@@ -20,8 +22,48 @@
 #include "TextureComponent.h"
 #include "Transform.h"
 
+void RegisterGameComponents()
+{
+	auto& componentFactory = ComponentFactory::GetInstance();
+
+	componentFactory.Register("BurgerSliceComponent",
+    [](dae::GameObject& go, const nlohmann::json& jsonData) -> Component*
+    {
+        if (!jsonData.contains("sliceType") ||
+            !jsonData["sliceType"].is_string()) 
+        {
+            throw std::runtime_error("The given sliceType is invalid.");
+        }
+
+        std::string sliceTypeStr = jsonData["sliceType"].get<std::string>();
+
+        SliceType sliceType = SliceType::BottomBread;
+
+        if (sliceTypeStr == "BottomBread") {
+            sliceType = SliceType::BottomBread;
+        } 
+        else if (sliceTypeStr == "Meat") {
+            sliceType = SliceType::Meat;
+        } 
+        else if (sliceTypeStr == "Salad") {
+            sliceType = SliceType::Salad;
+        } 
+        else if (sliceTypeStr == "TopBread") {
+            sliceType = SliceType::TopBread;
+        } 
+        else {
+            throw std::runtime_error("Unknown SliceType.");
+        }
+
+        return go.AddComponent<BurgerSliceComponent>(sliceType);
+    });
+}
+
+
 void load()
 {
+	RegisterGameComponents();
+
 	// auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	//auto go = std::make_shared<dae::GameObject>();
@@ -87,6 +129,7 @@ void load()
 	//input.BindCommand(0, Gamepad::GamepadButton::DPAD_LEFT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{-1.f, 0.f}));
 	//input.BindCommand(0, Gamepad::GamepadButton::DPAD_RIGHT, SDL_SCANCODE_UNKNOWN, dae::InputAction::HOLD, std::make_unique<MoveSaltCommand>(msSalt.get(), glm::vec2{1.f, 0.f}));
 }
+
 
 int main(int, char*[]) {
 	dae::Minigin engine("../Data/");

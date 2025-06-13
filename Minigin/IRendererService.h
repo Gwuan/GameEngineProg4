@@ -37,7 +37,7 @@ public:
 	virtual void RenderTexture(const ITexture2D& texture, const Rectf& dst) const = 0;
 
 	virtual void RenderTextureRegion(const ITexture2D& texture, const Rectf& srcRect, float x, float y) const = 0;
-	virtual void RenderTextureRegion(const ITexture2D& texture, const Rectf& srcRect, const Rectf& dstRect, const TextureFlip& flip) const = 0;
+	virtual void RenderTextureRegion(const ITexture2D& texture, const Rectf& srcRect, const Rectf& dstRect, const TextureFlip& flip = TextureFlip::None) const = 0;
 
 	virtual void RenderLine(const glm::vec2& start, const glm::vec2& end, const ColorRGBA& color = Colors::Red) const = 0;
 

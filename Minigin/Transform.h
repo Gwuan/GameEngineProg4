@@ -5,7 +5,7 @@
 class Transform final : public Component
 {
 public:
-    void Update(const float deltaTime) override;
+    void Update(const float) override {};
     void FixedUpdate(const float) override {}
     void LateUpdate(float deltaTime) override;
     void Render() const override {}
@@ -27,7 +27,7 @@ public:
 
     glm::vec2 MoveDirection;
 
-    glm::vec2 GetVelocity() const { return m_Velocity; }
+    glm::vec2 GetVelocity() const { return m_PreviousVelocity; }
     glm::vec2 GetForwardVector() const { return m_ForwardVector; }
 
     glm::vec2 GetLocalPosition() const { return m_LocalPosition; }
@@ -53,6 +53,7 @@ private:
     float m_MoveSpeed;
 	mutable bool m_IsDirty;
 
+    glm::vec2 m_PreviousVelocity = glm::vec2{0, 0};
     glm::vec2 m_Velocity = glm::vec2{0, 0};
     glm::vec2 m_ForwardVector = glm::vec2{1.f, 0};
 };

@@ -10,7 +10,7 @@ Transform::Transform(dae::GameObject& owner, glm::vec2 pos)
 	  m_IsDirty(true)
 {}
 
-void Transform::Update(const float deltaTime)
+void Transform::LateUpdate(float deltaTime)
 {
     if (GetOwner().IsStatic() || !m_MovementEnabled)
         return;
@@ -32,15 +32,15 @@ void Transform::Update(const float deltaTime)
     	m_LocalPosition += m_Velocity * deltaTime;
         MarkDirty();
     }
-}
 
-void Transform::LateUpdate(float)
-{
     if (m_Velocity != glm::vec2{})
     {
 		m_ForwardVector = glm::normalize(m_Velocity);
     }
-    m_Velocity = glm::vec2{};
+
+    m_PreviousVelocity = m_Velocity;
+
+	m_Velocity = glm::vec2{};
     MoveDirection = glm::vec2{};
 }
 

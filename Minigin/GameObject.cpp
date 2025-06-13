@@ -1,6 +1,9 @@
 #include "GameObject.h"
+
+#include <algorithm>
 #include <windows.h>
 #include <memory>
+#include <ranges>
 #include "imgui_plot.h"
 #include "SDLRenderer.h"
 #include "Transform.h"
@@ -20,33 +23,51 @@ dae::GameObject::GameObject(const glm::vec2& position, bool isStatic)
 
 dae::GameObject::~GameObject()
 {
+	// First, safely remove this object from its parent
+	if (m_pParent)
+	{
+		m_pParent->RemoveChild(this);
+		m_pParent = nullptr;
+	}
+	
+	// Make a copy of children to avoid iterator invalidation
+	auto childrenCopy = m_Children;
 	m_Children.clear();
-	SetParent(nullptr);
+	
+	// Set parent to nullptr for all children
+	for (auto child : childrenCopy)
+	{
+		if (child && child->m_pParent == this)
+		{
+			child->m_pParent = nullptr;
+		}
+	}
 }
 
 void dae::GameObject::AddChild(GameObject* object)
 {
+	if (!object || object == this || IsChild(object))
+		return;
+		
 	m_Children.push_back(object);
 }
 
 void dae::GameObject::RemoveChild(GameObject* object)
 {
-    auto it = std::remove_if(m_Children.begin(), m_Children.end(),
-                             [object](GameObject* child) {
-                                 return child == object;
-                             });
-
-    if (it != m_Children.end())
-    {
-        m_Children.erase(it);
-    }
+	if (!object)
+		return;
+		
+	auto it = std::find(m_Children.begin(), m_Children.end(), object);
+	if (it != m_Children.end())
+	{
+		m_Children.erase(it);
+	}
 }
 
 bool dae::GameObject::IsChild(GameObject* object)
 {
 	if (!object)
 		return false;
-
     return std::find(m_Children.begin(), m_Children.end(), object) != m_Children.end();
 }
 
@@ -54,10 +75,16 @@ void dae::GameObject::KillComponents()
 {
 	if (m_ComponentKillList.empty())
 		return;
-
-	for (auto& index : m_ComponentKillList)
+		
+	// Eliminate index shifting problems
+	std::ranges::sort(std::ranges::reverse_view(m_ComponentKillList));
+	
+	for (auto index : m_ComponentKillList)
 	{
-		m_Components.erase(m_Components.begin() + index);
+		if (index < m_Components.size())
+		{
+			m_Components.erase(m_Components.begin() + index);
+		}
 	}
 	m_ComponentKillList.clear();
 }
@@ -102,7 +129,6 @@ void dae::GameObject::LateUpdate(const float deltaTime)
 			component->LateUpdate(deltaTime);
 		}
 	}
-
 	KillComponents();
 }
 
@@ -124,33 +150,39 @@ void dae::GameObject::DebugRender()
 
 void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 {
-	if (IsChild(parent) || parent == this || parent == m_pParent)
+	if (parent == this || parent == m_pParent)
 		return;
-
-	if (parent == nullptr)
+		
+	if (parent && IsChild(parent))
+		return;
+	
+	glm::vec2 worldPos{};
+	if (keepWorldPos && m_pTransform)
 	{
-		const auto worldPos = m_pTransform->GetWorldPosition();
-		m_pTransform->SetPosition(worldPos.x, worldPos.y);
+		worldPos = m_pTransform->GetWorldPosition();
 	}
-	else
-	{
-		if (keepWorldPos)
-		{
-			const auto worldPos = m_pTransform->GetWorldPosition() - parent->m_pTransform->GetWorldPosition();
-			m_pTransform->SetPosition(worldPos.x, worldPos.y);
-		}
-		m_pTransform->MarkDirty();
-	}
-
+	
 	if (m_pParent)
 	{
 		m_pParent->RemoveChild(this);
 	}
-
+	
 	m_pParent = parent;
-
-	if(m_pParent)
+	
+	if (m_pParent)
 	{
 		m_pParent->AddChild(this);
+		
+		if (keepWorldPos && m_pTransform)
+		{
+			const auto parentWorldPos = m_pParent->m_pTransform->GetWorldPosition();
+			const auto localPos = worldPos - parentWorldPos;
+			m_pTransform->SetPosition(localPos.x, localPos.y);
+		}
+		m_pTransform->MarkDirty();
+	}
+	else if (keepWorldPos && m_pTransform)
+	{
+		m_pTransform->SetPosition(worldPos.x, worldPos.y);
 	}
 }

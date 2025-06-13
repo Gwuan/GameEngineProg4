@@ -26,8 +26,8 @@ namespace dae
 		void Render() const;
 		void DebugRender();
 
-		#pragma region Component related functions
-		template <typename T, typename ... Args>
+#pragma region Component related functions
+		template <typename T, typename... Args>
 		T* AddComponent(Args&&... args)
 		{
 			if (!std::is_base_of_v<Component, T>)
@@ -39,12 +39,13 @@ namespace dae
 				auto component = std::unique_ptr<T>(new T(*this, std::forward<Args>(args)...));
 				T* returnValue = component.get();
 				m_Components.push_back(std::move(component));
-
-				if constexpr (requires(T t) { t.BeginPlay(); })
+				if (m_AlreadyActive)
 				{
-					returnValue->BeginPlay();
+					if constexpr (requires { std::declval<T>().BeginPlay(); })
+					{
+						returnValue->BeginPlay();
+					}
 				}
-
 				return returnValue;
 			}
 			catch (const std::exception& e)
@@ -59,7 +60,7 @@ namespace dae
 		{
 			for (auto& com : m_Components)
 			{
-				if(auto casted = dynamic_cast<T*>(com.get()))
+				if (auto casted = dynamic_cast<T*>(com.get()))
 					return casted;
 			}
 
@@ -69,12 +70,12 @@ namespace dae
 		template <typename T>
 		void RemoveComponent()
 		{
-			if(auto component = GetComponent<T>())
+			if (auto component = GetComponent<T>())
 			{
 				dynamic_cast<Component*>(component)->Destroy();
 			}
 		}
-		#pragma endregion
+#pragma endregion
 
 		void SetParent(GameObject* parent, bool keepWorldPosition = false);
 		GameObject* GetParent() const { return m_pParent; }

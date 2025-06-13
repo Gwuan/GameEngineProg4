@@ -25,6 +25,11 @@ Scene::~Scene() = default;
 
 void Scene::Add(std::shared_ptr<GameObject> object)
 {
+	if (auto activeScene = SceneManager::GetInstance().GetActiveScene())
+	{
+		if (activeScene == this)
+			object->BeginPlay();
+	}
 	m_objects.emplace_back(std::move(object));
 }
 

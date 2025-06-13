@@ -13,6 +13,7 @@
 void PeterPepperComponent::BeginPlay()
 {
 	// GetOwner().GetTransform()->DisableVerticalMovement(true);
+	GetOwner().SetTag("Player");
 }
 
 void PeterPepperComponent::Update(float deltaTime)
