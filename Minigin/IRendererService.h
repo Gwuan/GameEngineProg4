@@ -5,6 +5,7 @@
 
 #include "Datatypes.hpp"
 #include "ITexture2D.h"
+#include "MapViewConfig.h"
 #include "SDLTexture2D.h"
 #include "SpriteAnimation.h"
 
@@ -44,7 +45,23 @@ public:
 	const ColorRGBA& GetBackgroundColor() const { return m_BackgroundColor; }
 	void SetBackgroundColor(const ColorRGBA& color) { m_BackgroundColor = color; }
 
+	glm::vec2 GetWindowSize() const
+	{
+		if (!m_pWindow)
+			return {};
+
+		int width{};
+		int height{};
+
+		SDL_GetWindowSize(m_pWindow, &width, &height);
+
+		return {static_cast<float>(width), static_cast<float>(height)}; 
+	}
+
+	void UpdateMapView(const std::shared_ptr<MapViewConfig>& mapView) {m_MapView = mapView; }
+
 protected:
 	SDL_Window* m_pWindow = nullptr;
 	ColorRGBA m_BackgroundColor = Colors::Black;
+	std::shared_ptr<MapViewConfig> m_MapView = nullptr;
 };

@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include <glm.hpp>
 
+#include "MapViewConfig.h"
+
 struct Rectf;
 
 namespace dae
@@ -10,6 +12,7 @@ namespace dae
 	class Scene final
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSize, bool instantActivate);
+		friend void SceneManager::SetNewActiveScene(Scene* scene);
 	public:
 		void Add(std::shared_ptr<GameObject> object);
 		void Remove(std::shared_ptr<GameObject> object);
@@ -49,6 +52,8 @@ namespace dae
 
 		std::vector<std::vector<Rectf>> m_Grid;
 		const uint32_t m_GridCellSize;
+
+		std::shared_ptr<MapViewConfig> m_pMapConfig = nullptr;
 
 		std::string m_name;
 		size_t m_NameHash;

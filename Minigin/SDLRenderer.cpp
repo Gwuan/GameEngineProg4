@@ -116,20 +116,14 @@ std::shared_ptr<ITexture2D> dae::SDLRenderer::CreateFontTexture(const char* text
 void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const float x, const float y) const
 {
 	const auto* sdlTexture = dynamic_cast<const SDLTexture2D*>(&texture);
-	if (!sdlTexture) return
+	if (!sdlTexture) return;
 
-	;
 	const auto textureSize = texture.GetSize();
 
-	SDL_FRect dst
-	{
-		x,
-		y,
-		static_cast<float>(textureSize.x),
-		static_cast<float>(textureSize.y)
-	};
+	auto dst = m_MapView->ApplyView({{x, y}, static_cast<float>(textureSize.x), static_cast<float>(textureSize.y)}); 
 
-	SDL_RenderCopyF(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dst);
+	const auto& dstSDL = SDLConverters::RectfToSDLF(dst);
+	SDL_RenderCopyF(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dstSDL);
 }
 
 void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const Rectf& dst) const
@@ -137,7 +131,7 @@ void dae::SDLRenderer::RenderTexture(const ITexture2D& texture, const Rectf& dst
     auto sdlTexture = dynamic_cast<const SDLTexture2D*>(&texture);
 	if (!sdlTexture) return;
 
-	const auto dstSDL = SDLConverters::RectfToSDLF(dst);
+	const auto dstSDL = SDLConverters::RectfToSDLF(m_MapView->ApplyView(dst));
 	SDL_RenderCopyF(m_RendererBackend, sdlTexture->GetSDLTexture(), nullptr, &dstSDL);
 }
 
@@ -149,15 +143,18 @@ void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rect
 	const auto srcSDL = SDLConverters::RectfToSDL(src);
 	const auto texSize = texture.GetSize();
 
-	SDL_FRect dst
+	const Rectf dst
 	{
-		dstX,
-		dstY,
+		{
+			dstX,
+			dstY
+		},
 		static_cast<float>(texSize.x),
 		static_cast<float>(texSize.y)
 	};
 
-	SDL_RenderCopyF(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDL, &dst);
+	const auto dstSDL = SDLConverters::RectfToSDLF(m_MapView->ApplyView(dst));
+	SDL_RenderCopyF(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDL, &dstSDL);
 }
 
 void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rectf& src, const Rectf& dst, const TextureFlip& flip) const
@@ -166,7 +163,7 @@ void dae::SDLRenderer::RenderTextureRegion(const ITexture2D& texture, const Rect
 	if (!sdlTexture) return;
 
 	const auto& srcSDl = SDLConverters::RectfToSDL(src);  
-	const auto& dstSDL = SDLConverters::RectfToSDLF(dst);  
+	const auto& dstSDL = SDLConverters::RectfToSDLF(m_MapView->ApplyView(dst));  
 
 	SDL_RenderCopyExF(m_RendererBackend, sdlTexture->GetSDLTexture(), &srcSDl, &dstSDL, 0, nullptr, SDLConverters::FlipToSDL(flip));
 }
@@ -176,8 +173,12 @@ void dae::SDLRenderer::RenderLine(const glm::vec2& start, const glm::vec2& end, 
 	SDL_Color tempColor;
 	SDL_GetRenderDrawColor(m_RendererBackend, &tempColor.r, &tempColor.g, &tempColor.b, &tempColor.a);
 
+	const auto& startDrawPos= m_MapView->ApplyView(start);
+	const auto& endDrawPos= m_MapView->ApplyView(end);
+
+
 	SDL_SetRenderDrawColor(m_RendererBackend, color.r, color.g, color.b, color.a);
-		SDL_RenderDrawLineF(m_RendererBackend, start.x, start.y, end.x, end.y);;
+		SDL_RenderDrawLineF(m_RendererBackend, startDrawPos.x, startDrawPos.y, endDrawPos.x, endDrawPos.y);
 	SDL_SetRenderDrawColor(m_RendererBackend, tempColor.r, tempColor.g, tempColor.g, tempColor.a);
 }
 

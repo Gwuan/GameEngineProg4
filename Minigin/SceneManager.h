@@ -1,11 +1,10 @@
 #pragma once
-#include <vector>
-#include <string>
-#include <memory>
-#include <vec2.hpp>
-
-#include "Observer.h"
 #include "Singleton.h"
+#include "Observer.h"
+
+#include <glm.hpp>
+#include <vector>
+#include <memory>
 
 namespace dae
 {
@@ -29,9 +28,9 @@ namespace dae
 
 		void OnNotify(dae::GameObject* object, EventID event) override;
 
-	private:
 		void SetNewActiveScene(Scene* scene);
 
+	private:
 		Subject m_NewSceneSubj{};
 		Scene* m_ActiveScene = nullptr;
 

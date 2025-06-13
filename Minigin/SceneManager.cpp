@@ -8,7 +8,9 @@
 #include "Transform.h"
 #include <nlohmann/json.hpp>
 
+#include "IRendererService.h"
 #include "JsonResolver.h"
+#include "ServiceAllocator.h"
 #include "Utils.hpp"
 
 void dae::SceneManager::Update(const float deltaTime)
@@ -44,6 +46,7 @@ void dae::SceneManager::OnNotify(dae::GameObject*, EventID event)
 void dae::SceneManager::SetNewActiveScene(Scene* scene)
 {
 	m_ActiveScene = scene;
+	ServiceAllocator::GetRenderer().UpdateMapView(m_ActiveScene->m_pMapConfig);
 	m_NewSceneSubj.Notify(nullptr, HashUtils::make_sdbm_hash("NewActiveScene"));
 }
 

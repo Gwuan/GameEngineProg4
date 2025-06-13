@@ -162,6 +162,9 @@
     <ClInclude Include="Utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MapViewConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
@@ -251,9 +254,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="IRendererService.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="SDLUtils.hpp">
       <Filter>SDLRenderer</Filter>
     </ClCompile>
@@ -262,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="SDLRenderer.cpp">
       <Filter>SDLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="MapViewConfig.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

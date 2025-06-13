@@ -19,6 +19,7 @@ Scene::Scene(const std::string& name, const glm::vec2& gridSize, uint32_t cellSi
 {
 	m_NameHash = std::hash<std::string>{}(name);
 	InitializeGrid(gridSize);
+	m_pMapConfig = std::make_unique<MapViewConfig>(m_Grid, static_cast<float>(m_GridCellSize));
 }
 
 Scene::~Scene() = default;

@@ -243,6 +243,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="ITexture2D.h" />
     <ClInclude Include="JsonResolver.h" />
     <ClInclude Include="LoggingSoundSystem.h" />
+    <ClInclude Include="MapViewConfig.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="NullSoundSystem.hpp" />
     <ClInclude Include="Observer.h" />
@@ -279,9 +280,9 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="IRendererService.cpp" />
     <ClCompile Include="JsonResolver.cpp" />
     <ClCompile Include="LoggingSoundSystem.cpp" />
+    <ClCompile Include="MapViewConfig.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="SDLRenderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
