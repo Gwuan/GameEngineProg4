@@ -98,8 +98,6 @@ void PeterMoveState::OnNotify(dae::GameObject* object, EventID event)
 
 void PeterMoveState::OnExit()
 {
-	PeterPepperState::OnExit();
-
 	m_pPeter->RemoveObserver(this);
 }
 
@@ -193,6 +191,7 @@ void PeterThrowPepperState::OnEnter()
 	const glm::vec2 pepperLocation = peterTransform->GetWorldPosition() + (peterTransform->GetForwardVector() * distance);
 
 	m_pPepper = std::make_shared<dae::GameObject>(pepperLocation, false);
+	m_pPepper->SetTag("Pepper");
 	m_pPepper->SetParent(&m_pPeter->GetOwner(), true);
 
 	m_pPepper->AddComponent<ColliderComponent>(glm::vec2{16, 16}, true);

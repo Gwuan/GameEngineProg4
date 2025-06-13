@@ -9,6 +9,8 @@
 
 #include "BurgerComponent.h"
 #include "ColliderComponent.h"
+#include "EnemyComponent.h"
+#include "EnemyType.h"
 #include "GameCommands.h"
 #include "InputManager.h"
 #include "JsonResolver.h"
@@ -56,6 +58,35 @@ void RegisterGameComponents()
         }
 
         return go.AddComponent<BurgerSliceComponent>(sliceType);
+    });
+
+	componentFactory.Register("EnemyComponent",
+    [](dae::GameObject& go, const nlohmann::json& jsonData) -> Component*
+    {
+        if (!jsonData.contains("enemyType") ||
+            !jsonData["enemyType"].is_string()) 
+        {
+            throw std::runtime_error("The given enemyType is invalid.");
+        }
+
+        std::string enemyTypeStr = jsonData["enemyType"].get<std::string>();
+
+        EnemyType* enemyType = {};
+
+        if (enemyTypeStr == "MrHotdog") {
+            enemyType = &g_MrHotDog;
+        } 
+        else if (enemyTypeStr == "MrPickle") {
+            enemyType = &g_MrPickle;
+        } 
+        else if (enemyTypeStr == "MrEgg") {
+            enemyType = &g_MrEgg;
+        } 
+        else {
+            throw std::runtime_error("Unknown EnemyType.");
+        }
+
+        return go.AddComponent<EnemyComponent>(*enemyType);
     });
 }
 

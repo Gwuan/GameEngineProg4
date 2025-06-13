@@ -132,6 +132,7 @@ void BurgerSliceComponent::FallDownBeginOverlap(ColliderComponent* otherCollider
 	if (colliderTag == "Enemy")
 	{
 		m_IgnoreNextPlatform = true;
+		m_PlatformCounter = 4;
 	}
 	else if (colliderTag == "Platform")
 	{
@@ -141,7 +142,13 @@ void BurgerSliceComponent::FallDownBeginOverlap(ColliderComponent* otherCollider
 			m_pSliceTransform->DisableVerticalMovement(true);
 		}
 		else
-			m_IgnoreNextPlatform = false;
+		{
+			// very hacky thing to do
+			m_PlatformCounter--;
+
+			if (m_PlatformCounter < 0)
+				m_IgnoreNextPlatform = false;
+		}
 	}
 	else if (colliderTag == "BurgerSlice")
 	{

@@ -102,6 +102,10 @@
     { "gridPos": [6, 6],  "tag": "Ladder"     , "components": [{ "type": "TextureComponent", "texture": "ladder.png" }, {"type": "ColliderComponent", "boxSize": [1, 16], "trigger": true}] },
     
     { "gridPos": [7, 5], "components": [{ "type": "BurgerSliceComponent",  "sliceType": "BottomBread"} ] },
-    { "gridPos": [7, 11], "components": [{ "type": "BurgerSliceComponent",  "sliceType": "Meat"} ] }
+    { "gridPos": [7, 11], "components": [{ "type": "BurgerSliceComponent",  "sliceType": "Meat"} ] },
+
+    { "gridPos": [6, 14], "components": [{ "type": "EnemyComponent",  "enemyType": "MrHotdog"} ] },
+    { "gridPos": [7, 14], "components": [{ "type": "EnemyComponent",  "enemyType": "MrPickle"} ] },
+    { "gridPos": [8, 14], "components": [{ "type": "EnemyComponent",  "enemyType": "MrEgg"} ] }
   ]
 }

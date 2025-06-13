@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <ranges>
 
 #include "SDLRenderer.h"
 #include "Utils.hpp"
@@ -140,14 +141,23 @@ std::pair<bool, glm::ivec2> Scene::WorldToGrid(const glm::vec2& worldPos) const
 
 void Scene::KillGameObjects()
 {
-	if (m_ObjectKillList.empty())
-		return;
-	for (auto& index : m_ObjectKillList)
-	{
-		m_objects.erase(m_objects.begin() + index);
-	}
+    if (m_ObjectKillList.empty())
+        return;
 
-	m_ObjectKillList.clear();
+	// Eliminate index shifting problems by sorting
+    std::ranges::sort(std::ranges::reverse_view(m_ObjectKillList));
+
+	// Remove duplicates
+	auto it = std::ranges::unique(m_ObjectKillList).begin(); 
+	m_ObjectKillList.erase(it, m_ObjectKillList.end()); 
+
+    for (auto index : m_ObjectKillList)
+    {
+        if (index < m_objects.size())
+            m_objects.erase(m_objects.begin() + index);
+    }
+
+    m_ObjectKillList.clear();
 }
 
 void Scene::InitializeGrid(const glm::vec2& gridSize)

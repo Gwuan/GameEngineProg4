@@ -52,4 +52,6 @@ private:
 	ColliderComponent* m_pFallDownCollider = nullptr;
 
 	Transform* m_pSliceTransform = nullptr;
+
+	int m_PlatformCounter{};
 };
