@@ -12,6 +12,7 @@
 #include "ColliderComponent.h"
 #include "EnemyComponent.h"
 #include "EnemyType.h"
+#include "GameCommands.h"
 #include "GameOverScreen.h"
 #include "HUDComponent.h"
 #include "InputManager.h"
@@ -136,6 +137,7 @@ void RegisterGameComponents()
 void load()
 {
 	RegisterGameComponents();
+	dae::InputManager::GetInstance().BindCommand(0, Gamepad::GamepadButton::NONE, SDL_SCANCODE_F1, dae::InputAction::PRESSED, std::make_unique<SkipLevelCommand>(nullptr));
 
 	dae::SceneManager::GetInstance().LoadSceneFromJson("../Data/Levels/MainMenu.json");
 }

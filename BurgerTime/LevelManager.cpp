@@ -45,9 +45,10 @@ void LevelManager::LoadNextLevel()
 {
 	m_CurrentLevel++;
 
-	if (m_CurrentLevel == 0)
+	if (m_CurrentLevel <= 0)
 	{
 		dae::SceneManager::GetInstance().LoadSceneFromJson("../Data/Levels/MainMenu.json");
+		return;;
 	}
 
 	const std::string nextFile = "../Data/Levels/Level" + std::to_string(m_CurrentLevel) + ".json";

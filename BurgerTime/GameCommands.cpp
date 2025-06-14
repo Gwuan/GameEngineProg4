@@ -3,6 +3,7 @@
 #include <chrono>
 #include <SDL_syswm.h>
 
+#include "LevelManager.h"
 #include "PeterPepperComponent.h"
 #include "ServiceAllocator.h"
 #include "SoundSystem.hpp"
@@ -53,6 +54,11 @@ void PauseAllAudioCommand::Execute()
 void ResumeAllAudioCommand::Execute()
 {
 	ServiceAllocator::GetSoundSystem().ResumeAll();
+}
+
+void SkipLevelCommand::Execute()
+{
+	LevelManager::GetInstance().LoadNextLevel();
 }
 
 void ShootPepper::Execute()

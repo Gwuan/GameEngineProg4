@@ -105,6 +105,13 @@ public:
 	void Execute() override;
 };
 
+class SkipLevelCommand final : public Command
+{
+public:
+	SkipLevelCommand(dae::GameObject* object) : Command(object) {}
+	void Execute() override;
+};
+
 class ShootPepper final : public Command
 {
 public:
