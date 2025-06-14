@@ -9,6 +9,7 @@
 #include "DataTypes.hpp"
 #include "GameCommands.h"
 #include <glm.hpp>
+#include <algorithm>
 
 void AIMoveToPlayer::BeginPlay()
 {
