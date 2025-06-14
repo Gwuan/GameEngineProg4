@@ -41,9 +41,9 @@ namespace dae
 				m_Components.push_back(std::move(component));
 				if (m_AlreadyActive)
 				{
-					if constexpr (requires { std::declval<T>().BeginPlay(); })
+					if (auto comp = dynamic_cast<Component*>(returnValue))
 					{
-						returnValue->BeginPlay();
+						comp->BeginPlay();
 					}
 				}
 				return returnValue;

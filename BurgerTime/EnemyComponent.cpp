@@ -1,9 +1,11 @@
 #include "EnemyComponent.h"
 
 
+#include "AIMoveToPlayer.h"
 #include "EnemyType.h"
 #include "ResourceManager.h"
 #include "SpriteAnimation.h"
+#include "Transform.h"
 #include "Utils.hpp"
 
 void EnemyComponent::BeginPlay()
@@ -11,7 +13,10 @@ void EnemyComponent::BeginPlay()
 	GetOwner().SetTag("Enemy");
 
 	auto spriteSheet = dae::ResourceManager::GetInstance().LoadTexture("SpriteSheet.png");
+	GetOwner().AddComponent<AIMoveToPlayer>();
 	GetOwner().AddComponent<SpriteAnimation>(spriteSheet, m_Type->horizontalWalkAnimation);
+
+	GetOwner().GetTransform()->SetMoveSpeed(m_Type->movementSpeed);
 
 	m_pCollider = GetOwner().AddComponent<ColliderComponent>(glm::vec2{16, 16}, true);
 	if (m_pCollider) m_pCollider->OnBeginOverlap += [this](ColliderComponent* other) { OnBoxOverlap(other); };

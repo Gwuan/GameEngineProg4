@@ -139,6 +139,33 @@ std::pair<bool, glm::ivec2> Scene::WorldToGrid(const glm::vec2& worldPos) const
 	return std::make_pair(false, glm::ivec2{});
 }
 
+dae::GameObject* Scene::FindObjectWithTag(const std::string& tag) const
+{
+	auto found = std::ranges::find_if(m_objects, [tag](const auto& object)
+	{
+		return tag == object->GetTag();
+	});
+
+	if (found != m_objects.end())
+		return found->get();
+
+	return nullptr;
+}
+
+std::vector<dae::GameObject*> Scene::FindObjectsWithTag(const std::string& tag) const
+{
+	std::vector<dae::GameObject*> result;
+
+	for (const auto object : m_objects)
+    {
+        if (object->GetTag() == tag)
+        {
+            result.push_back(object.get());        }
+    }
+
+	return result;
+}
+
 void Scene::KillGameObjects()
 {
     if (m_ObjectKillList.empty())

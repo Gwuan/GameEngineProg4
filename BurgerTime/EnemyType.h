@@ -53,7 +53,8 @@ static EnemyType g_MrHotDog{
 		4,
 		.2f
 	},
-	.score = 100
+	.score = 100,
+	.movementSpeed = 32.f
 };
 
 static EnemyType g_MrPickle{
@@ -97,7 +98,8 @@ static EnemyType g_MrPickle{
 		4,
 		.2f
 	},
-	.score = 200
+	.score = 200,
+	.movementSpeed = 36.f
 };
 
 static EnemyType g_MrEgg{
@@ -141,5 +143,6 @@ static EnemyType g_MrEgg{
 		4,
 		.2f
 	},
-	.score = 300
+	.score = 300,
+	.movementSpeed = 29.f
 };

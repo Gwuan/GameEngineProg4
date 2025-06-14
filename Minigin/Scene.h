@@ -33,7 +33,11 @@ namespace dae
 
 		std::pair<bool, glm::vec2> GridToWorld(uint32_t column, uint32_t row) const;
 		std::pair<bool, glm::ivec2> WorldToGrid(const glm::vec2& worldPos) const;
+		std::vector<std::vector<Rectf>> GetMap() const { return m_Grid; }
 		float GetCellSize() const {	return static_cast<float>(this->m_GridCellSize); }
+
+		dae::GameObject* FindObjectWithTag(const std::string& tag) const;
+		std::vector<dae::GameObject*> FindObjectsWithTag(const std::string& tag) const;
 
 
 		size_t GetHashedName() const { return this->m_NameHash; }
