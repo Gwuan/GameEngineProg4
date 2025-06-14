@@ -27,7 +27,7 @@
     <ClCompile Include="PeterPepperState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HudDemoComponent.cpp">
+    <ClCompile Include="HUDComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="PeterPepperComponent.cpp">
@@ -36,20 +36,41 @@
     <ClCompile Include="LadderBehavior.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BurgerComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EnemyState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AIMoveToPlayer.cpp">
+    <ClCompile Include="ScoreManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AIMoveToPlayer.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BurgerBasket.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BurgerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverScreen.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScreen.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuComp.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,7 +80,7 @@
     <ClInclude Include="PeterPepperState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HudDemoComponent.h">
+    <ClInclude Include="HUDComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="PeterPepperComponent.h">
@@ -68,23 +89,44 @@
     <ClInclude Include="LadderBehavior.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BurgerComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnemyState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AIMoveToPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AINode.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AIMoveToPlayer.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BurgerBasket.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BurgerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverScreen.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScreen.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuComp.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="WinScreen.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

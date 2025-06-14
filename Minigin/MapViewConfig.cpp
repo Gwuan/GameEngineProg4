@@ -29,7 +29,7 @@ Rectf MapViewConfig::ApplyView(const Rectf& src) const
 	return Rectf{
 		{
 			src.LeftBottom.x * m_Scale + m_Offset.x,
-			src.LeftBottom.y * m_Scale - m_Offset.y,
+			src.LeftBottom.y * m_Scale + m_Offset.y,
 
 		},
 		src.width * m_Scale,

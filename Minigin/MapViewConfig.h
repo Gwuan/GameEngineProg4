@@ -24,5 +24,5 @@ private:
 	glm::vec2 m_Offset = {};
 	float m_Scale = 1.f;
 
-	static constexpr float m_ScreenCoverage = 0.7f;
+	static constexpr float m_ScreenCoverage = 0.9f;
 };

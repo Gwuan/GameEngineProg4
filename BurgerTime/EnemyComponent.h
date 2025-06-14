@@ -16,6 +16,8 @@ public:
 	void LateUpdate(const float) override {}
 	void Render() const override {}
 
+	~EnemyComponent() override;
+
 	int GetLadderCount() const { return m_LadderCounter; }
 	bool OnLadderEntry() const { return m_OnLadderEntry; }
 

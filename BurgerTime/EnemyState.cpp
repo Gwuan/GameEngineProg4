@@ -39,7 +39,7 @@ void EnemyMoveState::OnNotify(dae::GameObject* object, EventID event)
 			m_IsCrunched = true;
 		}
 		break;
-	case HashUtils::make_sdbm_hash("OnDeath"):
+	case HashUtils::make_sdbm_hash("OnEnemyDeath"):
 		if (object == &m_pEnemy->GetOwner())
 		{
 			m_IsDead = true;

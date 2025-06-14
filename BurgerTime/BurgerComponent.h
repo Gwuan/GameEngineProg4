@@ -24,6 +24,15 @@ public:
 	void FixedUpdate(const float) override {}
 	void LateUpdate(const float) override {}
 	void Render() const override {}
+
+	SliceType GetSliceType() const { return this->m_SliceType; }
+
+protected:
+	template <typename T, typename ... Args>
+	friend T* dae::GameObject::AddComponent(Args&&... args);
+
+	explicit BurgerSliceComponent(dae::GameObject& owner, const SliceType& sliceType);
+
 private:
 	void InitializeSliceType();
 
@@ -31,12 +40,9 @@ private:
 
 	void FallDownBeginOverlap(ColliderComponent* otherCollider);
 
-	template <typename T, typename ... Args>
-	friend T* dae::GameObject::AddComponent(Args&&... args);
-
-	explicit BurgerSliceComponent(dae::GameObject& owner, const SliceType& sliceType);
 	void CheckAllColliders();
 	void DropDown();
+	void MarkAsCollected();
 
 	bool m_IgnoreNextPlatform = false;
 
@@ -54,4 +60,6 @@ private:
 	Transform* m_pSliceTransform = nullptr;
 
 	int m_PlatformCounter{};
+
+	bool m_IsCollected = false;
 };

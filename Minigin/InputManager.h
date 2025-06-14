@@ -9,6 +9,8 @@
 #include "Gamepad.h"
 #include "Singleton.h"
 
+#include <SDL_keyboard.h>
+
 class Gamepad;
 
 namespace dae
@@ -36,13 +38,19 @@ namespace dae
 			SDL_Scancode keyboardKey, InputAction inputAction);
 
 	private:
+		void KillUnbindedCommands();
+
 		bool IsKeyPressed(SDL_Scancode scancode) const;
 		bool IsKeyReleased(SDL_Scancode scancode) const;
 		bool IsKeyHoldDown(SDL_Scancode scancode) const;
 		
 		using ControllerKey = std::tuple<unsigned int, Gamepad::GamepadButton, SDL_Scancode, InputAction>;
-		using InputMap = std::map<ControllerKey, std::unique_ptr<Command>>;
+		// Apparently a map container likes to corrupt my data somehow
+		using InputMap = std::vector<std::pair<ControllerKey, std::unique_ptr<Command>>>;
 		InputMap m_BindedCommands;
+
+		std::vector<ControllerKey> m_PendingKillList;
+
 		const Uint8* m_CurrentKeyboardState;
 		std::vector<std::unique_ptr<Gamepad>> m_Gamepads;
 

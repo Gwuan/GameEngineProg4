@@ -11,16 +11,18 @@
 
 void BurgerSliceComponent::BeginPlay()
 {
-	Component::BeginPlay();
 
 	GetOwner().SetTag("BurgerSlice");
 
 	InitializeSliceType();
 
+	m_pSliceTransform = GetOwner().GetTransform();
+	m_pSliceTransform->DisableVerticalMovement(true);
+
 	m_pTextureComponent = GetOwner().AddComponent<TextureComponent>("SpriteSheet.png");
 	m_pTextureComponent->SetTextureSourceRect(m_TexSrcRect);
 	{
-		m_pFallDownCollider = GetOwner().AddComponent<ColliderComponent>(glm::vec2{16 * 3, 8}, true);
+		m_pFallDownCollider = GetOwner().AddComponent<ColliderComponent>(glm::vec2{16 * 2.2, 8}, true);
 		m_pFallDownCollider->m_Offset.y = -4;
 
 	    m_pFallDownCollider->OnBeginOverlap += [this](ColliderComponent* otherCollider) { FallDownBeginOverlap(otherCollider); };
@@ -51,8 +53,6 @@ void BurgerSliceComponent::BeginPlay()
 		}
 	}
 
-	m_pSliceTransform = GetOwner().GetTransform();
-	m_pSliceTransform->DisableVerticalMovement(true);
 }
 
 void BurgerSliceComponent::Update(const float)
@@ -74,7 +74,7 @@ void BurgerSliceComponent::InitializeSliceType()
 	{
 	case SliceType::BottomBread:
 		m_TexSrcRect.LeftBottom.x = 7 * cellSize;
-		m_TexSrcRect.LeftBottom.y = 3 * cellSize;
+		m_TexSrcRect.LeftBottom.y = 3.5f * cellSize;
 		m_TexSrcRect.width = cellSize * 2;
 		m_TexSrcRect.height = cellSize / 2;
 		break;
@@ -92,7 +92,7 @@ void BurgerSliceComponent::InitializeSliceType()
 		break;
 	case SliceType::TopBread:
 		m_TexSrcRect.LeftBottom.x = 7 * cellSize;
-		m_TexSrcRect.LeftBottom.y = 3.5f * cellSize;
+		m_TexSrcRect.LeftBottom.y = 3 * cellSize;
 		m_TexSrcRect.width = cellSize * 2;
 		m_TexSrcRect.height = cellSize / 2;
 		break;
@@ -129,7 +129,7 @@ void BurgerSliceComponent::FallDownBeginOverlap(ColliderComponent* otherCollider
 
 	const auto& colliderTag = otherCollider->GetOwner().GetTag();
 
-	if (colliderTag == "Enemy")
+	if (colliderTag == "Enemy" && m_pSliceTransform->MoveDirection.y != 0.f)
 	{
 		m_IgnoreNextPlatform = true;
 		m_PlatformCounter = 4;
@@ -153,7 +153,17 @@ void BurgerSliceComponent::FallDownBeginOverlap(ColliderComponent* otherCollider
 	else if (colliderTag == "BurgerSlice")
 	{
 		if (auto otherSlice = otherCollider->GetOwner().GetComponent<BurgerSliceComponent>())
-			otherSlice->DropDown();
+		{
+			if (otherSlice->m_IsCollected)
+				MarkAsCollected();
+			else
+				otherSlice->DropDown();
+		}
+	}
+	else if (colliderTag == "BurgerBasket")
+	{
+		if (!otherCollider->IsTrigger())
+			MarkAsCollected();
 	}
 }
 
@@ -181,4 +191,10 @@ void BurgerSliceComponent::DropDown()
 
 	if (m_pSliceTransform)
 		m_pSliceTransform->DisableVerticalMovement(false);
+}
+
+void BurgerSliceComponent::MarkAsCollected()
+{
+	GetOwner().GetTransform()->EnableMovement(false);
+	m_IsCollected = true;
 }

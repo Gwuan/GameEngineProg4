@@ -4,6 +4,7 @@
 #include "AIMoveToPlayer.h"
 #include "EnemyType.h"
 #include "ResourceManager.h"
+#include "ScoreManager.h"
 #include "SpriteAnimation.h"
 #include "Transform.h"
 #include "Utils.hpp"
@@ -31,6 +32,8 @@ void EnemyComponent::BeginPlay()
 		m_pLadderCollider->OnEndOverlap   += [this](ColliderComponent* other)	{ LadderEndOverlap(other); };
 	}
 
+	AddObserver(&ScoreManager::GetInstance());
+
 	m_State = std::make_unique<EnemyMoveState>(*this, *m_Type);
 	m_State->OnEnter();
 }
@@ -43,7 +46,11 @@ void EnemyComponent::Update(const float deltaTime)
 		m_State = std::move(newState);
 		m_State->OnEnter();
 	}
+}
 
+EnemyComponent::~EnemyComponent()
+{
+	RemoveObserver(&ScoreManager::GetInstance());
 }
 
 EnemyComponent::EnemyComponent(dae::GameObject& owner, const EnemyType& type)
@@ -55,11 +62,12 @@ void EnemyComponent::OnBoxOverlap(const ColliderComponent* otherCollider)
 {
 	if (otherCollider->GetOwner().GetTag() == "BurgerSlice")
 	{
-		Notify(&GetOwner(), HashUtils::make_sdbm_hash("OnCrush"));
+		if (otherCollider->GetOwner().GetTransform()->GetVelocity().y != 0)
+			Notify(&GetOwner(), HashUtils::make_sdbm_hash("OnCrush"));
 	}
 	else if (otherCollider->GetOwner().GetTag() == "Pepper")
 	{
-		Notify(&GetOwner(), HashUtils::make_sdbm_hash("OnDeath"));
+		Notify(&GetOwner(), HashUtils::make_sdbm_hash("OnEnemyDeath"));
 	}
 }
 

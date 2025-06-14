@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Minigin;$(SolutionDir)\3rdParty\NlohmannJson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Minigin;$(SolutionDir)\3rdParty\NlohmannJson\include;$(SolutionDir)\3rdParty\ImGui;$(SolutionDir)\3rdParty\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -113,7 +113,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Minigin;$(SolutionDir)\3rdParty\NlohmannJson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Minigin;$(SolutionDir)\3rdParty\NlohmannJson\include;$(SolutionDir)\3rdParty\ImGui;$(SolutionDir)\3rdParty\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -138,7 +138,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Minigin;$(SolutionDir)\3rdParty\NlohmannJson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Minigin;$(SolutionDir)\3rdParty\NlohmannJson\include;$(SolutionDir)\3rdParty\ImGui;$(SolutionDir)\3rdParty\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -163,7 +163,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Minigin;$(SolutionDir)\3rdParty\NlohmannJson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Minigin;$(SolutionDir)\3rdParty\NlohmannJson\include;$(SolutionDir)\3rdParty\ImGui;$(SolutionDir)\3rdParty\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -184,29 +184,43 @@ xcopy "$(SolutionDir)3rdParty\SDL2_Mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AIMoveToPlayer.cpp" />
+    <ClCompile Include="BurgerBasket.cpp" />
     <ClCompile Include="BurgerComponent.cpp" />
     <ClCompile Include="EnemyComponent.cpp" />
     <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="EnemyType.cpp" />
     <ClCompile Include="GameCommands.cpp" />
-    <ClCompile Include="HudDemoComponent.cpp" />
+    <ClCompile Include="GameOverScreen.cpp" />
+    <ClCompile Include="HUDComponent.cpp" />
     <ClCompile Include="LadderBehavior.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenuComp.cpp" />
     <ClCompile Include="PeterPepperComponent.cpp" />
     <ClCompile Include="PeterPepperState.cpp" />
+    <ClCompile Include="ScoreManager.cpp" />
+    <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIMoveToPlayer.h" />
     <ClInclude Include="AINode.hpp" />
+    <ClInclude Include="BurgerBasket.h" />
     <ClInclude Include="BurgerComponent.h" />
     <ClInclude Include="EnemyComponent.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="EnemyType.h" />
     <ClInclude Include="GameCommands.h" />
-    <ClInclude Include="HudDemoComponent.h" />
+    <ClInclude Include="GameOverScreen.h" />
+    <ClInclude Include="HUDComponent.h" />
     <ClInclude Include="LadderBehavior.h" />
+    <ClInclude Include="LevelManager.h" />
+    <ClInclude Include="LoadingScreen.h" />
+    <ClInclude Include="MainMenuComp.h" />
     <ClInclude Include="PeterPepperComponent.h" />
     <ClInclude Include="PeterPepperState.h" />
+    <ClInclude Include="ScoreManager.h" />
+    <ClInclude Include="WinScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

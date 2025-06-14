@@ -19,6 +19,8 @@ public:
 	PeterPepperComponent& operator=(const PeterPepperComponent&) = delete;
 	PeterPepperComponent& operator=(PeterPepperComponent&&) noexcept = delete;
 
+	~PeterPepperComponent() override;
+
 	int GetLadderCount() const { return m_LadderCounter; }
 	bool OnLadderEntry() const { return m_OnLadderEntry; }
 
@@ -36,6 +38,7 @@ protected:
 private:
 	bool m_OnLadderEntry = false;
 	bool m_ShootRequested = false;
+	bool m_IsDead = false;
 	void PlaySoundOnOverlap(const ColliderComponent* otherCollider);
 
 	void OnBeginOverlap(const ColliderComponent* otherCollider);

@@ -1,0 +1,10 @@
+{
+  "name": "GameOver",
+  "gridSize": [21, 21],
+  "cellSize": 16,
+
+  "gameObjects":
+  [
+    { "gridPos": [10, 10], "components": [{"type": "GameOver"}]}
+  ]
+}

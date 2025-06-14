@@ -1,0 +1,10 @@
+{
+  "name": "MainMenu",
+  "gridSize": [0, 0],
+  "cellSize": 16,
+
+  "gameObjects":
+  [
+    { "position": [0, 0], "components": [{"type": "MainMenu"}]}
+  ]
+}

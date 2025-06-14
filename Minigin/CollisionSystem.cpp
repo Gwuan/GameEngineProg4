@@ -49,9 +49,11 @@ void CollisionSystem::Update()
 						continue;
 
 					m_OverlappingPairs.insert(pairID);
-
-					collider->OnBeginOverlap.Broadcast(secondCollider);
-					secondCollider->OnBeginOverlap.Broadcast(collider);
+					if (collider && secondCollider)
+					{
+						collider->OnBeginOverlap.Broadcast(secondCollider);
+						secondCollider->OnBeginOverlap.Broadcast(collider);
+					}
 				}
 				else
 				{

@@ -10,6 +10,7 @@
 
 #include "IRendererService.h"
 #include "JsonResolver.h"
+#include "ResourceManager.h"
 #include "ServiceAllocator.h"
 #include "Utils.hpp"
 
@@ -45,9 +46,19 @@ void dae::SceneManager::OnNotify(dae::GameObject*, EventID event)
 
 void dae::SceneManager::SetNewActiveScene(Scene* scene)
 {
-	m_ActiveScene = scene;
-	ServiceAllocator::GetRenderer().UpdateMapView(m_ActiveScene->m_pMapConfig);
-	m_NewSceneSubj.Notify(nullptr, HashUtils::make_sdbm_hash("NewActiveScene"));
+    // Delete all other scenes except the new active one
+    if (scene)
+    {
+        const size_t activeHash = scene->GetHashedName();
+        std::erase_if(m_scenes, [activeHash, scene](const std::shared_ptr<Scene>& s)
+        {
+            return s.get() != scene;
+        });
+    }
+
+    m_ActiveScene = scene;
+    ServiceAllocator::GetRenderer().UpdateMapView(m_ActiveScene->m_pMapConfig);
+    m_NewSceneSubj.Notify(nullptr, HashUtils::make_sdbm_hash("NewActiveScene"));
 }
 
 dae::SceneManager::SceneManager()
